@@ -1,0 +1,13 @@
+﻿PackageID,Name,Type,IncludeRoot,Price,Description,StarterOffer,Tag,LocKey
+PACK_01,新手包,Bundle,META_Damage_001,160,一次性解锁3个节点,1,TAG_PACK_1,LOC_PACK_01
+PACK_02,工厂包,Bundle,META_AttackSpeed_002,200,一次性解锁4个节点,1,TAG_PACK_2,LOC_PACK_02
+PACK_03,赏金包,Bundle,META_AOE_003,240,一次性解锁5个节点,1,TAG_PACK_3,LOC_PACK_03
+PACK_04,电链包,Bundle,META_Crit_004,280,一次性解锁2个节点,0,TAG_PACK_4,LOC_PACK_04
+PACK_05,爆燃包,Bundle,META_Gold_005,320,一次性解锁3个节点,0,TAG_PACK_5,LOC_PACK_05
+PACK_06,守卫包,Bundle,META_XP_006,360,一次性解锁4个节点,0,TAG_PACK_6,LOC_PACK_06
+PACK_07,赌徒包,Bundle,META_Auto_007,400,一次性解锁5个节点,0,TAG_PACK_7,LOC_PACK_07
+PACK_08,终局包,Bundle,META_Facility_008,440,一次性解锁2个节点,0,TAG_PACK_8,LOC_PACK_08
+PACK_09,设施包,Bundle,META_RareSpawn_009,480,一次性解锁3个节点,0,TAG_PACK_9,LOC_PACK_09
+PACK_10,地图包,Bundle,META_Boss_010,520,一次性解锁4个节点,0,TAG_PACK_10,LOC_PACK_10
+PACK_11,角色包,Bundle,META_Defense_011,560,一次性解锁5个节点,0,TAG_PACK_11,LOC_PACK_11
+PACK_12,传奇包,Bundle,META_Utility_012,600,一次性解锁2个节点,0,TAG_PACK_12,LOC_PACK_12

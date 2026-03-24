@@ -1,0 +1,450 @@
+{
+  "sheet_name": "LootTables",
+  "sheet_slug": "LootTables",
+  "row_count": 48,
+  "column_count": 7,
+  "headers": [
+    "LootTableID",
+    "SourceKind",
+    "DropList",
+    "WeightList",
+    "RollMin",
+    "RollMax",
+    "RuleNote"
+  ],
+  "records": [
+    {
+      "LootTableID": "LT_01",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_01|DROP_XP_S_01|DROP_CHEST_01",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_02",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_02|DROP_XP_S_02|DROP_CHEST_02",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_03",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_03|DROP_XP_S_03|DROP_CHEST_03",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_04",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_04|DROP_XP_S_04|DROP_CHEST_04",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_05",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_05|DROP_XP_S_05|DROP_CHEST_05",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_06",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_06|DROP_XP_S_06|DROP_CHEST_06",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_07",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_07|DROP_XP_S_07|DROP_CHEST_07",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_08",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_08|DROP_XP_S_08|DROP_CHEST_08",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_09",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_09|DROP_XP_S_09|DROP_CHEST_09",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_10",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_10|DROP_XP_S_10|DROP_CHEST_10",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_11",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_11|DROP_XP_S_11|DROP_CHEST_11",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_12",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_12|DROP_XP_S_12|DROP_CHEST_12",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_13",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_01|DROP_XP_S_01|DROP_CHEST_01",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_14",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_02|DROP_XP_S_02|DROP_CHEST_02",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_15",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_03|DROP_XP_S_03|DROP_CHEST_03",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_16",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_04|DROP_XP_S_04|DROP_CHEST_04",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_17",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_05|DROP_XP_S_05|DROP_CHEST_05",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_18",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_06|DROP_XP_S_06|DROP_CHEST_06",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_19",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_07|DROP_XP_S_07|DROP_CHEST_07",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_20",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_08|DROP_XP_S_08|DROP_CHEST_08",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_21",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_09|DROP_XP_S_09|DROP_CHEST_09",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_22",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_10|DROP_XP_S_10|DROP_CHEST_10",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_23",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_11|DROP_XP_S_11|DROP_CHEST_11",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_24",
+      "SourceKind": "Mole",
+      "DropList": "DROP_GOLD_S_12|DROP_XP_S_12|DROP_CHEST_12",
+      "WeightList": "60|30|10",
+      "RollMin": 1,
+      "RollMax": 3,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_25",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_01|DROP_XP_S_01|DROP_CHEST_01",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_26",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_02|DROP_XP_S_02|DROP_CHEST_02",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_27",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_03|DROP_XP_S_03|DROP_CHEST_03",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_28",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_04|DROP_XP_S_04|DROP_CHEST_04",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_29",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_05|DROP_XP_S_05|DROP_CHEST_05",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_30",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_06|DROP_XP_S_06|DROP_CHEST_06",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_31",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_07|DROP_XP_S_07|DROP_CHEST_07",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_32",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_08|DROP_XP_S_08|DROP_CHEST_08",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_33",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_09|DROP_XP_S_09|DROP_CHEST_09",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_34",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_10|DROP_XP_S_10|DROP_CHEST_10",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_35",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_11|DROP_XP_S_11|DROP_CHEST_11",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_36",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_12|DROP_XP_S_12|DROP_CHEST_12",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_37",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_01|DROP_XP_S_01|DROP_CHEST_01",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_38",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_02|DROP_XP_S_02|DROP_CHEST_02",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_39",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_03|DROP_XP_S_03|DROP_CHEST_03",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_40",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_04|DROP_XP_S_04|DROP_CHEST_04",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_41",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_05|DROP_XP_S_05|DROP_CHEST_05",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_42",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_06|DROP_XP_S_06|DROP_CHEST_06",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_43",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_07|DROP_XP_S_07|DROP_CHEST_07",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_44",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_08|DROP_XP_S_08|DROP_CHEST_08",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_45",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_09|DROP_XP_S_09|DROP_CHEST_09",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_46",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_10|DROP_XP_S_10|DROP_CHEST_10",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_47",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_11|DROP_XP_S_11|DROP_CHEST_11",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    },
+    {
+      "LootTableID": "LT_48",
+      "SourceKind": "Boss/Event",
+      "DropList": "DROP_GOLD_S_12|DROP_XP_S_12|DROP_CHEST_12",
+      "WeightList": "60|30|10",
+      "RollMin": 2,
+      "RollMax": 5,
+      "RuleNote": "稀有度和目标类型决定是否替换为高档表"
+    }
+  ],
+  "rows": null
+}

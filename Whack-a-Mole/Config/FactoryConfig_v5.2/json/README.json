@@ -1,0 +1,69 @@
+{
+  "sheet_name": "README",
+  "sheet_slug": "README",
+  "row_count": 5,
+  "column_count": 8,
+  "headers": [
+    "模块",
+    "内容",
+    "规模",
+    "用途",
+    "程序读取建议",
+    "策划维护建议",
+    "联动表",
+    "备注"
+  ],
+  "records": [
+    {
+      "模块": "数据规范",
+      "内容": "程序接入严格格式",
+      "规模": "v5.1",
+      "用途": "统一表头/布尔/分隔符/引用规范",
+      "程序读取建议": "所有表从第1行表头开始读取",
+      "策划维护建议": "新增字段先更新 ValidationMap",
+      "联动表": "ProgramConventions|ValidationMap",
+      "备注": "推荐作为主接入版本"
+    },
+    {
+      "模块": "核心战斗",
+      "内容": "角色/武器/技能/升级/流派",
+      "规模": "完整",
+      "用途": "构建核心战斗循环",
+      "程序读取建议": "按 ID 读主表，再按升级/进化表扩展",
+      "策划维护建议": "新武器务必补 LocalizationKeys",
+      "联动表": "Roles|Weapons|WeaponLv|WeaponEvo|Skills|Upgrades|BuildArchetypes",
+      "备注": ""
+    },
+    {
+      "模块": "敌人与关卡",
+      "内容": "老鼠/Boss/地图/刷怪/波次/难度",
+      "规模": "完整",
+      "用途": "控制敌潮与节奏",
+      "程序读取建议": "先读 StageCurve，再叠加 SpawnRules 和 DifficultyModes",
+      "策划维护建议": "新增敌人要补 Drop / LootTable / LocKey",
+      "联动表": "Moles|Bosses|StageMaps|StageCurve|SpawnRules|WaveMods|DifficultyModes",
+      "备注": ""
+    },
+    {
+      "模块": "经济与成长",
+      "内容": "掉落/商店/局内/局外/任务成就",
+      "规模": "完整",
+      "用途": "支撑留存与长线成长",
+      "程序读取建议": "局外树可按 MetaNodes + MetaPackages 双层读",
+      "策划维护建议": "价格与奖励改动前先查 CalcModel",
+      "联动表": "Drops|LootTables|EconomyIn|MetaNodes|Tasks|Achievements",
+      "备注": ""
+    },
+    {
+      "模块": "表现配置",
+      "内容": "UI/音频/特效/本地化",
+      "规模": "完整",
+      "用途": "支撑接入与表现层联动",
+      "程序读取建议": "全部通过稳定 ID 关联",
+      "策划维护建议": "新内容同步补 LocKey、Audio、VFX",
+      "联动表": "UIConfigs|AudioCues|VFXCues|LocalizationKeys",
+      "备注": ""
+    }
+  ],
+  "rows": null
+}

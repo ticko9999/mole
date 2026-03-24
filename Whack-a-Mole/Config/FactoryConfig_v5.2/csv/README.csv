@@ -1,0 +1,6 @@
+﻿模块,内容,规模,用途,程序读取建议,策划维护建议,联动表,备注
+数据规范,程序接入严格格式,v5.1,统一表头/布尔/分隔符/引用规范,所有表从第1行表头开始读取,新增字段先更新 ValidationMap,ProgramConventions|ValidationMap,推荐作为主接入版本
+核心战斗,角色/武器/技能/升级/流派,完整,构建核心战斗循环,按 ID 读主表，再按升级/进化表扩展,新武器务必补 LocalizationKeys,Roles|Weapons|WeaponLv|WeaponEvo|Skills|Upgrades|BuildArchetypes,
+敌人与关卡,老鼠/Boss/地图/刷怪/波次/难度,完整,控制敌潮与节奏,先读 StageCurve，再叠加 SpawnRules 和 DifficultyModes,新增敌人要补 Drop / LootTable / LocKey,Moles|Bosses|StageMaps|StageCurve|SpawnRules|WaveMods|DifficultyModes,
+经济与成长,掉落/商店/局内/局外/任务成就,完整,支撑留存与长线成长,局外树可按 MetaNodes + MetaPackages 双层读,价格与奖励改动前先查 CalcModel,Drops|LootTables|EconomyIn|MetaNodes|Tasks|Achievements,
+表现配置,UI/音频/特效/本地化,完整,支撑接入与表现层联动,全部通过稳定 ID 关联,新内容同步补 LocKey、Audio、VFX,UIConfigs|AudioCues|VFXCues|LocalizationKeys,

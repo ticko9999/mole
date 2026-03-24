@@ -1,0 +1,63 @@
+{
+  "sheet_name": "DifficultyModes",
+  "sheet_slug": "DifficultyModes",
+  "row_count": 5,
+  "column_count": 7,
+  "headers": [
+    "DiffID",
+    "Name",
+    "HpMult",
+    "ThreatMult",
+    "RewardMult",
+    "LegendBonus",
+    "Description"
+  ],
+  "records": [
+    {
+      "DiffID": "DIFF_CASUAL",
+      "Name": "轻松",
+      "HpMult": 0.85,
+      "ThreatMult": 0.9,
+      "RewardMult": 1.1,
+      "LegendBonus": 0,
+      "Description": "更宽松，适合体验"
+    },
+    {
+      "DiffID": "DIFF_NORMAL",
+      "Name": "标准",
+      "HpMult": 1,
+      "ThreatMult": 1,
+      "RewardMult": 1,
+      "LegendBonus": 0,
+      "Description": "默认"
+    },
+    {
+      "DiffID": "DIFF_HARD",
+      "Name": "困难",
+      "HpMult": 1.18,
+      "ThreatMult": 1.12,
+      "RewardMult": 0.92,
+      "LegendBonus": 0.08,
+      "Description": "更高压力"
+    },
+    {
+      "DiffID": "DIFF_NIGHTMARE",
+      "Name": "噩梦",
+      "HpMult": 1.38,
+      "ThreatMult": 1.25,
+      "RewardMult": 0.85,
+      "LegendBonus": 0.15,
+      "Description": "高压与高回报"
+    },
+    {
+      "DiffID": "DIFF_OVERCLOCK",
+      "Name": "超载",
+      "HpMult": 1.55,
+      "ThreatMult": 1.35,
+      "RewardMult": 0.82,
+      "LegendBonus": 0.22,
+      "Description": "发行前终局挑战"
+    }
+  ],
+  "rows": null
+}

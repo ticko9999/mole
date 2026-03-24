@@ -1,0 +1,22 @@
+{
+  "name": "MoleSurvivors.EditMode.Tests",
+  "rootNamespace": "MoleSurvivors.Tests.EditMode",
+  "references": [
+    "MoleSurvivors",
+    "MoleSurvivors.Editor"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

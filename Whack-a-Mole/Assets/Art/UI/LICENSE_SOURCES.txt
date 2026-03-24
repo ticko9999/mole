@@ -1,0 +1,18 @@
+Free UI assets bundled for MoleSurvivors demo
+============================================
+
+Source A (buttons/panel)
+- Pack: Kenney UI Pack
+- URL: https://kenney.nl/assets/ui-pack
+- Download URL used: https://kenney.nl/media/pages/assets/ui-pack/af874291da-1718203990/kenney_ui-pack.zip
+- License: CC0 (public domain dedication)
+
+Source B (icons)
+- Pack: Skymon Icon Pack Free
+- URL: https://opengameart.org/content/skymon-icon-pack-free
+- Download URL used: https://opengameart.org/sites/default/files/skymon-icons-free-v250329.zip
+- License: CC0 (as stated on the OpenGameArt page)
+
+Notes
+- Attribution is not required under CC0.
+- This file is kept for audit and traceability.

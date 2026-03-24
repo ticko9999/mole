@@ -1,0 +1,319 @@
+{
+  "sheet_name": "FTUE",
+  "sheet_slug": "FTUE",
+  "row_count": 30,
+  "column_count": 8,
+  "headers": [
+    "StepID",
+    "Order",
+    "Description",
+    "GuideType",
+    "Context",
+    "Skippable",
+    "TriggerRule",
+    "Note"
+  ],
+  "records": [
+    {
+      "StepID": "FTUE_01",
+      "Order": 1,
+      "Description": "展示第一只地鼠的冒头与敲击",
+      "GuideType": "Popup|Arrow|SlowTime",
+      "Context": "Battle/UI",
+      "Skippable": 1,
+      "TriggerRule": "首次出现时触发",
+      "Note": "教学必须能跳过"
+    },
+    {
+      "StepID": "FTUE_02",
+      "Order": 2,
+      "Description": "提示命中反馈和金币掉落",
+      "GuideType": "Popup|Arrow|SlowTime",
+      "Context": "Battle/UI",
+      "Skippable": 1,
+      "TriggerRule": "首次出现时触发",
+      "Note": "教学必须能跳过"
+    },
+    {
+      "StepID": "FTUE_03",
+      "Order": 3,
+      "Description": "首次升级三选一教学",
+      "GuideType": "Popup|Arrow|SlowTime",
+      "Context": "Battle/UI",
+      "Skippable": 1,
+      "TriggerRule": "首次出现时触发",
+      "Note": "教学必须能跳过"
+    },
+    {
+      "StepID": "FTUE_04",
+      "Order": 4,
+      "Description": "引导选择范围或减负升级",
+      "GuideType": "Popup|Arrow|SlowTime",
+      "Context": "Battle/UI",
+      "Skippable": 1,
+      "TriggerRule": "首次出现时触发",
+      "Note": "教学必须能跳过"
+    },
+    {
+      "StepID": "FTUE_05",
+      "Order": 5,
+      "Description": "展示稀有鼠提示与优先击杀",
+      "GuideType": "Popup|Arrow|SlowTime",
+      "Context": "Battle/UI",
+      "Skippable": 1,
+      "TriggerRule": "首次出现时触发",
+      "Note": "教学必须能跳过"
+    },
+    {
+      "StepID": "FTUE_06",
+      "Order": 6,
+      "Description": "引导使用第一次自动锤",
+      "GuideType": "Popup|Arrow|SlowTime",
+      "Context": "Battle/UI",
+      "Skippable": 1,
+      "TriggerRule": "首次出现时触发",
+      "Note": "教学必须能跳过"
+    },
+    {
+      "StepID": "FTUE_07",
+      "Order": 7,
+      "Description": "解释局内商店与事件",
+      "GuideType": "Popup|Arrow|SlowTime",
+      "Context": "Battle/UI",
+      "Skippable": 1,
+      "TriggerRule": "首次出现时触发",
+      "Note": "教学必须能跳过"
+    },
+    {
+      "StepID": "FTUE_08",
+      "Order": 8,
+      "Description": "解释设施槽位和放置",
+      "GuideType": "Popup|Arrow|SlowTime",
+      "Context": "Battle/UI",
+      "Skippable": 1,
+      "TriggerRule": "首次出现时触发",
+      "Note": "教学必须能跳过"
+    },
+    {
+      "StepID": "FTUE_09",
+      "Order": 9,
+      "Description": "展示Boss预警",
+      "GuideType": "Popup|Arrow|SlowTime",
+      "Context": "Battle/UI",
+      "Skippable": 1,
+      "TriggerRule": "首次出现时触发",
+      "Note": "教学必须能跳过"
+    },
+    {
+      "StepID": "FTUE_10",
+      "Order": 10,
+      "Description": "局后成长树与再来一局",
+      "GuideType": "Popup|Arrow|SlowTime",
+      "Context": "Battle/UI",
+      "Skippable": 1,
+      "TriggerRule": "首次出现时触发",
+      "Note": "教学必须能跳过"
+    },
+    {
+      "StepID": "FTUE_11",
+      "Order": 11,
+      "Description": "角色解锁与流派推荐",
+      "GuideType": "Popup|Arrow|SlowTime",
+      "Context": "Battle/UI",
+      "Skippable": 1,
+      "TriggerRule": "首次出现时触发",
+      "Note": "教学必须能跳过"
+    },
+    {
+      "StepID": "FTUE_12",
+      "Order": 12,
+      "Description": "难度选择与挑战提示",
+      "GuideType": "Popup|Arrow|SlowTime",
+      "Context": "Battle/UI",
+      "Skippable": 1,
+      "TriggerRule": "首次出现时触发",
+      "Note": "教学必须能跳过"
+    },
+    {
+      "StepID": "FTUE_13",
+      "Order": 13,
+      "Description": "扩展教学节点 13",
+      "GuideType": "Popup",
+      "Context": "Meta/Menu",
+      "Skippable": 0,
+      "TriggerRule": "按解锁条件触发",
+      "Note": "发行前补完教程"
+    },
+    {
+      "StepID": "FTUE_14",
+      "Order": 14,
+      "Description": "扩展教学节点 14",
+      "GuideType": "Popup",
+      "Context": "Meta/Menu",
+      "Skippable": 0,
+      "TriggerRule": "按解锁条件触发",
+      "Note": "发行前补完教程"
+    },
+    {
+      "StepID": "FTUE_15",
+      "Order": 15,
+      "Description": "扩展教学节点 15",
+      "GuideType": "Popup",
+      "Context": "Meta/Menu",
+      "Skippable": 0,
+      "TriggerRule": "按解锁条件触发",
+      "Note": "发行前补完教程"
+    },
+    {
+      "StepID": "FTUE_16",
+      "Order": 16,
+      "Description": "扩展教学节点 16",
+      "GuideType": "Popup",
+      "Context": "Meta/Menu",
+      "Skippable": 0,
+      "TriggerRule": "按解锁条件触发",
+      "Note": "发行前补完教程"
+    },
+    {
+      "StepID": "FTUE_17",
+      "Order": 17,
+      "Description": "扩展教学节点 17",
+      "GuideType": "Popup",
+      "Context": "Meta/Menu",
+      "Skippable": 0,
+      "TriggerRule": "按解锁条件触发",
+      "Note": "发行前补完教程"
+    },
+    {
+      "StepID": "FTUE_18",
+      "Order": 18,
+      "Description": "扩展教学节点 18",
+      "GuideType": "Popup",
+      "Context": "Meta/Menu",
+      "Skippable": 0,
+      "TriggerRule": "按解锁条件触发",
+      "Note": "发行前补完教程"
+    },
+    {
+      "StepID": "FTUE_19",
+      "Order": 19,
+      "Description": "扩展教学节点 19",
+      "GuideType": "Popup",
+      "Context": "Meta/Menu",
+      "Skippable": 0,
+      "TriggerRule": "按解锁条件触发",
+      "Note": "发行前补完教程"
+    },
+    {
+      "StepID": "FTUE_20",
+      "Order": 20,
+      "Description": "扩展教学节点 20",
+      "GuideType": "Popup",
+      "Context": "Meta/Menu",
+      "Skippable": 0,
+      "TriggerRule": "按解锁条件触发",
+      "Note": "发行前补完教程"
+    },
+    {
+      "StepID": "FTUE_21",
+      "Order": 21,
+      "Description": "扩展教学节点 21",
+      "GuideType": "Popup",
+      "Context": "Meta/Menu",
+      "Skippable": 0,
+      "TriggerRule": "按解锁条件触发",
+      "Note": "发行前补完教程"
+    },
+    {
+      "StepID": "FTUE_22",
+      "Order": 22,
+      "Description": "扩展教学节点 22",
+      "GuideType": "Popup",
+      "Context": "Meta/Menu",
+      "Skippable": 0,
+      "TriggerRule": "按解锁条件触发",
+      "Note": "发行前补完教程"
+    },
+    {
+      "StepID": "FTUE_23",
+      "Order": 23,
+      "Description": "扩展教学节点 23",
+      "GuideType": "Popup",
+      "Context": "Meta/Menu",
+      "Skippable": 0,
+      "TriggerRule": "按解锁条件触发",
+      "Note": "发行前补完教程"
+    },
+    {
+      "StepID": "FTUE_24",
+      "Order": 24,
+      "Description": "扩展教学节点 24",
+      "GuideType": "Popup",
+      "Context": "Meta/Menu",
+      "Skippable": 0,
+      "TriggerRule": "按解锁条件触发",
+      "Note": "发行前补完教程"
+    },
+    {
+      "StepID": "FTUE_25",
+      "Order": 25,
+      "Description": "扩展教学节点 25",
+      "GuideType": "Popup",
+      "Context": "Meta/Menu",
+      "Skippable": 0,
+      "TriggerRule": "按解锁条件触发",
+      "Note": "发行前补完教程"
+    },
+    {
+      "StepID": "FTUE_26",
+      "Order": 26,
+      "Description": "扩展教学节点 26",
+      "GuideType": "Popup",
+      "Context": "Meta/Menu",
+      "Skippable": 0,
+      "TriggerRule": "按解锁条件触发",
+      "Note": "发行前补完教程"
+    },
+    {
+      "StepID": "FTUE_27",
+      "Order": 27,
+      "Description": "扩展教学节点 27",
+      "GuideType": "Popup",
+      "Context": "Meta/Menu",
+      "Skippable": 0,
+      "TriggerRule": "按解锁条件触发",
+      "Note": "发行前补完教程"
+    },
+    {
+      "StepID": "FTUE_28",
+      "Order": 28,
+      "Description": "扩展教学节点 28",
+      "GuideType": "Popup",
+      "Context": "Meta/Menu",
+      "Skippable": 0,
+      "TriggerRule": "按解锁条件触发",
+      "Note": "发行前补完教程"
+    },
+    {
+      "StepID": "FTUE_29",
+      "Order": 29,
+      "Description": "扩展教学节点 29",
+      "GuideType": "Popup",
+      "Context": "Meta/Menu",
+      "Skippable": 0,
+      "TriggerRule": "按解锁条件触发",
+      "Note": "发行前补完教程"
+    },
+    {
+      "StepID": "FTUE_30",
+      "Order": 30,
+      "Description": "扩展教学节点 30",
+      "GuideType": "Popup",
+      "Context": "Meta/Menu",
+      "Skippable": 0,
+      "TriggerRule": "按解锁条件触发",
+      "Note": "发行前补完教程"
+    }
+  ],
+  "rows": null
+}

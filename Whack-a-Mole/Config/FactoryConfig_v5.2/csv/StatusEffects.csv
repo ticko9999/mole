@@ -1,0 +1,11 @@
+﻿StatusID,Name,DamageType,Description,DurationSec,PowerA,PowerB,CanStack,MaxStack,TickSec,VFX,LocKey
+ST_SHOCK,感电,Shock,可叠层，叠层后额外弹射,6,0.3,0,1,5,0,VFX_001,LOC_STATUS_001
+ST_BURN,灼烧,Fire,持续伤害，触发爆燃,5,0.5,0,1,5,1,VFX_002,LOC_STATUS_002
+ST_FREEZE,冻结,Frost,冻结停止行动并增加受击,2,0,0,0,1,0,VFX_003,LOC_STATUS_003
+ST_BLEED,流血,Blunt,持续掉血，受到AOE易扩散,5,0.35,0,1,5,1,VFX_004,LOC_STATUS_004
+ST_WEAKEN,虚弱,Arcane,降低护甲和伤害,6,0.15,0,1,5,0,VFX_005,LOC_STATUS_005
+ST_GREED,贪婪印记,Gold,击杀额外掉落金币,8,0.25,0,1,5,0,VFX_006,LOC_STATUS_006
+ST_EXEC,处决标记,True,低于阈值可自动击杀,10,0.18,0,1,5,0,VFX_007,LOC_STATUS_007
+ST_SLOW,减速,Frost,降低冒头和缩回速度,4,0.25,0,1,5,0,VFX_008,LOC_STATUS_008
+ST_EXPOSE,破绽,Arcane,提高暴击率和暴伤,5,0.12,0,1,5,0,VFX_009,LOC_STATUS_009
+ST_STUN,眩晕,Blunt,短暂无法行动,1.5,0,0,0,1,0,VFX_010,LOC_STATUS_010

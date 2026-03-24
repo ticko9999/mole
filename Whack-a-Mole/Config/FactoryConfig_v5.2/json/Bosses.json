@@ -1,0 +1,117 @@
+{
+  "sheet_name": "Bosses",
+  "sheet_slug": "Bosses",
+  "row_count": 8,
+  "column_count": 10,
+  "headers": [
+    "BossID",
+    "Name",
+    "Theme",
+    "Rarity",
+    "HP",
+    "Abilities",
+    "PhaseSet",
+    "DropTable",
+    "UnlockMap",
+    "LocKey"
+  ],
+  "records": [
+    {
+      "BossID": "BOSS_FOREMAN",
+      "Name": "暴走工头鼠",
+      "Theme": "Industrial",
+      "Rarity": "Epic",
+      "HP": 800,
+      "Abilities": "召唤|换洞|全图加速",
+      "PhaseSet": "PHASE_FOREMAN_A|PHASE_FOREMAN_B|PHASE_FOREMAN_C",
+      "DropTable": "Drop_Relic_Boss1",
+      "UnlockMap": "MAP_FACTORY",
+      "LocKey": "LOC_BOSS_001"
+    },
+    {
+      "BossID": "BOSS_RATKING",
+      "Name": "鼠王总督",
+      "Theme": "Royal",
+      "Rarity": "Legendary",
+      "HP": 1200,
+      "Abilities": "召唤护卫|钻地|怒气",
+      "PhaseSet": "PHASE_KING_A|PHASE_KING_B|PHASE_KING_C",
+      "DropTable": "Drop_Relic_Boss2",
+      "UnlockMap": "MAP_VAULT",
+      "LocKey": "LOC_BOSS_002"
+    },
+    {
+      "BossID": "BOSS_TREASURER",
+      "Name": "金库董事长",
+      "Theme": "Wealth",
+      "Rarity": "Legendary",
+      "HP": 980,
+      "Abilities": "偷金|吐金鼠|宝箱",
+      "PhaseSet": "PHASE_TREAS_A|PHASE_TREAS_B|PHASE_TREAS_C",
+      "DropTable": "Drop_Relic_Boss3",
+      "UnlockMap": "MAP_FREEZER",
+      "LocKey": "LOC_BOSS_003"
+    },
+    {
+      "BossID": "BOSS_DRILL",
+      "Name": "地核钻头鼠",
+      "Theme": "Machine",
+      "Rarity": "Legendary",
+      "HP": 1350,
+      "Abilities": "封锁洞口|震地|钻地",
+      "PhaseSet": "PHASE_DRILL_A|PHASE_DRILL_B|PHASE_DRILL_C",
+      "DropTable": "Drop_Relic_Boss4",
+      "UnlockMap": "MAP_REACTOR",
+      "LocKey": "LOC_BOSS_004"
+    },
+    {
+      "BossID": "BOSS_TESLA",
+      "Name": "感电主脑鼠",
+      "Theme": "Shock",
+      "Rarity": "Legendary",
+      "HP": 1150,
+      "Abilities": "全图电网|感电扩散",
+      "PhaseSet": "PHASE_TESLA_A|PHASE_TESLA_B|PHASE_TESLA_C",
+      "DropTable": "Drop_Relic_Boss5",
+      "UnlockMap": "MAP_DRILL",
+      "LocKey": "LOC_BOSS_005"
+    },
+    {
+      "BossID": "BOSS_FREEZER",
+      "Name": "冻库大王",
+      "Theme": "Frost",
+      "Rarity": "Legendary",
+      "HP": 1100,
+      "Abilities": "冻结、减速与碎裂",
+      "PhaseSet": "PHASE_FREEZE_A|PHASE_FREEZE_B|PHASE_FREEZE_C",
+      "DropTable": "Drop_Relic_Boss6",
+      "UnlockMap": "MAP_CASINO",
+      "LocKey": "LOC_BOSS_006"
+    },
+    {
+      "BossID": "BOSS_ALCH",
+      "Name": "炼金灾变鼠",
+      "Theme": "Fire",
+      "Rarity": "Legendary",
+      "HP": 1250,
+      "Abilities": "灼烧连爆|毒瓶",
+      "PhaseSet": "PHASE_ALCH_A|PHASE_ALCH_B|PHASE_ALCH_C",
+      "DropTable": "Drop_Relic_Boss7",
+      "UnlockMap": "MAP_FACTORY",
+      "LocKey": "LOC_BOSS_007"
+    },
+    {
+      "BossID": "BOSS_JUDGE",
+      "Name": "终审执法鼠",
+      "Theme": "Execute",
+      "Rarity": "Legendary",
+      "HP": 1400,
+      "Abilities": "处决压制|高压场",
+      "PhaseSet": "PHASE_JUDGE_A|PHASE_JUDGE_B|PHASE_JUDGE_C",
+      "DropTable": "Drop_Relic_Boss8",
+      "UnlockMap": "MAP_VAULT",
+      "LocKey": "LOC_BOSS_008"
+    }
+  ],
+  "rows": null
+}

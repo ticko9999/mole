@@ -1,0 +1,21 @@
+﻿AudioID,Name,Type,Bus,Volume,Loop,TriggerDesc,LocKey
+AUD_001,普通命中,SFX,Group_Main,0.76,1,触发说明 普通命中,LOC_AUD_001
+AUD_002,暴击命中,SFX,Group_Main,0.77,1,触发说明 暴击命中,LOC_AUD_002
+AUD_003,金币吸附,SFX,Group_Main,0.78,0,触发说明 金币吸附,LOC_AUD_003
+AUD_004,稀有鼠出现,SFX,Group_Main,0.79,1,触发说明 稀有鼠出现,LOC_AUD_004
+AUD_005,宝箱掉落,SFX,Group_Main,0.75,1,触发说明 宝箱掉落,LOC_AUD_005
+AUD_006,狂热触发,SFX,Group_Main,0.76,0,触发说明 狂热触发,LOC_AUD_006
+AUD_007,Boss预警,SFX,Group_Main,0.77,1,触发说明 Boss预警,LOC_AUD_007
+AUD_008,Boss阶段切换,SFX,Group_Main,0.78,1,触发说明 Boss阶段切换,LOC_AUD_008
+AUD_009,设施触发,SFX,Group_Main,0.79,0,触发说明 设施触发,LOC_AUD_009
+AUD_010,电链跳跃,SFX,Group_Main,0.75,1,触发说明 电链跳跃,LOC_AUD_010
+AUD_011,爆燃爆炸,SFX,Group_Main,0.76,1,触发说明 爆燃爆炸,LOC_AUD_011
+AUD_012,冻结碎裂,SFX,Group_Main,0.77,0,触发说明 冻结碎裂,LOC_AUD_012
+AUD_013,商店打开,SFX,Group_Main,0.78,1,触发说明 商店打开,LOC_AUD_013
+AUD_014,事件触发,SFX,Group_Main,0.79,1,触发说明 事件触发,LOC_AUD_014
+AUD_015,结算胜利,SFX,Group_Main,0.75,0,触发说明 结算胜利,LOC_AUD_015
+AUD_016,结算失败,SFX,Group_Main,0.76,1,触发说明 结算失败,LOC_AUD_016
+AUD_017,按钮确认,SFX,Group_Main,0.77,1,触发说明 按钮确认,LOC_AUD_017
+AUD_018,按钮返回,Stinger,Group_Main,0.78,0,触发说明 按钮返回,LOC_AUD_018
+AUD_019,Legend出现,Stinger,Group_Main,0.79,1,触发说明 Legend出现,LOC_AUD_019
+AUD_020,自动锤触发,Stinger,Group_Main,0.75,1,触发说明 自动锤触发,LOC_AUD_020

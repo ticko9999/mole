@@ -1,0 +1,25 @@
+﻿ShopID,Name,ShopType,SlotCount,BasePrice,PriceGrowth,Currency,CanRefresh,OfferTypes,Description,Tag,LocKey
+SHOP_01,商店页签 01,Relic,3,20,1.18,Gold,0,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_0,LOC_SHOP_01
+SHOP_02,商店页签 02,Consumable,4,25,1.2,Gold,1,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_1,LOC_SHOP_02
+SHOP_03,商店页签 03,Consumable,5,30,1.22,Gold,0,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_2,LOC_SHOP_03
+SHOP_04,商店页签 04,Relic,6,35,1.24,Gold,1,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_3,LOC_SHOP_04
+SHOP_05,商店页签 05,Consumable,3,40,1.26,Gold,0,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_4,LOC_SHOP_05
+SHOP_06,商店页签 06,Consumable,4,45,1.18,Gold,1,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_5,LOC_SHOP_06
+SHOP_07,商店页签 07,Relic,5,50,1.2,Gold,0,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_0,LOC_SHOP_07
+SHOP_08,商店页签 08,Consumable,6,55,1.22,Gold,1,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_1,LOC_SHOP_08
+SHOP_09,商店页签 09,Consumable,3,60,1.24,Gold,0,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_2,LOC_SHOP_09
+SHOP_10,商店页签 10,Relic,4,65,1.26,Gold,1,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_3,LOC_SHOP_10
+SHOP_11,商店页签 11,Consumable,5,70,1.18,Gold,0,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_4,LOC_SHOP_11
+SHOP_12,商店页签 12,Consumable,6,75,1.2,Gold,1,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_5,LOC_SHOP_12
+SHOP_13,商店页签 13,Relic,3,80,1.22,Gold,0,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_0,LOC_SHOP_13
+SHOP_14,商店页签 14,Consumable,4,85,1.24,Gold,1,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_1,LOC_SHOP_14
+SHOP_15,商店页签 15,Consumable,5,90,1.26,Gold,0,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_2,LOC_SHOP_15
+SHOP_16,商店页签 16,Relic,6,95,1.18,Gold,1,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_3,LOC_SHOP_16
+SHOP_17,商店页签 17,Consumable,3,100,1.2,Gold,0,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_4,LOC_SHOP_17
+SHOP_18,商店页签 18,Consumable,4,105,1.22,Gold,1,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_5,LOC_SHOP_18
+SHOP_19,商店页签 19,Relic,5,110,1.24,Gold,0,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_0,LOC_SHOP_19
+SHOP_20,商店页签 20,Consumable,6,115,1.26,Gold,1,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_1,LOC_SHOP_20
+SHOP_21,商店页签 21,Consumable,3,120,1.18,Gold,0,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_2,LOC_SHOP_21
+SHOP_22,商店页签 22,Relic,4,125,1.2,Gold,1,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_3,LOC_SHOP_22
+SHOP_23,商店页签 23,Consumable,5,130,1.22,Gold,0,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_4,LOC_SHOP_23
+SHOP_24,商店页签 24,Consumable,6,135,1.24,Gold,1,Relic|Upgrade|Facility|Heal,波次间商店配置,TAG_SHOP_5,LOC_SHOP_24

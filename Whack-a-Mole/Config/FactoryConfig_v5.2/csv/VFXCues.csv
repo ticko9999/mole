@@ -1,0 +1,21 @@
+﻿VFXID,Name,Type,Pool,Duration,Loop,Description,LocKey
+VFX_001,锤击闪光,Hit,Pool_Common,0.62,1,表现说明 锤击闪光,LOC_VFX_001
+VFX_002,暴击重击,Hit,Pool_Common,0.64,0,表现说明 暴击重击,LOC_VFX_002
+VFX_003,感电弧线,Hit,Pool_Common,0.66,1,表现说明 感电弧线,LOC_VFX_003
+VFX_004,爆燃火环,Hit,Pool_Common,0.6,0,表现说明 爆燃火环,LOC_VFX_004
+VFX_005,冻结晶体,Hit,Pool_Common,0.62,1,表现说明 冻结晶体,LOC_VFX_005
+VFX_006,金币喷发,Hit,Pool_Common,0.64,0,表现说明 金币喷发,LOC_VFX_006
+VFX_007,宝箱开启,Hit,Pool_Common,0.66,1,表现说明 宝箱开启,LOC_VFX_007
+VFX_008,传奇鼠高亮,Hit,Pool_Common,0.6,0,表现说明 传奇鼠高亮,LOC_VFX_008
+VFX_009,Boss警示圈,Hit,Pool_Common,0.62,1,表现说明 Boss警示圈,LOC_VFX_009
+VFX_010,设施激活,State,Pool_Common,0.64,0,表现说明 设施激活,LOC_VFX_010
+VFX_011,处决斩线,State,Pool_Common,0.66,1,表现说明 处决斩线,LOC_VFX_011
+VFX_012,吸金拖尾,State,Pool_Common,0.6,0,表现说明 吸金拖尾,LOC_VFX_012
+VFX_013,狂热边框,State,Pool_Common,0.62,1,表现说明 狂热边框,LOC_VFX_013
+VFX_014,地图危险波,State,Pool_Common,0.64,0,表现说明 地图危险波,LOC_VFX_014
+VFX_015,波次转场,State,Pool_Common,0.66,1,表现说明 波次转场,LOC_VFX_015
+VFX_016,胜利烟花,State,Pool_Common,0.6,0,表现说明 胜利烟花,LOC_VFX_016
+VFX_017,失败故障,State,Pool_Common,0.62,1,表现说明 失败故障,LOC_VFX_017
+VFX_018,自动锤残影,State,Pool_Common,0.64,0,表现说明 自动锤残影,LOC_VFX_018
+VFX_019,图腾光环,State,Pool_Common,0.66,1,表现说明 图腾光环,LOC_VFX_019
+VFX_020,棱镜分叉,State,Pool_Common,0.6,0,表现说明 棱镜分叉,LOC_VFX_020

@@ -1,0 +1,7 @@
+﻿RuleID,PoolID,MapFilter,PhaseFilter,MinSec,MaxSec,ThreatMin,Condition,Enabled,Note
+SPR_01,POOL_STD,MAP_ANY,Early,0,999,1.5,MoleTags match,1,刷怪池规则 POOL_STD
+SPR_02,POOL_FAST,MAP_ANY,Early,0,999,2,MoleTags match,1,刷怪池规则 POOL_FAST
+SPR_03,POOL_ARMORED,MAP_ANY,Mid|Late,0,999,2.5,MoleTags match,1,刷怪池规则 POOL_ARMORED
+SPR_04,POOL_RICH,MAP_ANY,Mid|Late,120,999,3,MoleTags match,1,刷怪池规则 POOL_RICH
+SPR_05,POOL_EVENT,MAP_REACTOR|MAP_DRILL,Mid|Late,120,999,3.5,MoleTags match,1,刷怪池规则 POOL_EVENT
+SPR_06,POOL_END,MAP_REACTOR|MAP_DRILL,Mid|Late,120,999,4,MoleTags match,1,刷怪池规则 POOL_END

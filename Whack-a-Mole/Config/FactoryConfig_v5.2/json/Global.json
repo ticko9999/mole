@@ -1,0 +1,199 @@
+{
+  "sheet_name": "Global",
+  "sheet_slug": "Global",
+  "row_count": 18,
+  "column_count": 8,
+  "headers": [
+    "ParamID",
+    "Name",
+    "Value",
+    "Category",
+    "DataType",
+    "Min",
+    "Max",
+    "Note"
+  ],
+  "records": [
+    {
+      "ParamID": "GLB_001",
+      "Name": "BattleDurationSec",
+      "Value": 600,
+      "Category": "Battle",
+      "DataType": "int",
+      "Min": 0,
+      "Max": "",
+      "Note": "默认战斗总时长 10 分钟"
+    },
+    {
+      "ParamID": "GLB_002",
+      "Name": "StartingGold",
+      "Value": 0,
+      "Category": "Battle",
+      "DataType": "int",
+      "Min": 0,
+      "Max": "",
+      "Note": "开局金币"
+    },
+    {
+      "ParamID": "GLB_003",
+      "Name": "StartingXP",
+      "Value": 0,
+      "Category": "Battle",
+      "DataType": "int",
+      "Min": 0,
+      "Max": "",
+      "Note": "开局经验"
+    },
+    {
+      "ParamID": "GLB_004",
+      "Name": "StartingLife",
+      "Value": 5,
+      "Category": "Battle",
+      "DataType": "int",
+      "Min": 0,
+      "Max": "",
+      "Note": "基础失误容忍"
+    },
+    {
+      "ParamID": "GLB_005",
+      "Name": "StartingFacilitySlots",
+      "Value": 1,
+      "Category": "Battle",
+      "DataType": "int",
+      "Min": 0,
+      "Max": "",
+      "Note": "基础设施槽位"
+    },
+    {
+      "ParamID": "GLB_006",
+      "Name": "StartingReroll",
+      "Value": 1,
+      "Category": "Battle",
+      "DataType": "int",
+      "Min": 0,
+      "Max": "",
+      "Note": "开局重抽"
+    },
+    {
+      "ParamID": "GLB_007",
+      "Name": "ComboWindowSec",
+      "Value": 2.2,
+      "Category": "Combat",
+      "DataType": "float",
+      "Min": 0,
+      "Max": "",
+      "Note": "连击断裂时间"
+    },
+    {
+      "ParamID": "GLB_008",
+      "Name": "LegendWarnSec",
+      "Value": 1.2,
+      "Category": "Combat",
+      "DataType": "float",
+      "Min": 0,
+      "Max": "",
+      "Note": "传奇鼠提示时间"
+    },
+    {
+      "ParamID": "GLB_009",
+      "Name": "BossWarningSec",
+      "Value": 3,
+      "Category": "Combat",
+      "DataType": "float",
+      "Min": 0,
+      "Max": "",
+      "Note": "Boss预警时长"
+    },
+    {
+      "ParamID": "GLB_010",
+      "Name": "AutoPickupRange",
+      "Value": 1.5,
+      "Category": "Economy",
+      "DataType": "float",
+      "Min": 0,
+      "Max": "",
+      "Note": "基础吸附半径"
+    },
+    {
+      "ParamID": "GLB_011",
+      "Name": "InterestRate",
+      "Value": 0.06,
+      "Category": "Economy",
+      "DataType": "float",
+      "Min": 0,
+      "Max": "",
+      "Note": "每波利息"
+    },
+    {
+      "ParamID": "GLB_012",
+      "Name": "InterestThreshold",
+      "Value": 100,
+      "Category": "Economy",
+      "DataType": "int",
+      "Min": 0,
+      "Max": "",
+      "Note": "利息门槛"
+    },
+    {
+      "ParamID": "GLB_013",
+      "Name": "RarityDecay",
+      "Value": 0.15,
+      "Category": "Spawn",
+      "DataType": "float",
+      "Min": 0,
+      "Max": "",
+      "Note": "同类稀有衰减"
+    },
+    {
+      "ParamID": "GLB_014",
+      "Name": "MaxEventChoices",
+      "Value": 3,
+      "Category": "Event",
+      "DataType": "int",
+      "Min": 0,
+      "Max": "",
+      "Note": "事件分支数"
+    },
+    {
+      "ParamID": "GLB_015",
+      "Name": "ShopRefreshBase",
+      "Value": 20,
+      "Category": "Shop",
+      "DataType": "int",
+      "Min": 0,
+      "Max": "",
+      "Note": "刷新价格"
+    },
+    {
+      "ParamID": "GLB_016",
+      "Name": "MetaRefundRate",
+      "Value": 0.6,
+      "Category": "Meta",
+      "DataType": "float",
+      "Min": 0,
+      "Max": "",
+      "Note": "重置返还率"
+    },
+    {
+      "ParamID": "GLB_017",
+      "Name": "NightmareHpMult",
+      "Value": 1.38,
+      "Category": "Difficulty",
+      "DataType": "float",
+      "Min": 0,
+      "Max": "",
+      "Note": "噩梦生命倍率"
+    },
+    {
+      "ParamID": "GLB_018",
+      "Name": "NightmareThreatMult",
+      "Value": 1.25,
+      "Category": "Difficulty",
+      "DataType": "float",
+      "Min": 0,
+      "Max": "",
+      "Note": "噩梦威胁倍率"
+    }
+  ],
+  "rows": null
+}

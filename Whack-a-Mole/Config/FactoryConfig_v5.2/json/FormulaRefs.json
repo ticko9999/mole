@@ -1,0 +1,79 @@
+{
+  "sheet_name": "FormulaRefs",
+  "sheet_slug": "FormulaRefs",
+  "row_count": 6,
+  "column_count": 8,
+  "headers": [
+    "FormulaID",
+    "Name",
+    "ExpressionPseudo",
+    "Inputs",
+    "Outputs",
+    "OwnerSheet",
+    "UseCase",
+    "Note"
+  ],
+  "records": [
+    {
+      "FormulaID": "F_DAMAGE",
+      "Name": "最终伤害",
+      "ExpressionPseudo": "BaseDamage*(1+DMG_PCT)*Crit*TargetMods",
+      "Inputs": "Weapons|Skills|Attr",
+      "Outputs": "HitDamage",
+      "OwnerSheet": "CalcModel",
+      "UseCase": "所有命中",
+      "Note": "暴击时乘以CritDmg"
+    },
+    {
+      "FormulaID": "F_CD",
+      "Name": "最终冷却",
+      "ExpressionPseudo": "BaseCD/(1+ASPD_PCT)",
+      "Inputs": "Weapons|Attr",
+      "Outputs": "FinalCD",
+      "OwnerSheet": "CalcModel",
+      "UseCase": "攻击频率",
+      "Note": "向下限制0.08"
+    },
+    {
+      "FormulaID": "F_GOLD",
+      "Name": "金币掉落",
+      "ExpressionPseudo": "BaseGold*(1+GOLD_PCT)*Combo*RareMult",
+      "Inputs": "Moles|Attr",
+      "Outputs": "GoldGain",
+      "OwnerSheet": "CalcModel",
+      "UseCase": "掉落结算",
+      "Note": "赏金和传奇另算"
+    },
+    {
+      "FormulaID": "F_THREAT",
+      "Name": "威胁预算",
+      "ExpressionPseudo": "Base+t*A+t^2*B",
+      "Inputs": "StageCurve",
+      "Outputs": "ThreatBudget",
+      "OwnerSheet": "StageCurve",
+      "UseCase": "刷怪",
+      "Note": "按地图微调"
+    },
+    {
+      "FormulaID": "F_INTEREST",
+      "Name": "利息",
+      "ExpressionPseudo": "CurrentGold*InterestRate if Gold>=Threshold",
+      "Inputs": "EconomyIn",
+      "Outputs": "InterestGold",
+      "OwnerSheet": "EconomyIn",
+      "UseCase": "波间收益",
+      "Note": "经济流核心"
+    },
+    {
+      "FormulaID": "F_EXEC",
+      "Name": "处决判断",
+      "ExpressionPseudo": "HPPercent<=EXEC_PCT or status=EXEC",
+      "Inputs": "Status|Attr",
+      "Outputs": "ExecuteFlag",
+      "OwnerSheet": "Skills",
+      "UseCase": "自动处决",
+      "Note": "Boss通常不适用"
+    }
+  ],
+  "rows": null
+}

@@ -1,0 +1,55 @@
+﻿WeaponID,Name,Tier,Rarity,Type,DamageType,BaseDamage,BaseCD,BaseRadius,Crit,TargetRule,ProjectileID,SummonID,StatusOnHit,CanDrop,IsEvolution,Tags,LocKey,Description,Version
+WPN_WOOD,木锤,Starter,Common,Hammer,Blunt,10,0.48,0.35,0.05,Single,PRJ_HAMMER,,,1,0,TAG_Blunt|TAG_Hammer,LOC_WPN_WOOD,玩家基础单点锤,Release
+WPN_IRON,铁锤,Starter,Common,Hammer,Blunt,16,0.62,0.32,0.08,Single,PRJ_HAMMER,,,1,0,TAG_Blunt|TAG_Hammer,LOC_WPN_IRON,高伤低频,Release
+WPN_THUNDER,雷击锤,Starter,Uncommon,Chain,Shock,11,0.58,0.34,0.06,Chain,PRJ_ARC,,,1,0,TAG_Shock|TAG_Chain,LOC_WPN_THUNDER,命中后弹射,Release
+WPN_SWEEP,横扫锤,Starter,Uncommon,Wave,Blunt,9,0.5,0.5,0.05,Arc,PRJ_WAVE,,,1,0,TAG_Blunt|TAG_Wave,LOC_WPN_SWEEP,扇形打击,Release
+WPN_PRESS,液压压头,Starter,Uncommon,Trap,Blunt,13,0.8,0.38,0.04,Execute,PRJ_WAVE,,,1,0,TAG_Blunt|TAG_Trap,LOC_WPN_PRESS,低血处决路线,Release
+WPN_COIN,金币炮,Starter,Rare,Beam,Gold,8,0.54,0.34,0.12,Single,PRJ_BEAM,,,1,0,TAG_Gold|TAG_Beam,LOC_WPN_COIN,收益转伤害,Release
+WPN_DRONE_CORE,无人机核心锤,Starter,Rare,Drone,Blunt,7,1.1,0.3,0.03,Auto,PRJ_DRONE,,,1,0,TAG_Blunt|TAG_Drone,LOC_WPN_DRONE_CORE,自动索敌锤,Release
+WPN_FLASK,炼金爆瓶,Starter,Rare,Trap,Fire,12,0.75,0.42,0.04,Splash,PRJ_FIRELOB,,,1,0,TAG_Fire|TAG_Trap,LOC_WPN_FLASK,异常爆炸,Release
+WPN_DICE,幸运骰锤,Starter,Rare,Hammer,Arcane,6,0.42,0.3,0.2,Single,PRJ_HAMMER,,,1,0,TAG_Arcane|TAG_Hammer,LOC_WPN_DICE,暴击/赌收益,Release
+WPN_SHIELD,守卫盾锤,Starter,Uncommon,Hammer,Blunt,8,0.55,0.36,0.05,Single,PRJ_HAMMER,,,1,0,TAG_Blunt|TAG_Hammer,LOC_WPN_SHIELD,命中提供护盾,Release
+WPN_PILE,打桩机,Advanced,Rare,Hammer,Blunt,20,0.95,0.28,0.1,Pierce,PRJ_HAMMER,,,1,0,TAG_Blunt|TAG_Hammer,LOC_WPN_PILE,单体爆发,Release
+WPN_MAGNET,磁暴吸头,Advanced,Rare,Beam,Shock,9,0.46,0.52,0.06,Pull,PRJ_ARC,,,1,0,TAG_Shock|TAG_Beam,LOC_WPN_MAGNET,吸附+电流,Release
+WPN_SAW,环刃锯盘,Advanced,Rare,Orbital,Blunt,7,0.3,0.6,0.05,Orbit,PRJ_WAVE,,,1,0,TAG_Blunt|TAG_Orbital,LOC_WPN_SAW,环绕切割,Release
+WPN_MORTAR,地震迫击锤,Advanced,Epic,Wave,Explosive,18,1.2,0.65,0.08,Impact,PRJ_WAVE,,,1,0,TAG_Explosive|TAG_Wave,LOC_WPN_MORTAR,范围震荡,Release
+WPN_TESLA,特斯拉线圈,Advanced,Epic,Totem,Shock,5,0.25,0.7,0.03,Aura,PRJ_ARC,,,1,0,TAG_Shock|TAG_Totem,LOC_WPN_TESLA,持续感电,Release
+WPN_FLAME,热熔喷灯,Advanced,Epic,Beam,Fire,4,0.12,0.48,0.02,Beam,PRJ_FIRELOB,,,1,0,TAG_Fire|TAG_Beam,LOC_WPN_FLAME,持续灼烧,Release
+WPN_FROST,冻压冷凝枪,Advanced,Epic,Beam,Frost,5,0.16,0.44,0.03,Beam,PRJ_BEAM,,,1,0,TAG_Frost|TAG_Beam,LOC_WPN_FROST,冻结控制,Release
+WPN_GAUNTLET,连打拳套,Advanced,Rare,Hammer,Blunt,5,0.18,0.26,0.06,Rapid,PRJ_HAMMER,,,1,0,TAG_Blunt|TAG_Hammer,LOC_WPN_GAUNTLET,高频近点,Release
+WPN_PRISM,棱镜炮台,Advanced,Epic,Totem,Arcane,14,1,0.55,0.1,Prism,PRJ_WAVE,,,1,0,TAG_Arcane|TAG_Totem,LOC_WPN_PRISM,分叉射线,Release
+WPN_BOMBARD,链爆弹仓,Advanced,Epic,Trap,Explosive,16,0.88,0.6,0.06,Splash,PRJ_WAVE,,,1,0,TAG_Explosive|TAG_Trap,LOC_WPN_BOMBARD,击杀连爆,Release
+EVO_WOOD_STORM,风暴工锤,Evolution,Legendary,Hammer,Shock,28,0.34,0.75,0.12,Auto,PRJ_WAVE,,,0,1,TAG_Shock|TAG_EVO,LOC_EVO_WOOD_STORM,范围+电震,Release
+EVO_IRON_QUAKE,震地重锤,Evolution,Legendary,Wave,Blunt,42,0.72,0.9,0.12,Auto,PRJ_WAVE,,,0,1,TAG_Blunt|TAG_EVO,LOC_EVO_IRON_QUAKE,重锤地裂,Release
+EVO_THUNDER_GRID,雷网主机,Evolution,Legendary,Chain,Shock,20,0.38,0.78,0.12,Auto,PRJ_ARC,,,0,1,TAG_Shock|TAG_EVO,LOC_EVO_THUNDER_GRID,全场连锁,Release
+EVO_SWEEP_CYCLONE,旋风扫荡机,Evolution,Legendary,Wave,Blunt,16,0.28,1,0.12,Auto,PRJ_WAVE,,,0,1,TAG_Blunt|TAG_EVO,LOC_EVO_SWEEP_CYCLONE,全扇面扫荡,Release
+EVO_PRESS_JUDGE,终审压制机,Evolution,Legendary,Trap,True,26,0.65,0.55,0.12,Auto,PRJ_ARC,,,0,1,TAG_True|TAG_EVO,LOC_EVO_PRESS_JUDGE,低血自动处决,Release
+EVO_COIN_MINT,黄金铸造炮,Evolution,Legendary,Beam,Gold,15,0.33,0.52,0.12,Auto,PRJ_ARC,,,0,1,TAG_Gold|TAG_EVO,LOC_EVO_COIN_MINT,金币转火力,Release
+EVO_DRONE_HIVE,蜂群锤巢,Evolution,Legendary,Drone,Blunt,10,0.22,0.34,0.12,Auto,PRJ_ARC,,,0,1,TAG_Blunt|TAG_EVO,LOC_EVO_DRONE_HIVE,多机协同,Release
+EVO_FLASK_REACTOR,炼金反应炉,Evolution,Legendary,Trap,Fire,23,0.48,0.72,0.12,Auto,PRJ_ARC,,,0,1,TAG_Fire|TAG_EVO,LOC_EVO_FLASK_REACTOR,异常连爆,Release
+EVO_DICE_CASINO,赌场主机,Evolution,Legendary,Hammer,Arcane,18,0.24,0.48,0.12,Auto,PRJ_WAVE,,,0,1,TAG_Arcane|TAG_EVO,LOC_EVO_DICE_CASINO,暴击与随机大奖,Release
+EVO_SHIELD_BASTION,堡垒盾锤,Evolution,Legendary,Totem,Blunt,12,0.4,0.68,0.12,Auto,PRJ_ARC,,,0,1,TAG_Blunt|TAG_EVO,LOC_EVO_SHIELD_BASTION,护盾光环,Release
+WPN_FAC_01,设施武器 01,Facility,Epic,Totem,Shock,7,0.7,0.5,0.04,Auto,PRJ_BEAM,,,0,0,TAG_FACILITY|TAG_Shock,LOC_WPN_FAC_01,设施触发式武器,Release
+WPN_FAC_02,设施武器 02,Facility,Epic,Totem,Fire,8,0.8,0.55,0.04,Auto,PRJ_BEAM,,,0,0,TAG_FACILITY|TAG_Fire,LOC_WPN_FAC_02,设施触发式武器,Release
+WPN_FAC_03,设施武器 03,Facility,Epic,Totem,Frost,9,0.9,0.6,0.04,Auto,PRJ_BEAM,,,0,0,TAG_FACILITY|TAG_Frost,LOC_WPN_FAC_03,设施触发式武器,Release
+WPN_FAC_04,设施武器 04,Facility,Epic,Totem,Arcane,10,0.6,0.65,0.04,Auto,PRJ_BEAM,,,0,0,TAG_FACILITY|TAG_Arcane,LOC_WPN_FAC_04,设施触发式武器,Release
+WPN_FAC_05,设施武器 05,Facility,Epic,Totem,Explosive,11,0.7,0.45,0.04,Auto,PRJ_BEAM,,,0,0,TAG_FACILITY|TAG_Explosive,LOC_WPN_FAC_05,设施触发式武器,Release
+WPN_FAC_06,设施武器 06,Facility,Epic,Totem,True,12,0.8,0.5,0.04,Auto,PRJ_BEAM,,,0,0,TAG_FACILITY|TAG_True,LOC_WPN_FAC_06,设施触发式武器,Release
+WPN_FAC_07,设施武器 07,Facility,Epic,Totem,Poison,13,0.9,0.55,0.04,Auto,PRJ_BEAM,,,0,0,TAG_FACILITY|TAG_Poison,LOC_WPN_FAC_07,设施触发式武器,Release
+WPN_FAC_08,设施武器 08,Facility,Epic,Totem,Gold,14,0.6,0.6,0.04,Auto,PRJ_BEAM,,,0,0,TAG_FACILITY|TAG_Gold,LOC_WPN_FAC_08,设施触发式武器,Release
+WPN_FAC_09,设施武器 09,Facility,Epic,Totem,Blunt,15,0.7,0.65,0.04,Auto,PRJ_BEAM,,,0,0,TAG_FACILITY|TAG_Blunt,LOC_WPN_FAC_09,设施触发式武器,Release
+WPN_FAC_10,设施武器 10,Facility,Epic,Totem,Shock,16,0.8,0.45,0.04,Auto,PRJ_BEAM,,,0,0,TAG_FACILITY|TAG_Shock,LOC_WPN_FAC_10,设施触发式武器,Release
+WPN_FAC_11,设施武器 11,Facility,Epic,Totem,Fire,17,0.9,0.5,0.04,Auto,PRJ_BEAM,,,0,0,TAG_FACILITY|TAG_Fire,LOC_WPN_FAC_11,设施触发式武器,Release
+WPN_FAC_12,设施武器 12,Facility,Epic,Totem,Frost,18,0.6,0.55,0.04,Auto,PRJ_BEAM,,,0,0,TAG_FACILITY|TAG_Frost,LOC_WPN_FAC_12,设施触发式武器,Release
+WPN_SUM_01,召唤武器 01,Summon,Epic,Summon,Frost,6,0.48,0.34,0.05,Auto,PRJ_DRONE,SUM_DRONE_A,,0,0,TAG_SUMMON|TAG_Frost,LOC_WPN_SUM_01,召唤衍生武器,Release
+WPN_SUM_02,召唤武器 02,Summon,Epic,Summon,Arcane,7,0.56,0.38,0.05,Auto,PRJ_DRONE,SUM_DRONE_A,,0,0,TAG_SUMMON|TAG_Arcane,LOC_WPN_SUM_02,召唤衍生武器,Release
+WPN_SUM_03,召唤武器 03,Summon,Epic,Summon,Explosive,8,0.64,0.42,0.05,Auto,PRJ_DRONE,SUM_DRONE_A,,0,0,TAG_SUMMON|TAG_Explosive,LOC_WPN_SUM_03,召唤衍生武器,Release
+WPN_SUM_04,召唤武器 04,Summon,Epic,Summon,True,9,0.4,0.46,0.05,Auto,PRJ_DRONE,SUM_TOTEM_TESLA,,0,0,TAG_SUMMON|TAG_True,LOC_WPN_SUM_04,召唤衍生武器,Release
+WPN_SUM_05,召唤武器 05,Summon,Epic,Summon,Poison,10,0.48,0.3,0.05,Auto,PRJ_DRONE,SUM_TOTEM_TESLA,,0,0,TAG_SUMMON|TAG_Poison,LOC_WPN_SUM_05,召唤衍生武器,Release
+WPN_SUM_06,召唤武器 06,Summon,Epic,Summon,Gold,11,0.56,0.34,0.05,Auto,PRJ_DRONE,SUM_TOTEM_TESLA,,0,0,TAG_SUMMON|TAG_Gold,LOC_WPN_SUM_06,召唤衍生武器,Release
+WPN_SUM_07,召唤武器 07,Summon,Epic,Summon,Blunt,12,0.64,0.38,0.05,Auto,PRJ_DRONE,SUM_TOTEM_TESLA,,0,0,TAG_SUMMON|TAG_Blunt,LOC_WPN_SUM_07,召唤衍生武器,Release
+WPN_SUM_08,召唤武器 08,Summon,Epic,Summon,Shock,13,0.4,0.42,0.05,Auto,PRJ_DRONE,SUM_MINER,,0,0,TAG_SUMMON|TAG_Shock,LOC_WPN_SUM_08,召唤衍生武器,Release
+WPN_SUM_09,召唤武器 09,Summon,Epic,Summon,Fire,14,0.48,0.46,0.05,Auto,PRJ_DRONE,SUM_MINER,,0,0,TAG_SUMMON|TAG_Fire,LOC_WPN_SUM_09,召唤衍生武器,Release
+WPN_SUM_10,召唤武器 10,Summon,Epic,Summon,Frost,15,0.56,0.3,0.05,Auto,PRJ_DRONE,SUM_MINER,,0,0,TAG_SUMMON|TAG_Frost,LOC_WPN_SUM_10,召唤衍生武器,Release
+WPN_SUM_11,召唤武器 11,Summon,Epic,Summon,Arcane,16,0.64,0.34,0.05,Auto,PRJ_DRONE,SUM_MINER,,0,0,TAG_SUMMON|TAG_Arcane,LOC_WPN_SUM_11,召唤衍生武器,Release
+WPN_SUM_12,召唤武器 12,Summon,Epic,Summon,Explosive,17,0.4,0.38,0.05,Auto,PRJ_DRONE,SUM_MINER,,0,0,TAG_SUMMON|TAG_Explosive,LOC_WPN_SUM_12,召唤衍生武器,Release

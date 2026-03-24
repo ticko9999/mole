@@ -1,0 +1,7 @@
+﻿MapID,Name,Description,Difficulty,HoleCount,BossBinding,Note,UnlockStage,DurationMin
+MAP_FACTORY,废旧工厂,24洞标准地图,Mid,24,Boss:Foreman,默认首发地图,1,10
+MAP_VAULT,金库大厅,20洞高价值地图,Mid,20,Boss:Treasurer,经济流推荐,3,10
+MAP_FREEZER,冷库区,24洞控制地图,Hard,24,Boss:Freezer,控制与减速环境,5,10
+MAP_REACTOR,反应炉区,28洞高危险地图,Hard,28,Boss:Alch,异常和爆炸丰富,6,12
+MAP_DRILL,深层矿井,26洞Boss重地图,Hard,26,Boss:Drill,单体与Boss压制,7,12
+MAP_CASINO,赌场作坊,22洞赌运地图,Mid,22,Boss:Judge,赌徒与经济事件多,4,10

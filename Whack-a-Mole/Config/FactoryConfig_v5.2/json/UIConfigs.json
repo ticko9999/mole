@@ -1,0 +1,179 @@
+{
+  "sheet_name": "UIConfigs",
+  "sheet_slug": "UIConfigs",
+  "row_count": 16,
+  "column_count": 8,
+  "headers": [
+    "UIID",
+    "Name",
+    "Type",
+    "Anchor",
+    "ShowByDefault",
+    "ReferenceResolution",
+    "Behavior",
+    "LocKey"
+  ],
+  "records": [
+    {
+      "UIID": "UI_01",
+      "Name": "HUD顶栏",
+      "Type": "Panel",
+      "Anchor": "Anchor_1",
+      "ShowByDefault": 1,
+      "ReferenceResolution": "1920x1080",
+      "Behavior": "显示/隐藏/动画参数",
+      "LocKey": "LOC_UI_01"
+    },
+    {
+      "UIID": "UI_02",
+      "Name": "连击条",
+      "Type": "Panel",
+      "Anchor": "Anchor_2",
+      "ShowByDefault": 1,
+      "ReferenceResolution": "1920x1080",
+      "Behavior": "显示/隐藏/动画参数",
+      "LocKey": "LOC_UI_02"
+    },
+    {
+      "UIID": "UI_03",
+      "Name": "狂热提示",
+      "Type": "Panel",
+      "Anchor": "Anchor_3",
+      "ShowByDefault": 1,
+      "ReferenceResolution": "1920x1080",
+      "Behavior": "显示/隐藏/动画参数",
+      "LocKey": "LOC_UI_03"
+    },
+    {
+      "UIID": "UI_04",
+      "Name": "Boss血条",
+      "Type": "Panel",
+      "Anchor": "Anchor_4",
+      "ShowByDefault": 1,
+      "ReferenceResolution": "1920x1080",
+      "Behavior": "显示/隐藏/动画参数",
+      "LocKey": "LOC_UI_04"
+    },
+    {
+      "UIID": "UI_05",
+      "Name": "三选一卡牌",
+      "Type": "Panel",
+      "Anchor": "Anchor_5",
+      "ShowByDefault": 1,
+      "ReferenceResolution": "1920x1080",
+      "Behavior": "显示/隐藏/动画参数",
+      "LocKey": "LOC_UI_05"
+    },
+    {
+      "UIID": "UI_06",
+      "Name": "商店页",
+      "Type": "Panel",
+      "Anchor": "Anchor_6",
+      "ShowByDefault": 1,
+      "ReferenceResolution": "1920x1080",
+      "Behavior": "显示/隐藏/动画参数",
+      "LocKey": "LOC_UI_06"
+    },
+    {
+      "UIID": "UI_07",
+      "Name": "设施放置面板",
+      "Type": "Panel",
+      "Anchor": "Anchor_7",
+      "ShowByDefault": 1,
+      "ReferenceResolution": "1920x1080",
+      "Behavior": "显示/隐藏/动画参数",
+      "LocKey": "LOC_UI_07"
+    },
+    {
+      "UIID": "UI_08",
+      "Name": "地图选择",
+      "Type": "Panel",
+      "Anchor": "Anchor_8",
+      "ShowByDefault": 0,
+      "ReferenceResolution": "1920x1080",
+      "Behavior": "显示/隐藏/动画参数",
+      "LocKey": "LOC_UI_08"
+    },
+    {
+      "UIID": "UI_09",
+      "Name": "角色选择",
+      "Type": "Panel",
+      "Anchor": "Anchor_9",
+      "ShowByDefault": 0,
+      "ReferenceResolution": "1920x1080",
+      "Behavior": "显示/隐藏/动画参数",
+      "LocKey": "LOC_UI_09"
+    },
+    {
+      "UIID": "UI_10",
+      "Name": "局后结算",
+      "Type": "Panel",
+      "Anchor": "Anchor_10",
+      "ShowByDefault": 0,
+      "ReferenceResolution": "1920x1080",
+      "Behavior": "显示/隐藏/动画参数",
+      "LocKey": "LOC_UI_10"
+    },
+    {
+      "UIID": "UI_11",
+      "Name": "图鉴页",
+      "Type": "Panel",
+      "Anchor": "Anchor_11",
+      "ShowByDefault": 0,
+      "ReferenceResolution": "1920x1080",
+      "Behavior": "显示/隐藏/动画参数",
+      "LocKey": "LOC_UI_11"
+    },
+    {
+      "UIID": "UI_12",
+      "Name": "设置页",
+      "Type": "Panel",
+      "Anchor": "Anchor_12",
+      "ShowByDefault": 0,
+      "ReferenceResolution": "1920x1080",
+      "Behavior": "显示/隐藏/动画参数",
+      "LocKey": "LOC_UI_12"
+    },
+    {
+      "UIID": "UI_13",
+      "Name": "难度页",
+      "Type": "Panel",
+      "Anchor": "Anchor_13",
+      "ShowByDefault": 0,
+      "ReferenceResolution": "1920x1080",
+      "Behavior": "显示/隐藏/动画参数",
+      "LocKey": "LOC_UI_13"
+    },
+    {
+      "UIID": "UI_14",
+      "Name": "任务页",
+      "Type": "Panel",
+      "Anchor": "Anchor_14",
+      "ShowByDefault": 0,
+      "ReferenceResolution": "1920x1080",
+      "Behavior": "显示/隐藏/动画参数",
+      "LocKey": "LOC_UI_14"
+    },
+    {
+      "UIID": "UI_15",
+      "Name": "成就页",
+      "Type": "Panel",
+      "Anchor": "Anchor_15",
+      "ShowByDefault": 0,
+      "ReferenceResolution": "1920x1080",
+      "Behavior": "显示/隐藏/动画参数",
+      "LocKey": "LOC_UI_15"
+    },
+    {
+      "UIID": "UI_16",
+      "Name": "Meta树",
+      "Type": "Panel",
+      "Anchor": "Anchor_16",
+      "ShowByDefault": 0,
+      "ReferenceResolution": "1920x1080",
+      "Behavior": "显示/隐藏/动画参数",
+      "LocKey": "LOC_UI_16"
+    }
+  ],
+  "rows": null
+}

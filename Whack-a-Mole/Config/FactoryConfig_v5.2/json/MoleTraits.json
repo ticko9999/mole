@@ -1,0 +1,259 @@
+{
+  "sheet_name": "MoleTraits",
+  "sheet_slug": "MoleTraits",
+  "row_count": 24,
+  "column_count": 8,
+  "headers": [
+    "TraitID",
+    "Name",
+    "Description",
+    "PrimaryEffect",
+    "SecondaryEffect",
+    "UIBadge",
+    "CanRollOnNormal",
+    "CanRollOnElite"
+  ],
+  "records": [
+    {
+      "TraitID": "Fast",
+      "Name": "快闪",
+      "Description": "更短停留与缩回时间",
+      "PrimaryEffect": "StaySec,RetreatSpeed",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Trait",
+      "CanRollOnNormal": 1,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "Armored",
+      "Name": "硬壳",
+      "Description": "提供护甲与护盾",
+      "PrimaryEffect": "ArmorPct,ShieldHP",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Trait",
+      "CanRollOnNormal": 1,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "Wealthy",
+      "Name": "富矿",
+      "Description": "提高金币与稀有掉落",
+      "PrimaryEffect": "BaseGold,RareDrop",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Trait",
+      "CanRollOnNormal": 1,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "Treasure",
+      "Name": "宝箱",
+      "Description": "掉落宝箱或神器券",
+      "PrimaryEffect": "LootTable",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Trait",
+      "CanRollOnNormal": 1,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "Electric",
+      "Name": "导电",
+      "Description": "命中后可传导至邻洞",
+      "PrimaryEffect": "OnHitChain",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Trait",
+      "CanRollOnNormal": 1,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "Split",
+      "Name": "裂变",
+      "Description": "死亡后分裂出小鼠",
+      "PrimaryEffect": "OnDeathSpawn",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Trait",
+      "CanRollOnNormal": 1,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "Explosive",
+      "Name": "爆炸",
+      "Description": "死亡时范围爆炸",
+      "PrimaryEffect": "OnDeathAOE",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Trait",
+      "CanRollOnNormal": 1,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "Shield",
+      "Name": "护盾",
+      "Description": "优先消耗护盾值",
+      "PrimaryEffect": "ShieldHP",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Trait",
+      "CanRollOnNormal": 1,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "Commander",
+      "Name": "工头",
+      "Description": "提升同波敌人速度",
+      "PrimaryEffect": "AuraBuff",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Trait",
+      "CanRollOnNormal": 1,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "Legend",
+      "Name": "传奇",
+      "Description": "独立提示与全局奖励",
+      "PrimaryEffect": "GlobalReward",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Trait",
+      "CanRollOnNormal": 1,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "Burrow",
+      "Name": "钻地",
+      "Description": "有概率躲避第一次打击",
+      "PrimaryEffect": "Dodge",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Trait",
+      "CanRollOnNormal": 0,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "Greedy",
+      "Name": "贪婪",
+      "Description": "拾取金币会强化自己",
+      "PrimaryEffect": "ScaleByGold",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Trait",
+      "CanRollOnNormal": 0,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "FrozenBlood",
+      "Name": "寒血",
+      "Description": "被冻住时碎裂",
+      "PrimaryEffect": "Shatter",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Trait",
+      "CanRollOnNormal": 0,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "BossEscort",
+      "Name": "护卫",
+      "Description": "Boss阶段生成",
+      "PrimaryEffect": "BossPhase",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Trait",
+      "CanRollOnNormal": 0,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "AFFIX_RAGE",
+      "Name": "暴怒",
+      "Description": "高血量时提高刷新速度",
+      "PrimaryEffect": "EliteOnly",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Affix",
+      "CanRollOnNormal": 0,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "AFFIX_SPIKE",
+      "Name": "尖刺",
+      "Description": "被击中时反伤",
+      "PrimaryEffect": "EliteOnly",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Affix",
+      "CanRollOnNormal": 0,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "AFFIX_RICH",
+      "Name": "富甲",
+      "Description": "掉更多金币",
+      "PrimaryEffect": "EliteOnly",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Affix",
+      "CanRollOnNormal": 0,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "AFFIX_WARP",
+      "Name": "跃迁",
+      "Description": "随机切换洞口",
+      "PrimaryEffect": "EliteOnly",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Affix",
+      "CanRollOnNormal": 0,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "AFFIX_ARC",
+      "Name": "电弧",
+      "Description": "命中时对附近洞口放电",
+      "PrimaryEffect": "EliteOnly",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Affix",
+      "CanRollOnNormal": 0,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "AFFIX_FROST",
+      "Name": "寒霜",
+      "Description": "减缓玩家节奏",
+      "PrimaryEffect": "EliteOnly",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Affix",
+      "CanRollOnNormal": 0,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "AFFIX_SHIELDPLUS",
+      "Name": "厚盾",
+      "Description": "额外护盾",
+      "PrimaryEffect": "EliteOnly",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Affix",
+      "CanRollOnNormal": 0,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "AFFIX_SUMMON",
+      "Name": "召唤",
+      "Description": "定期叫出小鼠",
+      "PrimaryEffect": "EliteOnly",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Affix",
+      "CanRollOnNormal": 0,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "AFFIX_CURSE",
+      "Name": "诅咒",
+      "Description": "击杀后提升危险值",
+      "PrimaryEffect": "EliteOnly",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Affix",
+      "CanRollOnNormal": 0,
+      "CanRollOnElite": 1
+    },
+    {
+      "TraitID": "AFFIX_SPLITPLUS",
+      "Name": "超裂",
+      "Description": "死亡分裂更多",
+      "PrimaryEffect": "EliteOnly",
+      "SecondaryEffect": "",
+      "UIBadge": "Icon_Affix",
+      "CanRollOnNormal": 0,
+      "CanRollOnElite": 1
+    }
+  ],
+  "rows": null
+}

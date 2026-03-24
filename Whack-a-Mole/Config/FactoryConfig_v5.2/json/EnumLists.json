@@ -1,0 +1,86 @@
+{
+  "sheet_name": "EnumLists",
+  "sheet_slug": "EnumLists",
+  "row_count": 10,
+  "column_count": 5,
+  "headers": [
+    "DamageType",
+    "Rarity",
+    "Status",
+    "Trigger",
+    "WeaponType"
+  ],
+  "records": [
+    {
+      "DamageType": "Arcane",
+      "Rarity": "Common",
+      "Status": "Bleed",
+      "Trigger": "Aura",
+      "WeaponType": "Beam"
+    },
+    {
+      "DamageType": "Blunt",
+      "Rarity": "Epic",
+      "Status": "Burn",
+      "Trigger": "Manual",
+      "WeaponType": "Chain"
+    },
+    {
+      "DamageType": "Explosive",
+      "Rarity": "Legendary",
+      "Status": "ExecuteMark",
+      "Trigger": "OnCombo",
+      "WeaponType": "Drone"
+    },
+    {
+      "DamageType": "Fire",
+      "Rarity": "Rare",
+      "Status": "Expose",
+      "Trigger": "OnCrit",
+      "WeaponType": "Hammer"
+    },
+    {
+      "DamageType": "Frost",
+      "Rarity": "Uncommon",
+      "Status": "Freeze",
+      "Trigger": "OnEscape",
+      "WeaponType": "Laser"
+    },
+    {
+      "DamageType": "Gold",
+      "Rarity": "",
+      "Status": "GreedMark",
+      "Trigger": "OnGoldGain",
+      "WeaponType": "Orbital"
+    },
+    {
+      "DamageType": "Poison",
+      "Rarity": "",
+      "Status": "Shock",
+      "Trigger": "OnHit",
+      "WeaponType": "Summon"
+    },
+    {
+      "DamageType": "Shock",
+      "Rarity": "",
+      "Status": "Slow",
+      "Trigger": "OnKill",
+      "WeaponType": "Totem"
+    },
+    {
+      "DamageType": "True",
+      "Rarity": "",
+      "Status": "Stun",
+      "Trigger": "OnSpawn",
+      "WeaponType": "Trap"
+    },
+    {
+      "DamageType": "",
+      "Rarity": "",
+      "Status": "Weaken",
+      "Trigger": "Periodic",
+      "WeaponType": "Wave"
+    }
+  ],
+  "rows": null
+}

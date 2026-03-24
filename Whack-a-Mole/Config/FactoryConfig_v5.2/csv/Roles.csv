@@ -1,0 +1,9 @@
+﻿RoleID,Name,RoleType,Description,StartWeapon,CoreTags,PassiveA,PassiveB,UnlockReq,DefaultSkin,BaseHP,BaseMove,BaseGoldPct,BaseXPpct,LocKey
+ROLE_BLACKSMITH,铁匠锤手,Starter,基础锤系、范围成长稳定,WPN_WOOD,Damage|AOE,"Damage,AOE 被动1","Damage,AOE 被动2",Default,Default,5,1,0,0,LOC_ROLE_001
+ROLE_ENGINEER,工厂工程师,Automation,设施与自动锤效率更高,WPN_DRONE_CORE,Facility|Automation,"Facility,Automation 被动1","Facility,Automation 被动2",Task:1,Default,6,1,0.02,0.01,LOC_ROLE_002
+ROLE_BOUNTY,赏金猎人,Economy,稀有鼠追猎与金币收益突出,WPN_COIN,Gold|RareTarget,"Gold,RareTarget 被动1","Gold,RareTarget 被动2",Task:2,Default,7,1,0.04,0.02,LOC_ROLE_003
+ROLE_STORM,雷链术士,Control,电链传播与感电爆发强,WPN_THUNDER,Shock|Chain,"Shock,Chain 被动1","Shock,Chain 被动2",Task:3,Default,5,1,0.06,0,LOC_ROLE_004
+ROLE_WARDEN,镇压官,Control,处决与控制效果更强,WPN_PRESS,Execute|CC,"Execute,CC 被动1","Execute,CC 被动2",Task:4,Default,6,1,0,0.01,LOC_ROLE_005
+ROLE_ALCHEMIST,炼金爆破师,Explosive,异常与爆炸流派核心,WPN_FLASK,Fire|Explosive,"Fire,Explosive 被动1","Fire,Explosive 被动2",Task:5,Default,7,1,0.02,0.02,LOC_ROLE_006
+ROLE_GAMBLER,赌徒,RiskReward,高波动高收益，传奇鼠和宝箱联动,WPN_DICE,Gold|Crit,"Gold,Crit 被动1","Gold,Crit 被动2",Task:6,Default,5,1,0.04,0,LOC_ROLE_007
+ROLE_GUARDIAN,守卫队长,Survival,护盾、护甲和Boss战稳定性高,WPN_SHIELD,Tank|Boss,"Tank,Boss 被动1","Tank,Boss 被动2",Task:7,Default,6,1,0.06,0.01,LOC_ROLE_008

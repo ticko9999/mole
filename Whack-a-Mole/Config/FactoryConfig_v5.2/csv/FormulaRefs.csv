@@ -1,0 +1,7 @@
+﻿FormulaID,Name,ExpressionPseudo,Inputs,Outputs,OwnerSheet,UseCase,Note
+F_DAMAGE,最终伤害,BaseDamage*(1+DMG_PCT)*Crit*TargetMods,Weapons|Skills|Attr,HitDamage,CalcModel,所有命中,暴击时乘以CritDmg
+F_CD,最终冷却,BaseCD/(1+ASPD_PCT),Weapons|Attr,FinalCD,CalcModel,攻击频率,向下限制0.08
+F_GOLD,金币掉落,BaseGold*(1+GOLD_PCT)*Combo*RareMult,Moles|Attr,GoldGain,CalcModel,掉落结算,赏金和传奇另算
+F_THREAT,威胁预算,Base+t*A+t^2*B,StageCurve,ThreatBudget,StageCurve,刷怪,按地图微调
+F_INTEREST,利息,CurrentGold*InterestRate if Gold>=Threshold,EconomyIn,InterestGold,EconomyIn,波间收益,经济流核心
+F_EXEC,处决判断,HPPercent<=EXEC_PCT or status=EXEC,Status|Attr,ExecuteFlag,Skills,自动处决,Boss通常不适用

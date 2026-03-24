@@ -1,0 +1,86 @@
+{
+  "sheet_name": "StageMaps",
+  "sheet_slug": "StageMaps",
+  "row_count": 6,
+  "column_count": 9,
+  "headers": [
+    "MapID",
+    "Name",
+    "Description",
+    "Difficulty",
+    "HoleCount",
+    "BossBinding",
+    "Note",
+    "UnlockStage",
+    "DurationMin"
+  ],
+  "records": [
+    {
+      "MapID": "MAP_FACTORY",
+      "Name": "废旧工厂",
+      "Description": "24洞标准地图",
+      "Difficulty": "Mid",
+      "HoleCount": 24,
+      "BossBinding": "Boss:Foreman",
+      "Note": "默认首发地图",
+      "UnlockStage": 1,
+      "DurationMin": 10
+    },
+    {
+      "MapID": "MAP_VAULT",
+      "Name": "金库大厅",
+      "Description": "20洞高价值地图",
+      "Difficulty": "Mid",
+      "HoleCount": 20,
+      "BossBinding": "Boss:Treasurer",
+      "Note": "经济流推荐",
+      "UnlockStage": 3,
+      "DurationMin": 10
+    },
+    {
+      "MapID": "MAP_FREEZER",
+      "Name": "冷库区",
+      "Description": "24洞控制地图",
+      "Difficulty": "Hard",
+      "HoleCount": 24,
+      "BossBinding": "Boss:Freezer",
+      "Note": "控制与减速环境",
+      "UnlockStage": 5,
+      "DurationMin": 10
+    },
+    {
+      "MapID": "MAP_REACTOR",
+      "Name": "反应炉区",
+      "Description": "28洞高危险地图",
+      "Difficulty": "Hard",
+      "HoleCount": 28,
+      "BossBinding": "Boss:Alch",
+      "Note": "异常和爆炸丰富",
+      "UnlockStage": 6,
+      "DurationMin": 12
+    },
+    {
+      "MapID": "MAP_DRILL",
+      "Name": "深层矿井",
+      "Description": "26洞Boss重地图",
+      "Difficulty": "Hard",
+      "HoleCount": 26,
+      "BossBinding": "Boss:Drill",
+      "Note": "单体与Boss压制",
+      "UnlockStage": 7,
+      "DurationMin": 12
+    },
+    {
+      "MapID": "MAP_CASINO",
+      "Name": "赌场作坊",
+      "Description": "22洞赌运地图",
+      "Difficulty": "Mid",
+      "HoleCount": 22,
+      "BossBinding": "Boss:Judge",
+      "Note": "赌徒与经济事件多",
+      "UnlockStage": 4,
+      "DurationMin": 10
+    }
+  ],
+  "rows": null
+}

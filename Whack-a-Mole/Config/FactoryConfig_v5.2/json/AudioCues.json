@@ -1,0 +1,219 @@
+{
+  "sheet_name": "AudioCues",
+  "sheet_slug": "AudioCues",
+  "row_count": 20,
+  "column_count": 8,
+  "headers": [
+    "AudioID",
+    "Name",
+    "Type",
+    "Bus",
+    "Volume",
+    "Loop",
+    "TriggerDesc",
+    "LocKey"
+  ],
+  "records": [
+    {
+      "AudioID": "AUD_001",
+      "Name": "普通命中",
+      "Type": "SFX",
+      "Bus": "Group_Main",
+      "Volume": 0.76,
+      "Loop": 1,
+      "TriggerDesc": "触发说明 普通命中",
+      "LocKey": "LOC_AUD_001"
+    },
+    {
+      "AudioID": "AUD_002",
+      "Name": "暴击命中",
+      "Type": "SFX",
+      "Bus": "Group_Main",
+      "Volume": 0.77,
+      "Loop": 1,
+      "TriggerDesc": "触发说明 暴击命中",
+      "LocKey": "LOC_AUD_002"
+    },
+    {
+      "AudioID": "AUD_003",
+      "Name": "金币吸附",
+      "Type": "SFX",
+      "Bus": "Group_Main",
+      "Volume": 0.78,
+      "Loop": 0,
+      "TriggerDesc": "触发说明 金币吸附",
+      "LocKey": "LOC_AUD_003"
+    },
+    {
+      "AudioID": "AUD_004",
+      "Name": "稀有鼠出现",
+      "Type": "SFX",
+      "Bus": "Group_Main",
+      "Volume": 0.79,
+      "Loop": 1,
+      "TriggerDesc": "触发说明 稀有鼠出现",
+      "LocKey": "LOC_AUD_004"
+    },
+    {
+      "AudioID": "AUD_005",
+      "Name": "宝箱掉落",
+      "Type": "SFX",
+      "Bus": "Group_Main",
+      "Volume": 0.75,
+      "Loop": 1,
+      "TriggerDesc": "触发说明 宝箱掉落",
+      "LocKey": "LOC_AUD_005"
+    },
+    {
+      "AudioID": "AUD_006",
+      "Name": "狂热触发",
+      "Type": "SFX",
+      "Bus": "Group_Main",
+      "Volume": 0.76,
+      "Loop": 0,
+      "TriggerDesc": "触发说明 狂热触发",
+      "LocKey": "LOC_AUD_006"
+    },
+    {
+      "AudioID": "AUD_007",
+      "Name": "Boss预警",
+      "Type": "SFX",
+      "Bus": "Group_Main",
+      "Volume": 0.77,
+      "Loop": 1,
+      "TriggerDesc": "触发说明 Boss预警",
+      "LocKey": "LOC_AUD_007"
+    },
+    {
+      "AudioID": "AUD_008",
+      "Name": "Boss阶段切换",
+      "Type": "SFX",
+      "Bus": "Group_Main",
+      "Volume": 0.78,
+      "Loop": 1,
+      "TriggerDesc": "触发说明 Boss阶段切换",
+      "LocKey": "LOC_AUD_008"
+    },
+    {
+      "AudioID": "AUD_009",
+      "Name": "设施触发",
+      "Type": "SFX",
+      "Bus": "Group_Main",
+      "Volume": 0.79,
+      "Loop": 0,
+      "TriggerDesc": "触发说明 设施触发",
+      "LocKey": "LOC_AUD_009"
+    },
+    {
+      "AudioID": "AUD_010",
+      "Name": "电链跳跃",
+      "Type": "SFX",
+      "Bus": "Group_Main",
+      "Volume": 0.75,
+      "Loop": 1,
+      "TriggerDesc": "触发说明 电链跳跃",
+      "LocKey": "LOC_AUD_010"
+    },
+    {
+      "AudioID": "AUD_011",
+      "Name": "爆燃爆炸",
+      "Type": "SFX",
+      "Bus": "Group_Main",
+      "Volume": 0.76,
+      "Loop": 1,
+      "TriggerDesc": "触发说明 爆燃爆炸",
+      "LocKey": "LOC_AUD_011"
+    },
+    {
+      "AudioID": "AUD_012",
+      "Name": "冻结碎裂",
+      "Type": "SFX",
+      "Bus": "Group_Main",
+      "Volume": 0.77,
+      "Loop": 0,
+      "TriggerDesc": "触发说明 冻结碎裂",
+      "LocKey": "LOC_AUD_012"
+    },
+    {
+      "AudioID": "AUD_013",
+      "Name": "商店打开",
+      "Type": "SFX",
+      "Bus": "Group_Main",
+      "Volume": 0.78,
+      "Loop": 1,
+      "TriggerDesc": "触发说明 商店打开",
+      "LocKey": "LOC_AUD_013"
+    },
+    {
+      "AudioID": "AUD_014",
+      "Name": "事件触发",
+      "Type": "SFX",
+      "Bus": "Group_Main",
+      "Volume": 0.79,
+      "Loop": 1,
+      "TriggerDesc": "触发说明 事件触发",
+      "LocKey": "LOC_AUD_014"
+    },
+    {
+      "AudioID": "AUD_015",
+      "Name": "结算胜利",
+      "Type": "SFX",
+      "Bus": "Group_Main",
+      "Volume": 0.75,
+      "Loop": 0,
+      "TriggerDesc": "触发说明 结算胜利",
+      "LocKey": "LOC_AUD_015"
+    },
+    {
+      "AudioID": "AUD_016",
+      "Name": "结算失败",
+      "Type": "SFX",
+      "Bus": "Group_Main",
+      "Volume": 0.76,
+      "Loop": 1,
+      "TriggerDesc": "触发说明 结算失败",
+      "LocKey": "LOC_AUD_016"
+    },
+    {
+      "AudioID": "AUD_017",
+      "Name": "按钮确认",
+      "Type": "SFX",
+      "Bus": "Group_Main",
+      "Volume": 0.77,
+      "Loop": 1,
+      "TriggerDesc": "触发说明 按钮确认",
+      "LocKey": "LOC_AUD_017"
+    },
+    {
+      "AudioID": "AUD_018",
+      "Name": "按钮返回",
+      "Type": "Stinger",
+      "Bus": "Group_Main",
+      "Volume": 0.78,
+      "Loop": 0,
+      "TriggerDesc": "触发说明 按钮返回",
+      "LocKey": "LOC_AUD_018"
+    },
+    {
+      "AudioID": "AUD_019",
+      "Name": "Legend出现",
+      "Type": "Stinger",
+      "Bus": "Group_Main",
+      "Volume": 0.79,
+      "Loop": 1,
+      "TriggerDesc": "触发说明 Legend出现",
+      "LocKey": "LOC_AUD_019"
+    },
+    {
+      "AudioID": "AUD_020",
+      "Name": "自动锤触发",
+      "Type": "Stinger",
+      "Bus": "Group_Main",
+      "Volume": 0.75,
+      "Loop": 1,
+      "TriggerDesc": "触发说明 自动锤触发",
+      "LocKey": "LOC_AUD_020"
+    }
+  ],
+  "rows": null
+}

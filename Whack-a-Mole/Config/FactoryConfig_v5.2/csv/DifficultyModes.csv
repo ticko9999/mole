@@ -1,0 +1,6 @@
+﻿DiffID,Name,HpMult,ThreatMult,RewardMult,LegendBonus,Description
+DIFF_CASUAL,轻松,0.85,0.9,1.1,0,更宽松，适合体验
+DIFF_NORMAL,标准,1,1,1,0,默认
+DIFF_HARD,困难,1.18,1.12,0.92,0.08,更高压力
+DIFF_NIGHTMARE,噩梦,1.38,1.25,0.85,0.15,高压与高回报
+DIFF_OVERCLOCK,超载,1.55,1.35,0.82,0.22,发行前终局挑战

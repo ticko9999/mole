@@ -1,0 +1,9 @@
+﻿SummonID,Name,Type,AttackInterval,BaseDamage,Radius,AIProfile,LifeSec,Cap,ProjectileOrWeapon,Note,LocKey
+SUM_DRONE_A,基础小锤机,Drone,1.4,8,0.3,Seek,999,1,PRJ_DRONE,自动索敌单体,LOC_SUM_001
+SUM_DRONE_B,感电无人机,Drone,1,6,0.35,Seek,999,2,PRJ_DRONE,命中附感电,LOC_SUM_002
+SUM_TOTEM_GOLD,铸币图腾,Totem,2.2,0,0.6,Aura,999,3,WPN_FAC_01,区域内金币倍率提升,LOC_SUM_003
+SUM_TOTEM_TESLA,电网塔,Totem,0.6,5,0.7,Aura,999,1,WPN_FAC_01,持续感电,LOC_SUM_004
+SUM_MINER,钻头小队,Drone,1.8,12,0.45,Seek,999,2,PRJ_DRONE,对坦克鼠增伤,LOC_SUM_005
+SUM_JUDGE,处决机,Trap,2,20,0.5,Aura,12,3,WPN_FAC_01,定期处决低血目标,LOC_SUM_006
+SUM_SHIELD,守卫投影,Totem,2.5,0,0.7,Aura,999,1,WPN_FAC_01,提供护盾,LOC_SUM_007
+SUM_MAGNET,吸金球,Orbital,0.8,0,0.8,Aura,999,2,WPN_FAC_01,自动拾取,LOC_SUM_008

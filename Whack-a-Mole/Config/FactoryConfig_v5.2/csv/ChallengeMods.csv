@@ -1,0 +1,11 @@
+﻿ChallengeID,Name,Description,RewardBonus,UnlockRule
+CHAL_01,禁商店,挑战效果 禁商店,0.11,Unlock by task
+CHAL_02,无回复,挑战效果 无回复,0.14,Unlock by task
+CHAL_03,高危传奇,挑战效果 高危传奇,0.17,Unlock by task
+CHAL_04,稀有狂潮,挑战效果 稀有狂潮,0.08,Unlock by task
+CHAL_05,设施故障,挑战效果 设施故障,0.11,Unlock by task
+CHAL_06,Boss双阶段强化,挑战效果 Boss双阶段强化,0.14,Unlock by task
+CHAL_07,自动化减益,挑战效果 自动化减益,0.17,Unlock by task
+CHAL_08,金币腐蚀,挑战效果 金币腐蚀,0.08,Unlock by task
+CHAL_09,连击易断,挑战效果 连击易断,0.11,Unlock by task
+CHAL_10,小洞地图,挑战效果 小洞地图,0.14,Unlock by task

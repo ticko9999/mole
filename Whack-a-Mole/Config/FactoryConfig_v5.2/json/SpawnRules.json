@@ -1,0 +1,93 @@
+{
+  "sheet_name": "SpawnRules",
+  "sheet_slug": "SpawnRules",
+  "row_count": 6,
+  "column_count": 10,
+  "headers": [
+    "RuleID",
+    "PoolID",
+    "MapFilter",
+    "PhaseFilter",
+    "MinSec",
+    "MaxSec",
+    "ThreatMin",
+    "Condition",
+    "Enabled",
+    "Note"
+  ],
+  "records": [
+    {
+      "RuleID": "SPR_01",
+      "PoolID": "POOL_STD",
+      "MapFilter": "MAP_ANY",
+      "PhaseFilter": "Early",
+      "MinSec": 0,
+      "MaxSec": 999,
+      "ThreatMin": 1.5,
+      "Condition": "MoleTags match",
+      "Enabled": 1,
+      "Note": "刷怪池规则 POOL_STD"
+    },
+    {
+      "RuleID": "SPR_02",
+      "PoolID": "POOL_FAST",
+      "MapFilter": "MAP_ANY",
+      "PhaseFilter": "Early",
+      "MinSec": 0,
+      "MaxSec": 999,
+      "ThreatMin": 2,
+      "Condition": "MoleTags match",
+      "Enabled": 1,
+      "Note": "刷怪池规则 POOL_FAST"
+    },
+    {
+      "RuleID": "SPR_03",
+      "PoolID": "POOL_ARMORED",
+      "MapFilter": "MAP_ANY",
+      "PhaseFilter": "Mid|Late",
+      "MinSec": 0,
+      "MaxSec": 999,
+      "ThreatMin": 2.5,
+      "Condition": "MoleTags match",
+      "Enabled": 1,
+      "Note": "刷怪池规则 POOL_ARMORED"
+    },
+    {
+      "RuleID": "SPR_04",
+      "PoolID": "POOL_RICH",
+      "MapFilter": "MAP_ANY",
+      "PhaseFilter": "Mid|Late",
+      "MinSec": 120,
+      "MaxSec": 999,
+      "ThreatMin": 3,
+      "Condition": "MoleTags match",
+      "Enabled": 1,
+      "Note": "刷怪池规则 POOL_RICH"
+    },
+    {
+      "RuleID": "SPR_05",
+      "PoolID": "POOL_EVENT",
+      "MapFilter": "MAP_REACTOR|MAP_DRILL",
+      "PhaseFilter": "Mid|Late",
+      "MinSec": 120,
+      "MaxSec": 999,
+      "ThreatMin": 3.5,
+      "Condition": "MoleTags match",
+      "Enabled": 1,
+      "Note": "刷怪池规则 POOL_EVENT"
+    },
+    {
+      "RuleID": "SPR_06",
+      "PoolID": "POOL_END",
+      "MapFilter": "MAP_REACTOR|MAP_DRILL",
+      "PhaseFilter": "Mid|Late",
+      "MinSec": 120,
+      "MaxSec": 999,
+      "ThreatMin": 4,
+      "Condition": "MoleTags match",
+      "Enabled": 1,
+      "Note": "刷怪池规则 POOL_END"
+    }
+  ],
+  "rows": null
+}

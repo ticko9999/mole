@@ -1,0 +1,11 @@
+﻿ProjectileID,Name,MoveType,Speed,MaxChainOrLife,ArcOrSpread,SeekRule,HitRule,MaxTargets,VFX,Note
+PRJ_HAMMER,锤击命中判定,Instant,0,999,0,Nearest/Tagged,SingleHit,999,VFX_001,无飞行
+PRJ_ARC,电弧链路,Chain,12,6,0.05,Nearest/Tagged,SingleHit,6,VFX_002,按邻近洞口弹射
+PRJ_FIRELOB,火瓶投射,Arc,8,1,0.65,Nearest/Tagged,SingleHit,1,VFX_003,抛物线，落地爆炸
+PRJ_DRONE,无人机锤,Seek,10,999,0,Nearest/Tagged,SingleHit,999,VFX_004,自动索敌
+PRJ_WAVE,冲击波,Wave,20,999,0,Nearest/Tagged,SingleHit,999,VFX_005,从命中点扩散
+PRJ_BEAM,持续射线,Beam,0,999,0,Nearest/Tagged,TickHit,999,VFX_006,持续命中
+PRJ_ORBIT,环绕刃,Orbit,16,999,0,Nearest/Tagged,SingleHit,999,VFX_007,环绕角色
+PRJ_MORTAR,迫击锤弹,Arc,7,1,0.8,Nearest/Tagged,SingleHit,1,VFX_008,落点爆炸
+PRJ_PRISM,棱镜束,Fork,14,4,0,Nearest/Tagged,SingleHit,4,VFX_009,命中后分叉
+PRJ_BOMB,炸药箱,Static,0,1,0,Nearest/Tagged,SingleHit,1,VFX_010,短延时爆炸

@@ -1,0 +1,1794 @@
+{
+  "sheet_name": "LocalizationKeys",
+  "sheet_slug": "LocalizationKeys",
+  "row_count": 254,
+  "column_count": 5,
+  "headers": [
+    "LocKey",
+    "ZH_CN",
+    "EN_US",
+    "Context",
+    "SourceRef"
+  ],
+  "records": [
+    {
+      "LocKey": "LOC_ROLE_001",
+      "ZH_CN": "示例文本 ROLE 001",
+      "EN_US": "EN Sample ROLE 001",
+      "Context": "UI/Game",
+      "SourceRef": "ROLE:1"
+    },
+    {
+      "LocKey": "LOC_ROLE_002",
+      "ZH_CN": "示例文本 ROLE 002",
+      "EN_US": "EN Sample ROLE 002",
+      "Context": "UI/Game",
+      "SourceRef": "ROLE:2"
+    },
+    {
+      "LocKey": "LOC_ROLE_003",
+      "ZH_CN": "示例文本 ROLE 003",
+      "EN_US": "EN Sample ROLE 003",
+      "Context": "UI/Game",
+      "SourceRef": "ROLE:3"
+    },
+    {
+      "LocKey": "LOC_ROLE_004",
+      "ZH_CN": "示例文本 ROLE 004",
+      "EN_US": "EN Sample ROLE 004",
+      "Context": "UI/Game",
+      "SourceRef": "ROLE:4"
+    },
+    {
+      "LocKey": "LOC_ROLE_005",
+      "ZH_CN": "示例文本 ROLE 005",
+      "EN_US": "EN Sample ROLE 005",
+      "Context": "UI/Game",
+      "SourceRef": "ROLE:5"
+    },
+    {
+      "LocKey": "LOC_ROLE_006",
+      "ZH_CN": "示例文本 ROLE 006",
+      "EN_US": "EN Sample ROLE 006",
+      "Context": "UI/Game",
+      "SourceRef": "ROLE:6"
+    },
+    {
+      "LocKey": "LOC_ROLE_007",
+      "ZH_CN": "示例文本 ROLE 007",
+      "EN_US": "EN Sample ROLE 007",
+      "Context": "UI/Game",
+      "SourceRef": "ROLE:7"
+    },
+    {
+      "LocKey": "LOC_ROLE_008",
+      "ZH_CN": "示例文本 ROLE 008",
+      "EN_US": "EN Sample ROLE 008",
+      "Context": "UI/Game",
+      "SourceRef": "ROLE:8"
+    },
+    {
+      "LocKey": "LOC_WPN_001",
+      "ZH_CN": "示例文本 WPN 001",
+      "EN_US": "EN Sample WPN 001",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:1"
+    },
+    {
+      "LocKey": "LOC_WPN_002",
+      "ZH_CN": "示例文本 WPN 002",
+      "EN_US": "EN Sample WPN 002",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:2"
+    },
+    {
+      "LocKey": "LOC_WPN_003",
+      "ZH_CN": "示例文本 WPN 003",
+      "EN_US": "EN Sample WPN 003",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:3"
+    },
+    {
+      "LocKey": "LOC_WPN_004",
+      "ZH_CN": "示例文本 WPN 004",
+      "EN_US": "EN Sample WPN 004",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:4"
+    },
+    {
+      "LocKey": "LOC_WPN_005",
+      "ZH_CN": "示例文本 WPN 005",
+      "EN_US": "EN Sample WPN 005",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:5"
+    },
+    {
+      "LocKey": "LOC_WPN_006",
+      "ZH_CN": "示例文本 WPN 006",
+      "EN_US": "EN Sample WPN 006",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:6"
+    },
+    {
+      "LocKey": "LOC_WPN_007",
+      "ZH_CN": "示例文本 WPN 007",
+      "EN_US": "EN Sample WPN 007",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:7"
+    },
+    {
+      "LocKey": "LOC_WPN_008",
+      "ZH_CN": "示例文本 WPN 008",
+      "EN_US": "EN Sample WPN 008",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:8"
+    },
+    {
+      "LocKey": "LOC_WPN_009",
+      "ZH_CN": "示例文本 WPN 009",
+      "EN_US": "EN Sample WPN 009",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:9"
+    },
+    {
+      "LocKey": "LOC_WPN_010",
+      "ZH_CN": "示例文本 WPN 010",
+      "EN_US": "EN Sample WPN 010",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:10"
+    },
+    {
+      "LocKey": "LOC_WPN_011",
+      "ZH_CN": "示例文本 WPN 011",
+      "EN_US": "EN Sample WPN 011",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:11"
+    },
+    {
+      "LocKey": "LOC_WPN_012",
+      "ZH_CN": "示例文本 WPN 012",
+      "EN_US": "EN Sample WPN 012",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:12"
+    },
+    {
+      "LocKey": "LOC_WPN_013",
+      "ZH_CN": "示例文本 WPN 013",
+      "EN_US": "EN Sample WPN 013",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:13"
+    },
+    {
+      "LocKey": "LOC_WPN_014",
+      "ZH_CN": "示例文本 WPN 014",
+      "EN_US": "EN Sample WPN 014",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:14"
+    },
+    {
+      "LocKey": "LOC_WPN_015",
+      "ZH_CN": "示例文本 WPN 015",
+      "EN_US": "EN Sample WPN 015",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:15"
+    },
+    {
+      "LocKey": "LOC_WPN_016",
+      "ZH_CN": "示例文本 WPN 016",
+      "EN_US": "EN Sample WPN 016",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:16"
+    },
+    {
+      "LocKey": "LOC_WPN_017",
+      "ZH_CN": "示例文本 WPN 017",
+      "EN_US": "EN Sample WPN 017",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:17"
+    },
+    {
+      "LocKey": "LOC_WPN_018",
+      "ZH_CN": "示例文本 WPN 018",
+      "EN_US": "EN Sample WPN 018",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:18"
+    },
+    {
+      "LocKey": "LOC_WPN_019",
+      "ZH_CN": "示例文本 WPN 019",
+      "EN_US": "EN Sample WPN 019",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:19"
+    },
+    {
+      "LocKey": "LOC_WPN_020",
+      "ZH_CN": "示例文本 WPN 020",
+      "EN_US": "EN Sample WPN 020",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:20"
+    },
+    {
+      "LocKey": "LOC_WPN_021",
+      "ZH_CN": "示例文本 WPN 021",
+      "EN_US": "EN Sample WPN 021",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:21"
+    },
+    {
+      "LocKey": "LOC_WPN_022",
+      "ZH_CN": "示例文本 WPN 022",
+      "EN_US": "EN Sample WPN 022",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:22"
+    },
+    {
+      "LocKey": "LOC_WPN_023",
+      "ZH_CN": "示例文本 WPN 023",
+      "EN_US": "EN Sample WPN 023",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:23"
+    },
+    {
+      "LocKey": "LOC_WPN_024",
+      "ZH_CN": "示例文本 WPN 024",
+      "EN_US": "EN Sample WPN 024",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:24"
+    },
+    {
+      "LocKey": "LOC_WPN_025",
+      "ZH_CN": "示例文本 WPN 025",
+      "EN_US": "EN Sample WPN 025",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:25"
+    },
+    {
+      "LocKey": "LOC_WPN_026",
+      "ZH_CN": "示例文本 WPN 026",
+      "EN_US": "EN Sample WPN 026",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:26"
+    },
+    {
+      "LocKey": "LOC_WPN_027",
+      "ZH_CN": "示例文本 WPN 027",
+      "EN_US": "EN Sample WPN 027",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:27"
+    },
+    {
+      "LocKey": "LOC_WPN_028",
+      "ZH_CN": "示例文本 WPN 028",
+      "EN_US": "EN Sample WPN 028",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:28"
+    },
+    {
+      "LocKey": "LOC_WPN_029",
+      "ZH_CN": "示例文本 WPN 029",
+      "EN_US": "EN Sample WPN 029",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:29"
+    },
+    {
+      "LocKey": "LOC_WPN_030",
+      "ZH_CN": "示例文本 WPN 030",
+      "EN_US": "EN Sample WPN 030",
+      "Context": "UI/Game",
+      "SourceRef": "WPN:30"
+    },
+    {
+      "LocKey": "LOC_EVO_001",
+      "ZH_CN": "示例文本 EVO 001",
+      "EN_US": "EN Sample EVO 001",
+      "Context": "UI/Game",
+      "SourceRef": "EVO:1"
+    },
+    {
+      "LocKey": "LOC_EVO_002",
+      "ZH_CN": "示例文本 EVO 002",
+      "EN_US": "EN Sample EVO 002",
+      "Context": "UI/Game",
+      "SourceRef": "EVO:2"
+    },
+    {
+      "LocKey": "LOC_EVO_003",
+      "ZH_CN": "示例文本 EVO 003",
+      "EN_US": "EN Sample EVO 003",
+      "Context": "UI/Game",
+      "SourceRef": "EVO:3"
+    },
+    {
+      "LocKey": "LOC_EVO_004",
+      "ZH_CN": "示例文本 EVO 004",
+      "EN_US": "EN Sample EVO 004",
+      "Context": "UI/Game",
+      "SourceRef": "EVO:4"
+    },
+    {
+      "LocKey": "LOC_EVO_005",
+      "ZH_CN": "示例文本 EVO 005",
+      "EN_US": "EN Sample EVO 005",
+      "Context": "UI/Game",
+      "SourceRef": "EVO:5"
+    },
+    {
+      "LocKey": "LOC_EVO_006",
+      "ZH_CN": "示例文本 EVO 006",
+      "EN_US": "EN Sample EVO 006",
+      "Context": "UI/Game",
+      "SourceRef": "EVO:6"
+    },
+    {
+      "LocKey": "LOC_EVO_007",
+      "ZH_CN": "示例文本 EVO 007",
+      "EN_US": "EN Sample EVO 007",
+      "Context": "UI/Game",
+      "SourceRef": "EVO:7"
+    },
+    {
+      "LocKey": "LOC_EVO_008",
+      "ZH_CN": "示例文本 EVO 008",
+      "EN_US": "EN Sample EVO 008",
+      "Context": "UI/Game",
+      "SourceRef": "EVO:8"
+    },
+    {
+      "LocKey": "LOC_EVO_009",
+      "ZH_CN": "示例文本 EVO 009",
+      "EN_US": "EN Sample EVO 009",
+      "Context": "UI/Game",
+      "SourceRef": "EVO:9"
+    },
+    {
+      "LocKey": "LOC_EVO_010",
+      "ZH_CN": "示例文本 EVO 010",
+      "EN_US": "EN Sample EVO 010",
+      "Context": "UI/Game",
+      "SourceRef": "EVO:10"
+    },
+    {
+      "LocKey": "LOC_SK_001",
+      "ZH_CN": "示例文本 SK 001",
+      "EN_US": "EN Sample SK 001",
+      "Context": "UI/Game",
+      "SourceRef": "SK:1"
+    },
+    {
+      "LocKey": "LOC_SK_002",
+      "ZH_CN": "示例文本 SK 002",
+      "EN_US": "EN Sample SK 002",
+      "Context": "UI/Game",
+      "SourceRef": "SK:2"
+    },
+    {
+      "LocKey": "LOC_SK_003",
+      "ZH_CN": "示例文本 SK 003",
+      "EN_US": "EN Sample SK 003",
+      "Context": "UI/Game",
+      "SourceRef": "SK:3"
+    },
+    {
+      "LocKey": "LOC_SK_004",
+      "ZH_CN": "示例文本 SK 004",
+      "EN_US": "EN Sample SK 004",
+      "Context": "UI/Game",
+      "SourceRef": "SK:4"
+    },
+    {
+      "LocKey": "LOC_SK_005",
+      "ZH_CN": "示例文本 SK 005",
+      "EN_US": "EN Sample SK 005",
+      "Context": "UI/Game",
+      "SourceRef": "SK:5"
+    },
+    {
+      "LocKey": "LOC_SK_006",
+      "ZH_CN": "示例文本 SK 006",
+      "EN_US": "EN Sample SK 006",
+      "Context": "UI/Game",
+      "SourceRef": "SK:6"
+    },
+    {
+      "LocKey": "LOC_SK_007",
+      "ZH_CN": "示例文本 SK 007",
+      "EN_US": "EN Sample SK 007",
+      "Context": "UI/Game",
+      "SourceRef": "SK:7"
+    },
+    {
+      "LocKey": "LOC_SK_008",
+      "ZH_CN": "示例文本 SK 008",
+      "EN_US": "EN Sample SK 008",
+      "Context": "UI/Game",
+      "SourceRef": "SK:8"
+    },
+    {
+      "LocKey": "LOC_SK_009",
+      "ZH_CN": "示例文本 SK 009",
+      "EN_US": "EN Sample SK 009",
+      "Context": "UI/Game",
+      "SourceRef": "SK:9"
+    },
+    {
+      "LocKey": "LOC_SK_010",
+      "ZH_CN": "示例文本 SK 010",
+      "EN_US": "EN Sample SK 010",
+      "Context": "UI/Game",
+      "SourceRef": "SK:10"
+    },
+    {
+      "LocKey": "LOC_SK_011",
+      "ZH_CN": "示例文本 SK 011",
+      "EN_US": "EN Sample SK 011",
+      "Context": "UI/Game",
+      "SourceRef": "SK:11"
+    },
+    {
+      "LocKey": "LOC_SK_012",
+      "ZH_CN": "示例文本 SK 012",
+      "EN_US": "EN Sample SK 012",
+      "Context": "UI/Game",
+      "SourceRef": "SK:12"
+    },
+    {
+      "LocKey": "LOC_SK_013",
+      "ZH_CN": "示例文本 SK 013",
+      "EN_US": "EN Sample SK 013",
+      "Context": "UI/Game",
+      "SourceRef": "SK:13"
+    },
+    {
+      "LocKey": "LOC_SK_014",
+      "ZH_CN": "示例文本 SK 014",
+      "EN_US": "EN Sample SK 014",
+      "Context": "UI/Game",
+      "SourceRef": "SK:14"
+    },
+    {
+      "LocKey": "LOC_SK_015",
+      "ZH_CN": "示例文本 SK 015",
+      "EN_US": "EN Sample SK 015",
+      "Context": "UI/Game",
+      "SourceRef": "SK:15"
+    },
+    {
+      "LocKey": "LOC_SK_016",
+      "ZH_CN": "示例文本 SK 016",
+      "EN_US": "EN Sample SK 016",
+      "Context": "UI/Game",
+      "SourceRef": "SK:16"
+    },
+    {
+      "LocKey": "LOC_SK_017",
+      "ZH_CN": "示例文本 SK 017",
+      "EN_US": "EN Sample SK 017",
+      "Context": "UI/Game",
+      "SourceRef": "SK:17"
+    },
+    {
+      "LocKey": "LOC_SK_018",
+      "ZH_CN": "示例文本 SK 018",
+      "EN_US": "EN Sample SK 018",
+      "Context": "UI/Game",
+      "SourceRef": "SK:18"
+    },
+    {
+      "LocKey": "LOC_SK_019",
+      "ZH_CN": "示例文本 SK 019",
+      "EN_US": "EN Sample SK 019",
+      "Context": "UI/Game",
+      "SourceRef": "SK:19"
+    },
+    {
+      "LocKey": "LOC_SK_020",
+      "ZH_CN": "示例文本 SK 020",
+      "EN_US": "EN Sample SK 020",
+      "Context": "UI/Game",
+      "SourceRef": "SK:20"
+    },
+    {
+      "LocKey": "LOC_SK_021",
+      "ZH_CN": "示例文本 SK 021",
+      "EN_US": "EN Sample SK 021",
+      "Context": "UI/Game",
+      "SourceRef": "SK:21"
+    },
+    {
+      "LocKey": "LOC_SK_022",
+      "ZH_CN": "示例文本 SK 022",
+      "EN_US": "EN Sample SK 022",
+      "Context": "UI/Game",
+      "SourceRef": "SK:22"
+    },
+    {
+      "LocKey": "LOC_SK_023",
+      "ZH_CN": "示例文本 SK 023",
+      "EN_US": "EN Sample SK 023",
+      "Context": "UI/Game",
+      "SourceRef": "SK:23"
+    },
+    {
+      "LocKey": "LOC_SK_024",
+      "ZH_CN": "示例文本 SK 024",
+      "EN_US": "EN Sample SK 024",
+      "Context": "UI/Game",
+      "SourceRef": "SK:24"
+    },
+    {
+      "LocKey": "LOC_SK_025",
+      "ZH_CN": "示例文本 SK 025",
+      "EN_US": "EN Sample SK 025",
+      "Context": "UI/Game",
+      "SourceRef": "SK:25"
+    },
+    {
+      "LocKey": "LOC_SK_026",
+      "ZH_CN": "示例文本 SK 026",
+      "EN_US": "EN Sample SK 026",
+      "Context": "UI/Game",
+      "SourceRef": "SK:26"
+    },
+    {
+      "LocKey": "LOC_SK_027",
+      "ZH_CN": "示例文本 SK 027",
+      "EN_US": "EN Sample SK 027",
+      "Context": "UI/Game",
+      "SourceRef": "SK:27"
+    },
+    {
+      "LocKey": "LOC_SK_028",
+      "ZH_CN": "示例文本 SK 028",
+      "EN_US": "EN Sample SK 028",
+      "Context": "UI/Game",
+      "SourceRef": "SK:28"
+    },
+    {
+      "LocKey": "LOC_SK_029",
+      "ZH_CN": "示例文本 SK 029",
+      "EN_US": "EN Sample SK 029",
+      "Context": "UI/Game",
+      "SourceRef": "SK:29"
+    },
+    {
+      "LocKey": "LOC_SK_030",
+      "ZH_CN": "示例文本 SK 030",
+      "EN_US": "EN Sample SK 030",
+      "Context": "UI/Game",
+      "SourceRef": "SK:30"
+    },
+    {
+      "LocKey": "LOC_SK_031",
+      "ZH_CN": "示例文本 SK 031",
+      "EN_US": "EN Sample SK 031",
+      "Context": "UI/Game",
+      "SourceRef": "SK:31"
+    },
+    {
+      "LocKey": "LOC_SK_032",
+      "ZH_CN": "示例文本 SK 032",
+      "EN_US": "EN Sample SK 032",
+      "Context": "UI/Game",
+      "SourceRef": "SK:32"
+    },
+    {
+      "LocKey": "LOC_SK_033",
+      "ZH_CN": "示例文本 SK 033",
+      "EN_US": "EN Sample SK 033",
+      "Context": "UI/Game",
+      "SourceRef": "SK:33"
+    },
+    {
+      "LocKey": "LOC_SK_034",
+      "ZH_CN": "示例文本 SK 034",
+      "EN_US": "EN Sample SK 034",
+      "Context": "UI/Game",
+      "SourceRef": "SK:34"
+    },
+    {
+      "LocKey": "LOC_SK_035",
+      "ZH_CN": "示例文本 SK 035",
+      "EN_US": "EN Sample SK 035",
+      "Context": "UI/Game",
+      "SourceRef": "SK:35"
+    },
+    {
+      "LocKey": "LOC_SK_036",
+      "ZH_CN": "示例文本 SK 036",
+      "EN_US": "EN Sample SK 036",
+      "Context": "UI/Game",
+      "SourceRef": "SK:36"
+    },
+    {
+      "LocKey": "LOC_SK_037",
+      "ZH_CN": "示例文本 SK 037",
+      "EN_US": "EN Sample SK 037",
+      "Context": "UI/Game",
+      "SourceRef": "SK:37"
+    },
+    {
+      "LocKey": "LOC_SK_038",
+      "ZH_CN": "示例文本 SK 038",
+      "EN_US": "EN Sample SK 038",
+      "Context": "UI/Game",
+      "SourceRef": "SK:38"
+    },
+    {
+      "LocKey": "LOC_SK_039",
+      "ZH_CN": "示例文本 SK 039",
+      "EN_US": "EN Sample SK 039",
+      "Context": "UI/Game",
+      "SourceRef": "SK:39"
+    },
+    {
+      "LocKey": "LOC_SK_040",
+      "ZH_CN": "示例文本 SK 040",
+      "EN_US": "EN Sample SK 040",
+      "Context": "UI/Game",
+      "SourceRef": "SK:40"
+    },
+    {
+      "LocKey": "LOC_MOLE_001",
+      "ZH_CN": "示例文本 MOLE 001",
+      "EN_US": "EN Sample MOLE 001",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:1"
+    },
+    {
+      "LocKey": "LOC_MOLE_002",
+      "ZH_CN": "示例文本 MOLE 002",
+      "EN_US": "EN Sample MOLE 002",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:2"
+    },
+    {
+      "LocKey": "LOC_MOLE_003",
+      "ZH_CN": "示例文本 MOLE 003",
+      "EN_US": "EN Sample MOLE 003",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:3"
+    },
+    {
+      "LocKey": "LOC_MOLE_004",
+      "ZH_CN": "示例文本 MOLE 004",
+      "EN_US": "EN Sample MOLE 004",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:4"
+    },
+    {
+      "LocKey": "LOC_MOLE_005",
+      "ZH_CN": "示例文本 MOLE 005",
+      "EN_US": "EN Sample MOLE 005",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:5"
+    },
+    {
+      "LocKey": "LOC_MOLE_006",
+      "ZH_CN": "示例文本 MOLE 006",
+      "EN_US": "EN Sample MOLE 006",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:6"
+    },
+    {
+      "LocKey": "LOC_MOLE_007",
+      "ZH_CN": "示例文本 MOLE 007",
+      "EN_US": "EN Sample MOLE 007",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:7"
+    },
+    {
+      "LocKey": "LOC_MOLE_008",
+      "ZH_CN": "示例文本 MOLE 008",
+      "EN_US": "EN Sample MOLE 008",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:8"
+    },
+    {
+      "LocKey": "LOC_MOLE_009",
+      "ZH_CN": "示例文本 MOLE 009",
+      "EN_US": "EN Sample MOLE 009",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:9"
+    },
+    {
+      "LocKey": "LOC_MOLE_010",
+      "ZH_CN": "示例文本 MOLE 010",
+      "EN_US": "EN Sample MOLE 010",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:10"
+    },
+    {
+      "LocKey": "LOC_MOLE_011",
+      "ZH_CN": "示例文本 MOLE 011",
+      "EN_US": "EN Sample MOLE 011",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:11"
+    },
+    {
+      "LocKey": "LOC_MOLE_012",
+      "ZH_CN": "示例文本 MOLE 012",
+      "EN_US": "EN Sample MOLE 012",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:12"
+    },
+    {
+      "LocKey": "LOC_MOLE_013",
+      "ZH_CN": "示例文本 MOLE 013",
+      "EN_US": "EN Sample MOLE 013",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:13"
+    },
+    {
+      "LocKey": "LOC_MOLE_014",
+      "ZH_CN": "示例文本 MOLE 014",
+      "EN_US": "EN Sample MOLE 014",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:14"
+    },
+    {
+      "LocKey": "LOC_MOLE_015",
+      "ZH_CN": "示例文本 MOLE 015",
+      "EN_US": "EN Sample MOLE 015",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:15"
+    },
+    {
+      "LocKey": "LOC_MOLE_016",
+      "ZH_CN": "示例文本 MOLE 016",
+      "EN_US": "EN Sample MOLE 016",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:16"
+    },
+    {
+      "LocKey": "LOC_MOLE_017",
+      "ZH_CN": "示例文本 MOLE 017",
+      "EN_US": "EN Sample MOLE 017",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:17"
+    },
+    {
+      "LocKey": "LOC_MOLE_018",
+      "ZH_CN": "示例文本 MOLE 018",
+      "EN_US": "EN Sample MOLE 018",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:18"
+    },
+    {
+      "LocKey": "LOC_MOLE_019",
+      "ZH_CN": "示例文本 MOLE 019",
+      "EN_US": "EN Sample MOLE 019",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:19"
+    },
+    {
+      "LocKey": "LOC_MOLE_020",
+      "ZH_CN": "示例文本 MOLE 020",
+      "EN_US": "EN Sample MOLE 020",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:20"
+    },
+    {
+      "LocKey": "LOC_MOLE_021",
+      "ZH_CN": "示例文本 MOLE 021",
+      "EN_US": "EN Sample MOLE 021",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:21"
+    },
+    {
+      "LocKey": "LOC_MOLE_022",
+      "ZH_CN": "示例文本 MOLE 022",
+      "EN_US": "EN Sample MOLE 022",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:22"
+    },
+    {
+      "LocKey": "LOC_MOLE_023",
+      "ZH_CN": "示例文本 MOLE 023",
+      "EN_US": "EN Sample MOLE 023",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:23"
+    },
+    {
+      "LocKey": "LOC_MOLE_024",
+      "ZH_CN": "示例文本 MOLE 024",
+      "EN_US": "EN Sample MOLE 024",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:24"
+    },
+    {
+      "LocKey": "LOC_MOLE_025",
+      "ZH_CN": "示例文本 MOLE 025",
+      "EN_US": "EN Sample MOLE 025",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:25"
+    },
+    {
+      "LocKey": "LOC_MOLE_026",
+      "ZH_CN": "示例文本 MOLE 026",
+      "EN_US": "EN Sample MOLE 026",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:26"
+    },
+    {
+      "LocKey": "LOC_MOLE_027",
+      "ZH_CN": "示例文本 MOLE 027",
+      "EN_US": "EN Sample MOLE 027",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:27"
+    },
+    {
+      "LocKey": "LOC_MOLE_028",
+      "ZH_CN": "示例文本 MOLE 028",
+      "EN_US": "EN Sample MOLE 028",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:28"
+    },
+    {
+      "LocKey": "LOC_MOLE_029",
+      "ZH_CN": "示例文本 MOLE 029",
+      "EN_US": "EN Sample MOLE 029",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:29"
+    },
+    {
+      "LocKey": "LOC_MOLE_030",
+      "ZH_CN": "示例文本 MOLE 030",
+      "EN_US": "EN Sample MOLE 030",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:30"
+    },
+    {
+      "LocKey": "LOC_MOLE_031",
+      "ZH_CN": "示例文本 MOLE 031",
+      "EN_US": "EN Sample MOLE 031",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:31"
+    },
+    {
+      "LocKey": "LOC_MOLE_032",
+      "ZH_CN": "示例文本 MOLE 032",
+      "EN_US": "EN Sample MOLE 032",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:32"
+    },
+    {
+      "LocKey": "LOC_MOLE_033",
+      "ZH_CN": "示例文本 MOLE 033",
+      "EN_US": "EN Sample MOLE 033",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:33"
+    },
+    {
+      "LocKey": "LOC_MOLE_034",
+      "ZH_CN": "示例文本 MOLE 034",
+      "EN_US": "EN Sample MOLE 034",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:34"
+    },
+    {
+      "LocKey": "LOC_MOLE_035",
+      "ZH_CN": "示例文本 MOLE 035",
+      "EN_US": "EN Sample MOLE 035",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:35"
+    },
+    {
+      "LocKey": "LOC_MOLE_036",
+      "ZH_CN": "示例文本 MOLE 036",
+      "EN_US": "EN Sample MOLE 036",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:36"
+    },
+    {
+      "LocKey": "LOC_MOLE_037",
+      "ZH_CN": "示例文本 MOLE 037",
+      "EN_US": "EN Sample MOLE 037",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:37"
+    },
+    {
+      "LocKey": "LOC_MOLE_038",
+      "ZH_CN": "示例文本 MOLE 038",
+      "EN_US": "EN Sample MOLE 038",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:38"
+    },
+    {
+      "LocKey": "LOC_MOLE_039",
+      "ZH_CN": "示例文本 MOLE 039",
+      "EN_US": "EN Sample MOLE 039",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:39"
+    },
+    {
+      "LocKey": "LOC_MOLE_040",
+      "ZH_CN": "示例文本 MOLE 040",
+      "EN_US": "EN Sample MOLE 040",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:40"
+    },
+    {
+      "LocKey": "LOC_MOLE_041",
+      "ZH_CN": "示例文本 MOLE 041",
+      "EN_US": "EN Sample MOLE 041",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:41"
+    },
+    {
+      "LocKey": "LOC_MOLE_042",
+      "ZH_CN": "示例文本 MOLE 042",
+      "EN_US": "EN Sample MOLE 042",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:42"
+    },
+    {
+      "LocKey": "LOC_MOLE_043",
+      "ZH_CN": "示例文本 MOLE 043",
+      "EN_US": "EN Sample MOLE 043",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:43"
+    },
+    {
+      "LocKey": "LOC_MOLE_044",
+      "ZH_CN": "示例文本 MOLE 044",
+      "EN_US": "EN Sample MOLE 044",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:44"
+    },
+    {
+      "LocKey": "LOC_MOLE_045",
+      "ZH_CN": "示例文本 MOLE 045",
+      "EN_US": "EN Sample MOLE 045",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:45"
+    },
+    {
+      "LocKey": "LOC_MOLE_046",
+      "ZH_CN": "示例文本 MOLE 046",
+      "EN_US": "EN Sample MOLE 046",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:46"
+    },
+    {
+      "LocKey": "LOC_MOLE_047",
+      "ZH_CN": "示例文本 MOLE 047",
+      "EN_US": "EN Sample MOLE 047",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:47"
+    },
+    {
+      "LocKey": "LOC_MOLE_048",
+      "ZH_CN": "示例文本 MOLE 048",
+      "EN_US": "EN Sample MOLE 048",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:48"
+    },
+    {
+      "LocKey": "LOC_MOLE_049",
+      "ZH_CN": "示例文本 MOLE 049",
+      "EN_US": "EN Sample MOLE 049",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:49"
+    },
+    {
+      "LocKey": "LOC_MOLE_050",
+      "ZH_CN": "示例文本 MOLE 050",
+      "EN_US": "EN Sample MOLE 050",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:50"
+    },
+    {
+      "LocKey": "LOC_MOLE_051",
+      "ZH_CN": "示例文本 MOLE 051",
+      "EN_US": "EN Sample MOLE 051",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:51"
+    },
+    {
+      "LocKey": "LOC_MOLE_052",
+      "ZH_CN": "示例文本 MOLE 052",
+      "EN_US": "EN Sample MOLE 052",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:52"
+    },
+    {
+      "LocKey": "LOC_MOLE_053",
+      "ZH_CN": "示例文本 MOLE 053",
+      "EN_US": "EN Sample MOLE 053",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:53"
+    },
+    {
+      "LocKey": "LOC_MOLE_054",
+      "ZH_CN": "示例文本 MOLE 054",
+      "EN_US": "EN Sample MOLE 054",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:54"
+    },
+    {
+      "LocKey": "LOC_MOLE_055",
+      "ZH_CN": "示例文本 MOLE 055",
+      "EN_US": "EN Sample MOLE 055",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:55"
+    },
+    {
+      "LocKey": "LOC_MOLE_056",
+      "ZH_CN": "示例文本 MOLE 056",
+      "EN_US": "EN Sample MOLE 056",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:56"
+    },
+    {
+      "LocKey": "LOC_MOLE_057",
+      "ZH_CN": "示例文本 MOLE 057",
+      "EN_US": "EN Sample MOLE 057",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:57"
+    },
+    {
+      "LocKey": "LOC_MOLE_058",
+      "ZH_CN": "示例文本 MOLE 058",
+      "EN_US": "EN Sample MOLE 058",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:58"
+    },
+    {
+      "LocKey": "LOC_MOLE_059",
+      "ZH_CN": "示例文本 MOLE 059",
+      "EN_US": "EN Sample MOLE 059",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:59"
+    },
+    {
+      "LocKey": "LOC_MOLE_060",
+      "ZH_CN": "示例文本 MOLE 060",
+      "EN_US": "EN Sample MOLE 060",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:60"
+    },
+    {
+      "LocKey": "LOC_MOLE_061",
+      "ZH_CN": "示例文本 MOLE 061",
+      "EN_US": "EN Sample MOLE 061",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:61"
+    },
+    {
+      "LocKey": "LOC_MOLE_062",
+      "ZH_CN": "示例文本 MOLE 062",
+      "EN_US": "EN Sample MOLE 062",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:62"
+    },
+    {
+      "LocKey": "LOC_MOLE_063",
+      "ZH_CN": "示例文本 MOLE 063",
+      "EN_US": "EN Sample MOLE 063",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:63"
+    },
+    {
+      "LocKey": "LOC_MOLE_064",
+      "ZH_CN": "示例文本 MOLE 064",
+      "EN_US": "EN Sample MOLE 064",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:64"
+    },
+    {
+      "LocKey": "LOC_MOLE_065",
+      "ZH_CN": "示例文本 MOLE 065",
+      "EN_US": "EN Sample MOLE 065",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:65"
+    },
+    {
+      "LocKey": "LOC_MOLE_066",
+      "ZH_CN": "示例文本 MOLE 066",
+      "EN_US": "EN Sample MOLE 066",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:66"
+    },
+    {
+      "LocKey": "LOC_MOLE_067",
+      "ZH_CN": "示例文本 MOLE 067",
+      "EN_US": "EN Sample MOLE 067",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:67"
+    },
+    {
+      "LocKey": "LOC_MOLE_068",
+      "ZH_CN": "示例文本 MOLE 068",
+      "EN_US": "EN Sample MOLE 068",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:68"
+    },
+    {
+      "LocKey": "LOC_MOLE_069",
+      "ZH_CN": "示例文本 MOLE 069",
+      "EN_US": "EN Sample MOLE 069",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:69"
+    },
+    {
+      "LocKey": "LOC_MOLE_070",
+      "ZH_CN": "示例文本 MOLE 070",
+      "EN_US": "EN Sample MOLE 070",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:70"
+    },
+    {
+      "LocKey": "LOC_MOLE_071",
+      "ZH_CN": "示例文本 MOLE 071",
+      "EN_US": "EN Sample MOLE 071",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:71"
+    },
+    {
+      "LocKey": "LOC_MOLE_072",
+      "ZH_CN": "示例文本 MOLE 072",
+      "EN_US": "EN Sample MOLE 072",
+      "Context": "UI/Game",
+      "SourceRef": "MOLE:72"
+    },
+    {
+      "LocKey": "LOC_BOSS_001",
+      "ZH_CN": "示例文本 BOSS 001",
+      "EN_US": "EN Sample BOSS 001",
+      "Context": "UI/Game",
+      "SourceRef": "BOSS:1"
+    },
+    {
+      "LocKey": "LOC_BOSS_002",
+      "ZH_CN": "示例文本 BOSS 002",
+      "EN_US": "EN Sample BOSS 002",
+      "Context": "UI/Game",
+      "SourceRef": "BOSS:2"
+    },
+    {
+      "LocKey": "LOC_BOSS_003",
+      "ZH_CN": "示例文本 BOSS 003",
+      "EN_US": "EN Sample BOSS 003",
+      "Context": "UI/Game",
+      "SourceRef": "BOSS:3"
+    },
+    {
+      "LocKey": "LOC_BOSS_004",
+      "ZH_CN": "示例文本 BOSS 004",
+      "EN_US": "EN Sample BOSS 004",
+      "Context": "UI/Game",
+      "SourceRef": "BOSS:4"
+    },
+    {
+      "LocKey": "LOC_BOSS_005",
+      "ZH_CN": "示例文本 BOSS 005",
+      "EN_US": "EN Sample BOSS 005",
+      "Context": "UI/Game",
+      "SourceRef": "BOSS:5"
+    },
+    {
+      "LocKey": "LOC_BOSS_006",
+      "ZH_CN": "示例文本 BOSS 006",
+      "EN_US": "EN Sample BOSS 006",
+      "Context": "UI/Game",
+      "SourceRef": "BOSS:6"
+    },
+    {
+      "LocKey": "LOC_BOSS_007",
+      "ZH_CN": "示例文本 BOSS 007",
+      "EN_US": "EN Sample BOSS 007",
+      "Context": "UI/Game",
+      "SourceRef": "BOSS:7"
+    },
+    {
+      "LocKey": "LOC_BOSS_008",
+      "ZH_CN": "示例文本 BOSS 008",
+      "EN_US": "EN Sample BOSS 008",
+      "Context": "UI/Game",
+      "SourceRef": "BOSS:8"
+    },
+    {
+      "LocKey": "LOC_EV_001",
+      "ZH_CN": "示例文本 EV 001",
+      "EN_US": "EN Sample EV 001",
+      "Context": "UI/Game",
+      "SourceRef": "EV:1"
+    },
+    {
+      "LocKey": "LOC_EV_002",
+      "ZH_CN": "示例文本 EV 002",
+      "EN_US": "EN Sample EV 002",
+      "Context": "UI/Game",
+      "SourceRef": "EV:2"
+    },
+    {
+      "LocKey": "LOC_EV_003",
+      "ZH_CN": "示例文本 EV 003",
+      "EN_US": "EN Sample EV 003",
+      "Context": "UI/Game",
+      "SourceRef": "EV:3"
+    },
+    {
+      "LocKey": "LOC_EV_004",
+      "ZH_CN": "示例文本 EV 004",
+      "EN_US": "EN Sample EV 004",
+      "Context": "UI/Game",
+      "SourceRef": "EV:4"
+    },
+    {
+      "LocKey": "LOC_EV_005",
+      "ZH_CN": "示例文本 EV 005",
+      "EN_US": "EN Sample EV 005",
+      "Context": "UI/Game",
+      "SourceRef": "EV:5"
+    },
+    {
+      "LocKey": "LOC_EV_006",
+      "ZH_CN": "示例文本 EV 006",
+      "EN_US": "EN Sample EV 006",
+      "Context": "UI/Game",
+      "SourceRef": "EV:6"
+    },
+    {
+      "LocKey": "LOC_EV_007",
+      "ZH_CN": "示例文本 EV 007",
+      "EN_US": "EN Sample EV 007",
+      "Context": "UI/Game",
+      "SourceRef": "EV:7"
+    },
+    {
+      "LocKey": "LOC_EV_008",
+      "ZH_CN": "示例文本 EV 008",
+      "EN_US": "EN Sample EV 008",
+      "Context": "UI/Game",
+      "SourceRef": "EV:8"
+    },
+    {
+      "LocKey": "LOC_EV_009",
+      "ZH_CN": "示例文本 EV 009",
+      "EN_US": "EN Sample EV 009",
+      "Context": "UI/Game",
+      "SourceRef": "EV:9"
+    },
+    {
+      "LocKey": "LOC_EV_010",
+      "ZH_CN": "示例文本 EV 010",
+      "EN_US": "EN Sample EV 010",
+      "Context": "UI/Game",
+      "SourceRef": "EV:10"
+    },
+    {
+      "LocKey": "LOC_EV_011",
+      "ZH_CN": "示例文本 EV 011",
+      "EN_US": "EN Sample EV 011",
+      "Context": "UI/Game",
+      "SourceRef": "EV:11"
+    },
+    {
+      "LocKey": "LOC_EV_012",
+      "ZH_CN": "示例文本 EV 012",
+      "EN_US": "EN Sample EV 012",
+      "Context": "UI/Game",
+      "SourceRef": "EV:12"
+    },
+    {
+      "LocKey": "LOC_EV_013",
+      "ZH_CN": "示例文本 EV 013",
+      "EN_US": "EN Sample EV 013",
+      "Context": "UI/Game",
+      "SourceRef": "EV:13"
+    },
+    {
+      "LocKey": "LOC_EV_014",
+      "ZH_CN": "示例文本 EV 014",
+      "EN_US": "EN Sample EV 014",
+      "Context": "UI/Game",
+      "SourceRef": "EV:14"
+    },
+    {
+      "LocKey": "LOC_EV_015",
+      "ZH_CN": "示例文本 EV 015",
+      "EN_US": "EN Sample EV 015",
+      "Context": "UI/Game",
+      "SourceRef": "EV:15"
+    },
+    {
+      "LocKey": "LOC_EV_016",
+      "ZH_CN": "示例文本 EV 016",
+      "EN_US": "EN Sample EV 016",
+      "Context": "UI/Game",
+      "SourceRef": "EV:16"
+    },
+    {
+      "LocKey": "LOC_EV_017",
+      "ZH_CN": "示例文本 EV 017",
+      "EN_US": "EN Sample EV 017",
+      "Context": "UI/Game",
+      "SourceRef": "EV:17"
+    },
+    {
+      "LocKey": "LOC_EV_018",
+      "ZH_CN": "示例文本 EV 018",
+      "EN_US": "EN Sample EV 018",
+      "Context": "UI/Game",
+      "SourceRef": "EV:18"
+    },
+    {
+      "LocKey": "LOC_EV_019",
+      "ZH_CN": "示例文本 EV 019",
+      "EN_US": "EN Sample EV 019",
+      "Context": "UI/Game",
+      "SourceRef": "EV:19"
+    },
+    {
+      "LocKey": "LOC_EV_020",
+      "ZH_CN": "示例文本 EV 020",
+      "EN_US": "EN Sample EV 020",
+      "Context": "UI/Game",
+      "SourceRef": "EV:20"
+    },
+    {
+      "LocKey": "LOC_EV_021",
+      "ZH_CN": "示例文本 EV 021",
+      "EN_US": "EN Sample EV 021",
+      "Context": "UI/Game",
+      "SourceRef": "EV:21"
+    },
+    {
+      "LocKey": "LOC_EV_022",
+      "ZH_CN": "示例文本 EV 022",
+      "EN_US": "EN Sample EV 022",
+      "Context": "UI/Game",
+      "SourceRef": "EV:22"
+    },
+    {
+      "LocKey": "LOC_EV_023",
+      "ZH_CN": "示例文本 EV 023",
+      "EN_US": "EN Sample EV 023",
+      "Context": "UI/Game",
+      "SourceRef": "EV:23"
+    },
+    {
+      "LocKey": "LOC_EV_024",
+      "ZH_CN": "示例文本 EV 024",
+      "EN_US": "EN Sample EV 024",
+      "Context": "UI/Game",
+      "SourceRef": "EV:24"
+    },
+    {
+      "LocKey": "LOC_EV_025",
+      "ZH_CN": "示例文本 EV 025",
+      "EN_US": "EN Sample EV 025",
+      "Context": "UI/Game",
+      "SourceRef": "EV:25"
+    },
+    {
+      "LocKey": "LOC_EV_026",
+      "ZH_CN": "示例文本 EV 026",
+      "EN_US": "EN Sample EV 026",
+      "Context": "UI/Game",
+      "SourceRef": "EV:26"
+    },
+    {
+      "LocKey": "LOC_EV_027",
+      "ZH_CN": "示例文本 EV 027",
+      "EN_US": "EN Sample EV 027",
+      "Context": "UI/Game",
+      "SourceRef": "EV:27"
+    },
+    {
+      "LocKey": "LOC_EV_028",
+      "ZH_CN": "示例文本 EV 028",
+      "EN_US": "EN Sample EV 028",
+      "Context": "UI/Game",
+      "SourceRef": "EV:28"
+    },
+    {
+      "LocKey": "LOC_EV_029",
+      "ZH_CN": "示例文本 EV 029",
+      "EN_US": "EN Sample EV 029",
+      "Context": "UI/Game",
+      "SourceRef": "EV:29"
+    },
+    {
+      "LocKey": "LOC_EV_030",
+      "ZH_CN": "示例文本 EV 030",
+      "EN_US": "EN Sample EV 030",
+      "Context": "UI/Game",
+      "SourceRef": "EV:30"
+    },
+    {
+      "LocKey": "LOC_UI_001",
+      "ZH_CN": "示例文本 UI 001",
+      "EN_US": "EN Sample UI 001",
+      "Context": "UI/Game",
+      "SourceRef": "UI:1"
+    },
+    {
+      "LocKey": "LOC_UI_002",
+      "ZH_CN": "示例文本 UI 002",
+      "EN_US": "EN Sample UI 002",
+      "Context": "UI/Game",
+      "SourceRef": "UI:2"
+    },
+    {
+      "LocKey": "LOC_UI_003",
+      "ZH_CN": "示例文本 UI 003",
+      "EN_US": "EN Sample UI 003",
+      "Context": "UI/Game",
+      "SourceRef": "UI:3"
+    },
+    {
+      "LocKey": "LOC_UI_004",
+      "ZH_CN": "示例文本 UI 004",
+      "EN_US": "EN Sample UI 004",
+      "Context": "UI/Game",
+      "SourceRef": "UI:4"
+    },
+    {
+      "LocKey": "LOC_UI_005",
+      "ZH_CN": "示例文本 UI 005",
+      "EN_US": "EN Sample UI 005",
+      "Context": "UI/Game",
+      "SourceRef": "UI:5"
+    },
+    {
+      "LocKey": "LOC_UI_006",
+      "ZH_CN": "示例文本 UI 006",
+      "EN_US": "EN Sample UI 006",
+      "Context": "UI/Game",
+      "SourceRef": "UI:6"
+    },
+    {
+      "LocKey": "LOC_UI_007",
+      "ZH_CN": "示例文本 UI 007",
+      "EN_US": "EN Sample UI 007",
+      "Context": "UI/Game",
+      "SourceRef": "UI:7"
+    },
+    {
+      "LocKey": "LOC_UI_008",
+      "ZH_CN": "示例文本 UI 008",
+      "EN_US": "EN Sample UI 008",
+      "Context": "UI/Game",
+      "SourceRef": "UI:8"
+    },
+    {
+      "LocKey": "LOC_UI_009",
+      "ZH_CN": "示例文本 UI 009",
+      "EN_US": "EN Sample UI 009",
+      "Context": "UI/Game",
+      "SourceRef": "UI:9"
+    },
+    {
+      "LocKey": "LOC_UI_010",
+      "ZH_CN": "示例文本 UI 010",
+      "EN_US": "EN Sample UI 010",
+      "Context": "UI/Game",
+      "SourceRef": "UI:10"
+    },
+    {
+      "LocKey": "LOC_UI_011",
+      "ZH_CN": "示例文本 UI 011",
+      "EN_US": "EN Sample UI 011",
+      "Context": "UI/Game",
+      "SourceRef": "UI:11"
+    },
+    {
+      "LocKey": "LOC_UI_012",
+      "ZH_CN": "示例文本 UI 012",
+      "EN_US": "EN Sample UI 012",
+      "Context": "UI/Game",
+      "SourceRef": "UI:12"
+    },
+    {
+      "LocKey": "LOC_UI_013",
+      "ZH_CN": "示例文本 UI 013",
+      "EN_US": "EN Sample UI 013",
+      "Context": "UI/Game",
+      "SourceRef": "UI:13"
+    },
+    {
+      "LocKey": "LOC_UI_014",
+      "ZH_CN": "示例文本 UI 014",
+      "EN_US": "EN Sample UI 014",
+      "Context": "UI/Game",
+      "SourceRef": "UI:14"
+    },
+    {
+      "LocKey": "LOC_UI_015",
+      "ZH_CN": "示例文本 UI 015",
+      "EN_US": "EN Sample UI 015",
+      "Context": "UI/Game",
+      "SourceRef": "UI:15"
+    },
+    {
+      "LocKey": "LOC_UI_016",
+      "ZH_CN": "示例文本 UI 016",
+      "EN_US": "EN Sample UI 016",
+      "Context": "UI/Game",
+      "SourceRef": "UI:16"
+    },
+    {
+      "LocKey": "LOC_AUD_001",
+      "ZH_CN": "示例文本 AUD 001",
+      "EN_US": "EN Sample AUD 001",
+      "Context": "UI/Game",
+      "SourceRef": "AUD:1"
+    },
+    {
+      "LocKey": "LOC_AUD_002",
+      "ZH_CN": "示例文本 AUD 002",
+      "EN_US": "EN Sample AUD 002",
+      "Context": "UI/Game",
+      "SourceRef": "AUD:2"
+    },
+    {
+      "LocKey": "LOC_AUD_003",
+      "ZH_CN": "示例文本 AUD 003",
+      "EN_US": "EN Sample AUD 003",
+      "Context": "UI/Game",
+      "SourceRef": "AUD:3"
+    },
+    {
+      "LocKey": "LOC_AUD_004",
+      "ZH_CN": "示例文本 AUD 004",
+      "EN_US": "EN Sample AUD 004",
+      "Context": "UI/Game",
+      "SourceRef": "AUD:4"
+    },
+    {
+      "LocKey": "LOC_AUD_005",
+      "ZH_CN": "示例文本 AUD 005",
+      "EN_US": "EN Sample AUD 005",
+      "Context": "UI/Game",
+      "SourceRef": "AUD:5"
+    },
+    {
+      "LocKey": "LOC_AUD_006",
+      "ZH_CN": "示例文本 AUD 006",
+      "EN_US": "EN Sample AUD 006",
+      "Context": "UI/Game",
+      "SourceRef": "AUD:6"
+    },
+    {
+      "LocKey": "LOC_AUD_007",
+      "ZH_CN": "示例文本 AUD 007",
+      "EN_US": "EN Sample AUD 007",
+      "Context": "UI/Game",
+      "SourceRef": "AUD:7"
+    },
+    {
+      "LocKey": "LOC_AUD_008",
+      "ZH_CN": "示例文本 AUD 008",
+      "EN_US": "EN Sample AUD 008",
+      "Context": "UI/Game",
+      "SourceRef": "AUD:8"
+    },
+    {
+      "LocKey": "LOC_AUD_009",
+      "ZH_CN": "示例文本 AUD 009",
+      "EN_US": "EN Sample AUD 009",
+      "Context": "UI/Game",
+      "SourceRef": "AUD:9"
+    },
+    {
+      "LocKey": "LOC_AUD_010",
+      "ZH_CN": "示例文本 AUD 010",
+      "EN_US": "EN Sample AUD 010",
+      "Context": "UI/Game",
+      "SourceRef": "AUD:10"
+    },
+    {
+      "LocKey": "LOC_AUD_011",
+      "ZH_CN": "示例文本 AUD 011",
+      "EN_US": "EN Sample AUD 011",
+      "Context": "UI/Game",
+      "SourceRef": "AUD:11"
+    },
+    {
+      "LocKey": "LOC_AUD_012",
+      "ZH_CN": "示例文本 AUD 012",
+      "EN_US": "EN Sample AUD 012",
+      "Context": "UI/Game",
+      "SourceRef": "AUD:12"
+    },
+    {
+      "LocKey": "LOC_AUD_013",
+      "ZH_CN": "示例文本 AUD 013",
+      "EN_US": "EN Sample AUD 013",
+      "Context": "UI/Game",
+      "SourceRef": "AUD:13"
+    },
+    {
+      "LocKey": "LOC_AUD_014",
+      "ZH_CN": "示例文本 AUD 014",
+      "EN_US": "EN Sample AUD 014",
+      "Context": "UI/Game",
+      "SourceRef": "AUD:14"
+    },
+    {
+      "LocKey": "LOC_AUD_015",
+      "ZH_CN": "示例文本 AUD 015",
+      "EN_US": "EN Sample AUD 015",
+      "Context": "UI/Game",
+      "SourceRef": "AUD:15"
+    },
+    {
+      "LocKey": "LOC_AUD_016",
+      "ZH_CN": "示例文本 AUD 016",
+      "EN_US": "EN Sample AUD 016",
+      "Context": "UI/Game",
+      "SourceRef": "AUD:16"
+    },
+    {
+      "LocKey": "LOC_AUD_017",
+      "ZH_CN": "示例文本 AUD 017",
+      "EN_US": "EN Sample AUD 017",
+      "Context": "UI/Game",
+      "SourceRef": "AUD:17"
+    },
+    {
+      "LocKey": "LOC_AUD_018",
+      "ZH_CN": "示例文本 AUD 018",
+      "EN_US": "EN Sample AUD 018",
+      "Context": "UI/Game",
+      "SourceRef": "AUD:18"
+    },
+    {
+      "LocKey": "LOC_AUD_019",
+      "ZH_CN": "示例文本 AUD 019",
+      "EN_US": "EN Sample AUD 019",
+      "Context": "UI/Game",
+      "SourceRef": "AUD:19"
+    },
+    {
+      "LocKey": "LOC_AUD_020",
+      "ZH_CN": "示例文本 AUD 020",
+      "EN_US": "EN Sample AUD 020",
+      "Context": "UI/Game",
+      "SourceRef": "AUD:20"
+    },
+    {
+      "LocKey": "LOC_VFX_001",
+      "ZH_CN": "示例文本 VFX 001",
+      "EN_US": "EN Sample VFX 001",
+      "Context": "UI/Game",
+      "SourceRef": "VFX:1"
+    },
+    {
+      "LocKey": "LOC_VFX_002",
+      "ZH_CN": "示例文本 VFX 002",
+      "EN_US": "EN Sample VFX 002",
+      "Context": "UI/Game",
+      "SourceRef": "VFX:2"
+    },
+    {
+      "LocKey": "LOC_VFX_003",
+      "ZH_CN": "示例文本 VFX 003",
+      "EN_US": "EN Sample VFX 003",
+      "Context": "UI/Game",
+      "SourceRef": "VFX:3"
+    },
+    {
+      "LocKey": "LOC_VFX_004",
+      "ZH_CN": "示例文本 VFX 004",
+      "EN_US": "EN Sample VFX 004",
+      "Context": "UI/Game",
+      "SourceRef": "VFX:4"
+    },
+    {
+      "LocKey": "LOC_VFX_005",
+      "ZH_CN": "示例文本 VFX 005",
+      "EN_US": "EN Sample VFX 005",
+      "Context": "UI/Game",
+      "SourceRef": "VFX:5"
+    },
+    {
+      "LocKey": "LOC_VFX_006",
+      "ZH_CN": "示例文本 VFX 006",
+      "EN_US": "EN Sample VFX 006",
+      "Context": "UI/Game",
+      "SourceRef": "VFX:6"
+    },
+    {
+      "LocKey": "LOC_VFX_007",
+      "ZH_CN": "示例文本 VFX 007",
+      "EN_US": "EN Sample VFX 007",
+      "Context": "UI/Game",
+      "SourceRef": "VFX:7"
+    },
+    {
+      "LocKey": "LOC_VFX_008",
+      "ZH_CN": "示例文本 VFX 008",
+      "EN_US": "EN Sample VFX 008",
+      "Context": "UI/Game",
+      "SourceRef": "VFX:8"
+    },
+    {
+      "LocKey": "LOC_VFX_009",
+      "ZH_CN": "示例文本 VFX 009",
+      "EN_US": "EN Sample VFX 009",
+      "Context": "UI/Game",
+      "SourceRef": "VFX:9"
+    },
+    {
+      "LocKey": "LOC_VFX_010",
+      "ZH_CN": "示例文本 VFX 010",
+      "EN_US": "EN Sample VFX 010",
+      "Context": "UI/Game",
+      "SourceRef": "VFX:10"
+    },
+    {
+      "LocKey": "LOC_VFX_011",
+      "ZH_CN": "示例文本 VFX 011",
+      "EN_US": "EN Sample VFX 011",
+      "Context": "UI/Game",
+      "SourceRef": "VFX:11"
+    },
+    {
+      "LocKey": "LOC_VFX_012",
+      "ZH_CN": "示例文本 VFX 012",
+      "EN_US": "EN Sample VFX 012",
+      "Context": "UI/Game",
+      "SourceRef": "VFX:12"
+    },
+    {
+      "LocKey": "LOC_VFX_013",
+      "ZH_CN": "示例文本 VFX 013",
+      "EN_US": "EN Sample VFX 013",
+      "Context": "UI/Game",
+      "SourceRef": "VFX:13"
+    },
+    {
+      "LocKey": "LOC_VFX_014",
+      "ZH_CN": "示例文本 VFX 014",
+      "EN_US": "EN Sample VFX 014",
+      "Context": "UI/Game",
+      "SourceRef": "VFX:14"
+    },
+    {
+      "LocKey": "LOC_VFX_015",
+      "ZH_CN": "示例文本 VFX 015",
+      "EN_US": "EN Sample VFX 015",
+      "Context": "UI/Game",
+      "SourceRef": "VFX:15"
+    },
+    {
+      "LocKey": "LOC_VFX_016",
+      "ZH_CN": "示例文本 VFX 016",
+      "EN_US": "EN Sample VFX 016",
+      "Context": "UI/Game",
+      "SourceRef": "VFX:16"
+    },
+    {
+      "LocKey": "LOC_VFX_017",
+      "ZH_CN": "示例文本 VFX 017",
+      "EN_US": "EN Sample VFX 017",
+      "Context": "UI/Game",
+      "SourceRef": "VFX:17"
+    },
+    {
+      "LocKey": "LOC_VFX_018",
+      "ZH_CN": "示例文本 VFX 018",
+      "EN_US": "EN Sample VFX 018",
+      "Context": "UI/Game",
+      "SourceRef": "VFX:18"
+    },
+    {
+      "LocKey": "LOC_VFX_019",
+      "ZH_CN": "示例文本 VFX 019",
+      "EN_US": "EN Sample VFX 019",
+      "Context": "UI/Game",
+      "SourceRef": "VFX:19"
+    },
+    {
+      "LocKey": "LOC_VFX_020",
+      "ZH_CN": "示例文本 VFX 020",
+      "EN_US": "EN Sample VFX 020",
+      "Context": "UI/Game",
+      "SourceRef": "VFX:20"
+    }
+  ],
+  "rows": null
+}

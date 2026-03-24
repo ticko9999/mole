@@ -1,0 +1,459 @@
+{
+  "sheet_name": "Enums",
+  "sheet_slug": "Enums",
+  "row_count": 44,
+  "column_count": 8,
+  "headers": [
+    "EnumType",
+    "Code",
+    "DisplayName",
+    "Meaning",
+    "Example",
+    "ProgramRule",
+    "DesignerNote",
+    "Reserved"
+  ],
+  "records": [
+    {
+      "EnumType": "Rarity",
+      "Code": "Common",
+      "DisplayName": "Common",
+      "Meaning": "品质枚举",
+      "Example": "Rare",
+      "ProgramRule": "程序可转int序",
+      "DesignerNote": "用于掉落、技能、武器、Boss",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Rarity",
+      "Code": "Uncommon",
+      "DisplayName": "Uncommon",
+      "Meaning": "品质枚举",
+      "Example": "Rare",
+      "ProgramRule": "程序可转int序",
+      "DesignerNote": "用于掉落、技能、武器、Boss",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Rarity",
+      "Code": "Rare",
+      "DisplayName": "Rare",
+      "Meaning": "品质枚举",
+      "Example": "Rare",
+      "ProgramRule": "程序可转int序",
+      "DesignerNote": "用于掉落、技能、武器、Boss",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Rarity",
+      "Code": "Epic",
+      "DisplayName": "Epic",
+      "Meaning": "品质枚举",
+      "Example": "Rare",
+      "ProgramRule": "程序可转int序",
+      "DesignerNote": "用于掉落、技能、武器、Boss",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Rarity",
+      "Code": "Legendary",
+      "DisplayName": "Legendary",
+      "Meaning": "品质枚举",
+      "Example": "Rare",
+      "ProgramRule": "程序可转int序",
+      "DesignerNote": "用于掉落、技能、武器、Boss",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "WeaponType",
+      "Code": "Hammer",
+      "DisplayName": "Hammer",
+      "Meaning": "武器类型",
+      "Example": "Hammer",
+      "ProgramRule": "用于表现和逻辑分流",
+      "DesignerNote": "增加新类型时同步资源层",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "WeaponType",
+      "Code": "Chain",
+      "DisplayName": "Chain",
+      "Meaning": "武器类型",
+      "Example": "Hammer",
+      "ProgramRule": "用于表现和逻辑分流",
+      "DesignerNote": "增加新类型时同步资源层",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "WeaponType",
+      "Code": "Wave",
+      "DisplayName": "Wave",
+      "Meaning": "武器类型",
+      "Example": "Hammer",
+      "ProgramRule": "用于表现和逻辑分流",
+      "DesignerNote": "增加新类型时同步资源层",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "WeaponType",
+      "Code": "Drone",
+      "DisplayName": "Drone",
+      "Meaning": "武器类型",
+      "Example": "Hammer",
+      "ProgramRule": "用于表现和逻辑分流",
+      "DesignerNote": "增加新类型时同步资源层",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "WeaponType",
+      "Code": "Totem",
+      "DisplayName": "Totem",
+      "Meaning": "武器类型",
+      "Example": "Hammer",
+      "ProgramRule": "用于表现和逻辑分流",
+      "DesignerNote": "增加新类型时同步资源层",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "WeaponType",
+      "Code": "Trap",
+      "DisplayName": "Trap",
+      "Meaning": "武器类型",
+      "Example": "Hammer",
+      "ProgramRule": "用于表现和逻辑分流",
+      "DesignerNote": "增加新类型时同步资源层",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "WeaponType",
+      "Code": "Laser",
+      "DisplayName": "Laser",
+      "Meaning": "武器类型",
+      "Example": "Hammer",
+      "ProgramRule": "用于表现和逻辑分流",
+      "DesignerNote": "增加新类型时同步资源层",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "WeaponType",
+      "Code": "Orbital",
+      "DisplayName": "Orbital",
+      "Meaning": "武器类型",
+      "Example": "Hammer",
+      "ProgramRule": "用于表现和逻辑分流",
+      "DesignerNote": "增加新类型时同步资源层",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "WeaponType",
+      "Code": "Beam",
+      "DisplayName": "Beam",
+      "Meaning": "武器类型",
+      "Example": "Hammer",
+      "ProgramRule": "用于表现和逻辑分流",
+      "DesignerNote": "增加新类型时同步资源层",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "WeaponType",
+      "Code": "Summon",
+      "DisplayName": "Summon",
+      "Meaning": "武器类型",
+      "Example": "Hammer",
+      "ProgramRule": "用于表现和逻辑分流",
+      "DesignerNote": "增加新类型时同步资源层",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "DamageType",
+      "Code": "Blunt",
+      "DisplayName": "Blunt",
+      "Meaning": "伤害类型",
+      "Example": "Shock",
+      "ProgramRule": "用于状态和抗性",
+      "DesignerNote": "尽量复用，不滥加新类型",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "DamageType",
+      "Code": "Shock",
+      "DisplayName": "Shock",
+      "Meaning": "伤害类型",
+      "Example": "Shock",
+      "ProgramRule": "用于状态和抗性",
+      "DesignerNote": "尽量复用，不滥加新类型",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "DamageType",
+      "Code": "Fire",
+      "DisplayName": "Fire",
+      "Meaning": "伤害类型",
+      "Example": "Shock",
+      "ProgramRule": "用于状态和抗性",
+      "DesignerNote": "尽量复用，不滥加新类型",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "DamageType",
+      "Code": "Frost",
+      "DisplayName": "Frost",
+      "Meaning": "伤害类型",
+      "Example": "Shock",
+      "ProgramRule": "用于状态和抗性",
+      "DesignerNote": "尽量复用，不滥加新类型",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "DamageType",
+      "Code": "Arcane",
+      "DisplayName": "Arcane",
+      "Meaning": "伤害类型",
+      "Example": "Shock",
+      "ProgramRule": "用于状态和抗性",
+      "DesignerNote": "尽量复用，不滥加新类型",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "DamageType",
+      "Code": "Explosive",
+      "DisplayName": "Explosive",
+      "Meaning": "伤害类型",
+      "Example": "Shock",
+      "ProgramRule": "用于状态和抗性",
+      "DesignerNote": "尽量复用，不滥加新类型",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "DamageType",
+      "Code": "True",
+      "DisplayName": "True",
+      "Meaning": "伤害类型",
+      "Example": "Shock",
+      "ProgramRule": "用于状态和抗性",
+      "DesignerNote": "尽量复用，不滥加新类型",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "DamageType",
+      "Code": "Poison",
+      "DisplayName": "Poison",
+      "Meaning": "伤害类型",
+      "Example": "Shock",
+      "ProgramRule": "用于状态和抗性",
+      "DesignerNote": "尽量复用，不滥加新类型",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "DamageType",
+      "Code": "Gold",
+      "DisplayName": "Gold",
+      "Meaning": "伤害类型",
+      "Example": "Shock",
+      "ProgramRule": "用于状态和抗性",
+      "DesignerNote": "尽量复用，不滥加新类型",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Trigger",
+      "Code": "OnHit",
+      "DisplayName": "OnHit",
+      "Meaning": "触发时机",
+      "Example": "OnHit",
+      "ProgramRule": "事件驱动",
+      "DesignerNote": "同一技能尽量只用一个主Trigger",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Trigger",
+      "Code": "OnKill",
+      "DisplayName": "OnKill",
+      "Meaning": "触发时机",
+      "Example": "OnHit",
+      "ProgramRule": "事件驱动",
+      "DesignerNote": "同一技能尽量只用一个主Trigger",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Trigger",
+      "Code": "OnCrit",
+      "DisplayName": "OnCrit",
+      "Meaning": "触发时机",
+      "Example": "OnHit",
+      "ProgramRule": "事件驱动",
+      "DesignerNote": "同一技能尽量只用一个主Trigger",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Trigger",
+      "Code": "Periodic",
+      "DisplayName": "Periodic",
+      "Meaning": "触发时机",
+      "Example": "OnHit",
+      "ProgramRule": "事件驱动",
+      "DesignerNote": "同一技能尽量只用一个主Trigger",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Trigger",
+      "Code": "OnSpawn",
+      "DisplayName": "OnSpawn",
+      "Meaning": "触发时机",
+      "Example": "OnHit",
+      "ProgramRule": "事件驱动",
+      "DesignerNote": "同一技能尽量只用一个主Trigger",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Trigger",
+      "Code": "OnEscape",
+      "DisplayName": "OnEscape",
+      "Meaning": "触发时机",
+      "Example": "OnHit",
+      "ProgramRule": "事件驱动",
+      "DesignerNote": "同一技能尽量只用一个主Trigger",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Trigger",
+      "Code": "OnCombo",
+      "DisplayName": "OnCombo",
+      "Meaning": "触发时机",
+      "Example": "OnHit",
+      "ProgramRule": "事件驱动",
+      "DesignerNote": "同一技能尽量只用一个主Trigger",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Trigger",
+      "Code": "OnGoldGain",
+      "DisplayName": "OnGoldGain",
+      "Meaning": "触发时机",
+      "Example": "OnHit",
+      "ProgramRule": "事件驱动",
+      "DesignerNote": "同一技能尽量只用一个主Trigger",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Trigger",
+      "Code": "Aura",
+      "DisplayName": "Aura",
+      "Meaning": "触发时机",
+      "Example": "OnHit",
+      "ProgramRule": "事件驱动",
+      "DesignerNote": "同一技能尽量只用一个主Trigger",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Trigger",
+      "Code": "Manual",
+      "DisplayName": "Manual",
+      "Meaning": "触发时机",
+      "Example": "OnHit",
+      "ProgramRule": "事件驱动",
+      "DesignerNote": "同一技能尽量只用一个主Trigger",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Status",
+      "Code": "Stun",
+      "DisplayName": "Stun",
+      "Meaning": "状态类型",
+      "Example": "Burn",
+      "ProgramRule": "状态机读取",
+      "DesignerNote": "与StatusEffects表联动",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Status",
+      "Code": "Shock",
+      "DisplayName": "Shock",
+      "Meaning": "状态类型",
+      "Example": "Burn",
+      "ProgramRule": "状态机读取",
+      "DesignerNote": "与StatusEffects表联动",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Status",
+      "Code": "Burn",
+      "DisplayName": "Burn",
+      "Meaning": "状态类型",
+      "Example": "Burn",
+      "ProgramRule": "状态机读取",
+      "DesignerNote": "与StatusEffects表联动",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Status",
+      "Code": "Freeze",
+      "DisplayName": "Freeze",
+      "Meaning": "状态类型",
+      "Example": "Burn",
+      "ProgramRule": "状态机读取",
+      "DesignerNote": "与StatusEffects表联动",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Status",
+      "Code": "Bleed",
+      "DisplayName": "Bleed",
+      "Meaning": "状态类型",
+      "Example": "Burn",
+      "ProgramRule": "状态机读取",
+      "DesignerNote": "与StatusEffects表联动",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Status",
+      "Code": "Weaken",
+      "DisplayName": "Weaken",
+      "Meaning": "状态类型",
+      "Example": "Burn",
+      "ProgramRule": "状态机读取",
+      "DesignerNote": "与StatusEffects表联动",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Status",
+      "Code": "Expose",
+      "DisplayName": "Expose",
+      "Meaning": "状态类型",
+      "Example": "Burn",
+      "ProgramRule": "状态机读取",
+      "DesignerNote": "与StatusEffects表联动",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Status",
+      "Code": "GreedMark",
+      "DisplayName": "GreedMark",
+      "Meaning": "状态类型",
+      "Example": "Burn",
+      "ProgramRule": "状态机读取",
+      "DesignerNote": "与StatusEffects表联动",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Status",
+      "Code": "ExecuteMark",
+      "DisplayName": "ExecuteMark",
+      "Meaning": "状态类型",
+      "Example": "Burn",
+      "ProgramRule": "状态机读取",
+      "DesignerNote": "与StatusEffects表联动",
+      "Reserved": ""
+    },
+    {
+      "EnumType": "Status",
+      "Code": "Slow",
+      "DisplayName": "Slow",
+      "Meaning": "状态类型",
+      "Example": "Burn",
+      "ProgramRule": "状态机读取",
+      "DesignerNote": "与StatusEffects表联动",
+      "Reserved": ""
+    }
+  ],
+  "rows": null
+}

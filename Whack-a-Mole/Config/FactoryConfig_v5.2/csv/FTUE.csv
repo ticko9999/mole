@@ -1,0 +1,31 @@
+﻿StepID,Order,Description,GuideType,Context,Skippable,TriggerRule,Note
+FTUE_01,1,展示第一只地鼠的冒头与敲击,Popup|Arrow|SlowTime,Battle/UI,1,首次出现时触发,教学必须能跳过
+FTUE_02,2,提示命中反馈和金币掉落,Popup|Arrow|SlowTime,Battle/UI,1,首次出现时触发,教学必须能跳过
+FTUE_03,3,首次升级三选一教学,Popup|Arrow|SlowTime,Battle/UI,1,首次出现时触发,教学必须能跳过
+FTUE_04,4,引导选择范围或减负升级,Popup|Arrow|SlowTime,Battle/UI,1,首次出现时触发,教学必须能跳过
+FTUE_05,5,展示稀有鼠提示与优先击杀,Popup|Arrow|SlowTime,Battle/UI,1,首次出现时触发,教学必须能跳过
+FTUE_06,6,引导使用第一次自动锤,Popup|Arrow|SlowTime,Battle/UI,1,首次出现时触发,教学必须能跳过
+FTUE_07,7,解释局内商店与事件,Popup|Arrow|SlowTime,Battle/UI,1,首次出现时触发,教学必须能跳过
+FTUE_08,8,解释设施槽位和放置,Popup|Arrow|SlowTime,Battle/UI,1,首次出现时触发,教学必须能跳过
+FTUE_09,9,展示Boss预警,Popup|Arrow|SlowTime,Battle/UI,1,首次出现时触发,教学必须能跳过
+FTUE_10,10,局后成长树与再来一局,Popup|Arrow|SlowTime,Battle/UI,1,首次出现时触发,教学必须能跳过
+FTUE_11,11,角色解锁与流派推荐,Popup|Arrow|SlowTime,Battle/UI,1,首次出现时触发,教学必须能跳过
+FTUE_12,12,难度选择与挑战提示,Popup|Arrow|SlowTime,Battle/UI,1,首次出现时触发,教学必须能跳过
+FTUE_13,13,扩展教学节点 13,Popup,Meta/Menu,0,按解锁条件触发,发行前补完教程
+FTUE_14,14,扩展教学节点 14,Popup,Meta/Menu,0,按解锁条件触发,发行前补完教程
+FTUE_15,15,扩展教学节点 15,Popup,Meta/Menu,0,按解锁条件触发,发行前补完教程
+FTUE_16,16,扩展教学节点 16,Popup,Meta/Menu,0,按解锁条件触发,发行前补完教程
+FTUE_17,17,扩展教学节点 17,Popup,Meta/Menu,0,按解锁条件触发,发行前补完教程
+FTUE_18,18,扩展教学节点 18,Popup,Meta/Menu,0,按解锁条件触发,发行前补完教程
+FTUE_19,19,扩展教学节点 19,Popup,Meta/Menu,0,按解锁条件触发,发行前补完教程
+FTUE_20,20,扩展教学节点 20,Popup,Meta/Menu,0,按解锁条件触发,发行前补完教程
+FTUE_21,21,扩展教学节点 21,Popup,Meta/Menu,0,按解锁条件触发,发行前补完教程
+FTUE_22,22,扩展教学节点 22,Popup,Meta/Menu,0,按解锁条件触发,发行前补完教程
+FTUE_23,23,扩展教学节点 23,Popup,Meta/Menu,0,按解锁条件触发,发行前补完教程
+FTUE_24,24,扩展教学节点 24,Popup,Meta/Menu,0,按解锁条件触发,发行前补完教程
+FTUE_25,25,扩展教学节点 25,Popup,Meta/Menu,0,按解锁条件触发,发行前补完教程
+FTUE_26,26,扩展教学节点 26,Popup,Meta/Menu,0,按解锁条件触发,发行前补完教程
+FTUE_27,27,扩展教学节点 27,Popup,Meta/Menu,0,按解锁条件触发,发行前补完教程
+FTUE_28,28,扩展教学节点 28,Popup,Meta/Menu,0,按解锁条件触发,发行前补完教程
+FTUE_29,29,扩展教学节点 29,Popup,Meta/Menu,0,按解锁条件触发,发行前补完教程
+FTUE_30,30,扩展教学节点 30,Popup,Meta/Menu,0,按解锁条件触发,发行前补完教程

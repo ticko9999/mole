@@ -1,0 +1,199 @@
+{
+  "sheet_name": "AttrDict",
+  "sheet_slug": "AttrDict",
+  "row_count": 18,
+  "column_count": 8,
+  "headers": [
+    "AttrID",
+    "Name",
+    "Group",
+    "ValueType",
+    "Default",
+    "VisibleInUI",
+    "StackRule",
+    "Description"
+  ],
+  "records": [
+    {
+      "AttrID": "DMG_PCT",
+      "Name": "伤害%",
+      "Group": "Combat",
+      "ValueType": "Percent",
+      "Default": 0,
+      "VisibleInUI": 1,
+      "StackRule": "Add",
+      "Description": "最终伤害加成"
+    },
+    {
+      "AttrID": "ASPD_PCT",
+      "Name": "攻速%",
+      "Group": "Combat",
+      "ValueType": "Percent",
+      "Default": 0,
+      "VisibleInUI": 1,
+      "StackRule": "Add",
+      "Description": "缩短CD"
+    },
+    {
+      "AttrID": "AOE_PCT",
+      "Name": "范围%",
+      "Group": "Combat",
+      "ValueType": "Percent",
+      "Default": 0,
+      "VisibleInUI": 1,
+      "StackRule": "Add",
+      "Description": "扩大半径"
+    },
+    {
+      "AttrID": "CRIT_PCT",
+      "Name": "暴击率%",
+      "Group": "Combat",
+      "ValueType": "Percent",
+      "Default": 0,
+      "VisibleInUI": 1,
+      "StackRule": "Add",
+      "Description": "暴击概率"
+    },
+    {
+      "AttrID": "CRIT_DMG",
+      "Name": "暴击伤害%",
+      "Group": "Combat",
+      "ValueType": "Percent",
+      "Default": 1.5,
+      "VisibleInUI": 1,
+      "StackRule": "Add",
+      "Description": "暴伤倍率"
+    },
+    {
+      "AttrID": "GOLD_PCT",
+      "Name": "金币%",
+      "Group": "Economy",
+      "ValueType": "Percent",
+      "Default": 0,
+      "VisibleInUI": 1,
+      "StackRule": "Add",
+      "Description": "金币收益"
+    },
+    {
+      "AttrID": "XP_PCT",
+      "Name": "经验%",
+      "Group": "Economy",
+      "ValueType": "Percent",
+      "Default": 0,
+      "VisibleInUI": 1,
+      "StackRule": "Add",
+      "Description": "经验收益"
+    },
+    {
+      "AttrID": "ARMOR_PCT",
+      "Name": "护甲%",
+      "Group": "Defense",
+      "ValueType": "Percent",
+      "Default": 0,
+      "VisibleInUI": 1,
+      "StackRule": "Add",
+      "Description": "减伤"
+    },
+    {
+      "AttrID": "SHIELD_FLAT",
+      "Name": "护盾值",
+      "Group": "Defense",
+      "ValueType": "Float",
+      "Default": 0,
+      "VisibleInUI": 1,
+      "StackRule": "Add",
+      "Description": "额外护盾"
+    },
+    {
+      "AttrID": "EXEC_PCT",
+      "Name": "处决线%",
+      "Group": "Combat",
+      "ValueType": "Percent",
+      "Default": 0,
+      "VisibleInUI": 1,
+      "StackRule": "Add",
+      "Description": "低血自动处决"
+    },
+    {
+      "AttrID": "CHAIN_CNT",
+      "Name": "连锁数",
+      "Group": "Combat",
+      "ValueType": "Int",
+      "Default": 0,
+      "VisibleInUI": 1,
+      "StackRule": "Add",
+      "Description": "弹射次数"
+    },
+    {
+      "AttrID": "SPLASH_RAD",
+      "Name": "溅射半径",
+      "Group": "Combat",
+      "ValueType": "Float",
+      "Default": 0,
+      "VisibleInUI": 1,
+      "StackRule": "Add",
+      "Description": "AOE附加"
+    },
+    {
+      "AttrID": "RARE_SPAWN",
+      "Name": "稀有概率+",
+      "Group": "Spawn",
+      "ValueType": "Percent",
+      "Default": 0,
+      "VisibleInUI": 1,
+      "StackRule": "Add",
+      "Description": "稀有目标概率"
+    },
+    {
+      "AttrID": "FACILITY_SPD",
+      "Name": "设施频率%",
+      "Group": "Automation",
+      "ValueType": "Percent",
+      "Default": 0,
+      "VisibleInUI": 1,
+      "StackRule": "Add",
+      "Description": "设施触发频率"
+    },
+    {
+      "AttrID": "DRONE_CAP",
+      "Name": "无人机上限",
+      "Group": "Automation",
+      "ValueType": "Int",
+      "Default": 0,
+      "VisibleInUI": 1,
+      "StackRule": "Add",
+      "Description": "无人机数量上限"
+    },
+    {
+      "AttrID": "BOSS_DMG",
+      "Name": "Boss增伤%",
+      "Group": "Combat",
+      "ValueType": "Percent",
+      "Default": 0,
+      "VisibleInUI": 1,
+      "StackRule": "Add",
+      "Description": "对Boss加成"
+    },
+    {
+      "AttrID": "COMBO_GAIN",
+      "Name": "连击收益%",
+      "Group": "Economy",
+      "ValueType": "Percent",
+      "Default": 0,
+      "VisibleInUI": 1,
+      "StackRule": "Add",
+      "Description": "连击相关收益"
+    },
+    {
+      "AttrID": "PICKUP_RAD",
+      "Name": "拾取范围",
+      "Group": "Economy",
+      "ValueType": "Float",
+      "Default": 1.5,
+      "VisibleInUI": 1,
+      "StackRule": "Max",
+      "Description": "吸附半径"
+    }
+  ],
+  "rows": null
+}

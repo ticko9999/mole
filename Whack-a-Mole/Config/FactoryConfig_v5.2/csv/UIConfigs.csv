@@ -1,0 +1,17 @@
+﻿UIID,Name,Type,Anchor,ShowByDefault,ReferenceResolution,Behavior,LocKey
+UI_01,HUD顶栏,Panel,Anchor_1,1,1920x1080,显示/隐藏/动画参数,LOC_UI_01
+UI_02,连击条,Panel,Anchor_2,1,1920x1080,显示/隐藏/动画参数,LOC_UI_02
+UI_03,狂热提示,Panel,Anchor_3,1,1920x1080,显示/隐藏/动画参数,LOC_UI_03
+UI_04,Boss血条,Panel,Anchor_4,1,1920x1080,显示/隐藏/动画参数,LOC_UI_04
+UI_05,三选一卡牌,Panel,Anchor_5,1,1920x1080,显示/隐藏/动画参数,LOC_UI_05
+UI_06,商店页,Panel,Anchor_6,1,1920x1080,显示/隐藏/动画参数,LOC_UI_06
+UI_07,设施放置面板,Panel,Anchor_7,1,1920x1080,显示/隐藏/动画参数,LOC_UI_07
+UI_08,地图选择,Panel,Anchor_8,0,1920x1080,显示/隐藏/动画参数,LOC_UI_08
+UI_09,角色选择,Panel,Anchor_9,0,1920x1080,显示/隐藏/动画参数,LOC_UI_09
+UI_10,局后结算,Panel,Anchor_10,0,1920x1080,显示/隐藏/动画参数,LOC_UI_10
+UI_11,图鉴页,Panel,Anchor_11,0,1920x1080,显示/隐藏/动画参数,LOC_UI_11
+UI_12,设置页,Panel,Anchor_12,0,1920x1080,显示/隐藏/动画参数,LOC_UI_12
+UI_13,难度页,Panel,Anchor_13,0,1920x1080,显示/隐藏/动画参数,LOC_UI_13
+UI_14,任务页,Panel,Anchor_14,0,1920x1080,显示/隐藏/动画参数,LOC_UI_14
+UI_15,成就页,Panel,Anchor_15,0,1920x1080,显示/隐藏/动画参数,LOC_UI_15
+UI_16,Meta树,Panel,Anchor_16,0,1920x1080,显示/隐藏/动画参数,LOC_UI_16

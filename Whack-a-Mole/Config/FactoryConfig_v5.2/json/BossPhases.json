@@ -1,0 +1,259 @@
+{
+  "sheet_name": "BossPhases",
+  "sheet_slug": "BossPhases",
+  "row_count": 24,
+  "column_count": 8,
+  "headers": [
+    "PhaseID",
+    "BossID",
+    "PhaseIndex",
+    "HPChunk",
+    "ThreatLevel",
+    "Abilities",
+    "Description",
+    "DropOnBreak"
+  ],
+  "records": [
+    {
+      "PhaseID": "PHASE_FOREMAN_A",
+      "BossID": "BOSS_FOREMAN",
+      "PhaseIndex": 1,
+      "HPChunk": 264,
+      "ThreatLevel": 2,
+      "Abilities": "召唤|换洞|全图加速",
+      "Description": "阶段1机制：Industrial主题增强",
+      "DropOnBreak": "Loot_BOSS_FOREMAN_1"
+    },
+    {
+      "PhaseID": "PHASE_FOREMAN_B",
+      "BossID": "BOSS_FOREMAN",
+      "PhaseIndex": 2,
+      "HPChunk": 304,
+      "ThreatLevel": 3,
+      "Abilities": "召唤|换洞|全图加速",
+      "Description": "阶段2机制：Industrial主题增强",
+      "DropOnBreak": "Loot_BOSS_FOREMAN_2"
+    },
+    {
+      "PhaseID": "PHASE_FOREMAN_C",
+      "BossID": "BOSS_FOREMAN",
+      "PhaseIndex": 3,
+      "HPChunk": 344,
+      "ThreatLevel": 4,
+      "Abilities": "召唤|换洞|全图加速",
+      "Description": "阶段3机制：Industrial主题增强",
+      "DropOnBreak": "Loot_BOSS_FOREMAN_3"
+    },
+    {
+      "PhaseID": "PHASE_KING_A",
+      "BossID": "BOSS_RATKING",
+      "PhaseIndex": 1,
+      "HPChunk": 396,
+      "ThreatLevel": 2,
+      "Abilities": "召唤护卫|钻地|怒气",
+      "Description": "阶段1机制：Royal主题增强",
+      "DropOnBreak": "Loot_BOSS_RATKING_1"
+    },
+    {
+      "PhaseID": "PHASE_KING_B",
+      "BossID": "BOSS_RATKING",
+      "PhaseIndex": 2,
+      "HPChunk": 456,
+      "ThreatLevel": 3,
+      "Abilities": "召唤护卫|钻地|怒气",
+      "Description": "阶段2机制：Royal主题增强",
+      "DropOnBreak": "Loot_BOSS_RATKING_2"
+    },
+    {
+      "PhaseID": "PHASE_KING_C",
+      "BossID": "BOSS_RATKING",
+      "PhaseIndex": 3,
+      "HPChunk": 516,
+      "ThreatLevel": 4,
+      "Abilities": "召唤护卫|钻地|怒气",
+      "Description": "阶段3机制：Royal主题增强",
+      "DropOnBreak": "Loot_BOSS_RATKING_3"
+    },
+    {
+      "PhaseID": "PHASE_TREAS_A",
+      "BossID": "BOSS_TREASURER",
+      "PhaseIndex": 1,
+      "HPChunk": 323.4,
+      "ThreatLevel": 2,
+      "Abilities": "偷金|吐金鼠|宝箱",
+      "Description": "阶段1机制：Wealth主题增强",
+      "DropOnBreak": "Loot_BOSS_TREASURER_1"
+    },
+    {
+      "PhaseID": "PHASE_TREAS_B",
+      "BossID": "BOSS_TREASURER",
+      "PhaseIndex": 2,
+      "HPChunk": 372.4,
+      "ThreatLevel": 3,
+      "Abilities": "偷金|吐金鼠|宝箱",
+      "Description": "阶段2机制：Wealth主题增强",
+      "DropOnBreak": "Loot_BOSS_TREASURER_2"
+    },
+    {
+      "PhaseID": "PHASE_TREAS_C",
+      "BossID": "BOSS_TREASURER",
+      "PhaseIndex": 3,
+      "HPChunk": 421.4,
+      "ThreatLevel": 4,
+      "Abilities": "偷金|吐金鼠|宝箱",
+      "Description": "阶段3机制：Wealth主题增强",
+      "DropOnBreak": "Loot_BOSS_TREASURER_3"
+    },
+    {
+      "PhaseID": "PHASE_DRILL_A",
+      "BossID": "BOSS_DRILL",
+      "PhaseIndex": 1,
+      "HPChunk": 445.5,
+      "ThreatLevel": 2,
+      "Abilities": "封锁洞口|震地|钻地",
+      "Description": "阶段1机制：Machine主题增强",
+      "DropOnBreak": "Loot_BOSS_DRILL_1"
+    },
+    {
+      "PhaseID": "PHASE_DRILL_B",
+      "BossID": "BOSS_DRILL",
+      "PhaseIndex": 2,
+      "HPChunk": 513,
+      "ThreatLevel": 3,
+      "Abilities": "封锁洞口|震地|钻地",
+      "Description": "阶段2机制：Machine主题增强",
+      "DropOnBreak": "Loot_BOSS_DRILL_2"
+    },
+    {
+      "PhaseID": "PHASE_DRILL_C",
+      "BossID": "BOSS_DRILL",
+      "PhaseIndex": 3,
+      "HPChunk": 580.5,
+      "ThreatLevel": 4,
+      "Abilities": "封锁洞口|震地|钻地",
+      "Description": "阶段3机制：Machine主题增强",
+      "DropOnBreak": "Loot_BOSS_DRILL_3"
+    },
+    {
+      "PhaseID": "PHASE_TESLA_A",
+      "BossID": "BOSS_TESLA",
+      "PhaseIndex": 1,
+      "HPChunk": 379.5,
+      "ThreatLevel": 2,
+      "Abilities": "全图电网|感电扩散",
+      "Description": "阶段1机制：Shock主题增强",
+      "DropOnBreak": "Loot_BOSS_TESLA_1"
+    },
+    {
+      "PhaseID": "PHASE_TESLA_B",
+      "BossID": "BOSS_TESLA",
+      "PhaseIndex": 2,
+      "HPChunk": 437,
+      "ThreatLevel": 3,
+      "Abilities": "全图电网|感电扩散",
+      "Description": "阶段2机制：Shock主题增强",
+      "DropOnBreak": "Loot_BOSS_TESLA_2"
+    },
+    {
+      "PhaseID": "PHASE_TESLA_C",
+      "BossID": "BOSS_TESLA",
+      "PhaseIndex": 3,
+      "HPChunk": 494.5,
+      "ThreatLevel": 4,
+      "Abilities": "全图电网|感电扩散",
+      "Description": "阶段3机制：Shock主题增强",
+      "DropOnBreak": "Loot_BOSS_TESLA_3"
+    },
+    {
+      "PhaseID": "PHASE_FREEZE_A",
+      "BossID": "BOSS_FREEZER",
+      "PhaseIndex": 1,
+      "HPChunk": 363,
+      "ThreatLevel": 2,
+      "Abilities": "冻结、减速与碎裂",
+      "Description": "阶段1机制：Frost主题增强",
+      "DropOnBreak": "Loot_BOSS_FREEZER_1"
+    },
+    {
+      "PhaseID": "PHASE_FREEZE_B",
+      "BossID": "BOSS_FREEZER",
+      "PhaseIndex": 2,
+      "HPChunk": 418,
+      "ThreatLevel": 3,
+      "Abilities": "冻结、减速与碎裂",
+      "Description": "阶段2机制：Frost主题增强",
+      "DropOnBreak": "Loot_BOSS_FREEZER_2"
+    },
+    {
+      "PhaseID": "PHASE_FREEZE_C",
+      "BossID": "BOSS_FREEZER",
+      "PhaseIndex": 3,
+      "HPChunk": 473,
+      "ThreatLevel": 4,
+      "Abilities": "冻结、减速与碎裂",
+      "Description": "阶段3机制：Frost主题增强",
+      "DropOnBreak": "Loot_BOSS_FREEZER_3"
+    },
+    {
+      "PhaseID": "PHASE_ALCH_A",
+      "BossID": "BOSS_ALCH",
+      "PhaseIndex": 1,
+      "HPChunk": 412.5,
+      "ThreatLevel": 2,
+      "Abilities": "灼烧连爆|毒瓶",
+      "Description": "阶段1机制：Fire主题增强",
+      "DropOnBreak": "Loot_BOSS_ALCH_1"
+    },
+    {
+      "PhaseID": "PHASE_ALCH_B",
+      "BossID": "BOSS_ALCH",
+      "PhaseIndex": 2,
+      "HPChunk": 475,
+      "ThreatLevel": 3,
+      "Abilities": "灼烧连爆|毒瓶",
+      "Description": "阶段2机制：Fire主题增强",
+      "DropOnBreak": "Loot_BOSS_ALCH_2"
+    },
+    {
+      "PhaseID": "PHASE_ALCH_C",
+      "BossID": "BOSS_ALCH",
+      "PhaseIndex": 3,
+      "HPChunk": 537.5,
+      "ThreatLevel": 4,
+      "Abilities": "灼烧连爆|毒瓶",
+      "Description": "阶段3机制：Fire主题增强",
+      "DropOnBreak": "Loot_BOSS_ALCH_3"
+    },
+    {
+      "PhaseID": "PHASE_JUDGE_A",
+      "BossID": "BOSS_JUDGE",
+      "PhaseIndex": 1,
+      "HPChunk": 462,
+      "ThreatLevel": 2,
+      "Abilities": "处决压制|高压场",
+      "Description": "阶段1机制：Execute主题增强",
+      "DropOnBreak": "Loot_BOSS_JUDGE_1"
+    },
+    {
+      "PhaseID": "PHASE_JUDGE_B",
+      "BossID": "BOSS_JUDGE",
+      "PhaseIndex": 2,
+      "HPChunk": 532,
+      "ThreatLevel": 3,
+      "Abilities": "处决压制|高压场",
+      "Description": "阶段2机制：Execute主题增强",
+      "DropOnBreak": "Loot_BOSS_JUDGE_2"
+    },
+    {
+      "PhaseID": "PHASE_JUDGE_C",
+      "BossID": "BOSS_JUDGE",
+      "PhaseIndex": 3,
+      "HPChunk": 602,
+      "ThreatLevel": 4,
+      "Abilities": "处决压制|高压场",
+      "Description": "阶段3机制：Execute主题增强",
+      "DropOnBreak": "Loot_BOSS_JUDGE_3"
+    }
+  ],
+  "rows": null
+}

@@ -1,0 +1,12 @@
+﻿RuleKey,RuleValue,说明
+HeaderRow,1,所有表第1行为字段名，数据从第2行开始
+BooleanFormat,1/0,"布尔字段统一使用 1=TRUE, 0=FALSE"
+ListSeparator,|,多值字段统一使用竖线分隔，不加空格，例如 TagA|TagB|TagC
+PrimaryKeyRule,<PREFIX>_<NAME>,所有主键/外键字段命名维持大写蛇形 ID
+EmptyValue,空单元格,未知或不适用字段留空，不使用 N/A / - / None 文本
+EnumRule,固定值域,枚举字段建议仅使用 EnumLists 或 Enums 中的值
+VersionRule,SemVerString,版本字段统一字符串格式，例如 v5.1
+NumberRule,数值型不带单位,单位写在字段说明，不写进单元格
+ConditionRule,表达式字符串,条件/解锁/触发规则统一保存为可解析字符串
+LocKeyRule,唯一键,本地化键必须唯一，建议与实体ID一一对应
+RefRule,同名ID字段引用,如 WeaponID / RoleID / BossID 等使用对应主表主键

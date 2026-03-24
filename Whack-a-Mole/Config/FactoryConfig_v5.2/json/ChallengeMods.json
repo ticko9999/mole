@@ -1,0 +1,86 @@
+{
+  "sheet_name": "ChallengeMods",
+  "sheet_slug": "ChallengeMods",
+  "row_count": 10,
+  "column_count": 5,
+  "headers": [
+    "ChallengeID",
+    "Name",
+    "Description",
+    "RewardBonus",
+    "UnlockRule"
+  ],
+  "records": [
+    {
+      "ChallengeID": "CHAL_01",
+      "Name": "禁商店",
+      "Description": "挑战效果 禁商店",
+      "RewardBonus": 0.11,
+      "UnlockRule": "Unlock by task"
+    },
+    {
+      "ChallengeID": "CHAL_02",
+      "Name": "无回复",
+      "Description": "挑战效果 无回复",
+      "RewardBonus": 0.14,
+      "UnlockRule": "Unlock by task"
+    },
+    {
+      "ChallengeID": "CHAL_03",
+      "Name": "高危传奇",
+      "Description": "挑战效果 高危传奇",
+      "RewardBonus": 0.17,
+      "UnlockRule": "Unlock by task"
+    },
+    {
+      "ChallengeID": "CHAL_04",
+      "Name": "稀有狂潮",
+      "Description": "挑战效果 稀有狂潮",
+      "RewardBonus": 0.08,
+      "UnlockRule": "Unlock by task"
+    },
+    {
+      "ChallengeID": "CHAL_05",
+      "Name": "设施故障",
+      "Description": "挑战效果 设施故障",
+      "RewardBonus": 0.11,
+      "UnlockRule": "Unlock by task"
+    },
+    {
+      "ChallengeID": "CHAL_06",
+      "Name": "Boss双阶段强化",
+      "Description": "挑战效果 Boss双阶段强化",
+      "RewardBonus": 0.14,
+      "UnlockRule": "Unlock by task"
+    },
+    {
+      "ChallengeID": "CHAL_07",
+      "Name": "自动化减益",
+      "Description": "挑战效果 自动化减益",
+      "RewardBonus": 0.17,
+      "UnlockRule": "Unlock by task"
+    },
+    {
+      "ChallengeID": "CHAL_08",
+      "Name": "金币腐蚀",
+      "Description": "挑战效果 金币腐蚀",
+      "RewardBonus": 0.08,
+      "UnlockRule": "Unlock by task"
+    },
+    {
+      "ChallengeID": "CHAL_09",
+      "Name": "连击易断",
+      "Description": "挑战效果 连击易断",
+      "RewardBonus": 0.11,
+      "UnlockRule": "Unlock by task"
+    },
+    {
+      "ChallengeID": "CHAL_10",
+      "Name": "小洞地图",
+      "Description": "挑战效果 小洞地图",
+      "RewardBonus": 0.14,
+      "UnlockRule": "Unlock by task"
+    }
+  ],
+  "rows": null
+}

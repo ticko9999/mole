@@ -1,0 +1,219 @@
+{
+  "sheet_name": "VFXCues",
+  "sheet_slug": "VFXCues",
+  "row_count": 20,
+  "column_count": 8,
+  "headers": [
+    "VFXID",
+    "Name",
+    "Type",
+    "Pool",
+    "Duration",
+    "Loop",
+    "Description",
+    "LocKey"
+  ],
+  "records": [
+    {
+      "VFXID": "VFX_001",
+      "Name": "锤击闪光",
+      "Type": "Hit",
+      "Pool": "Pool_Common",
+      "Duration": 0.62,
+      "Loop": 1,
+      "Description": "表现说明 锤击闪光",
+      "LocKey": "LOC_VFX_001"
+    },
+    {
+      "VFXID": "VFX_002",
+      "Name": "暴击重击",
+      "Type": "Hit",
+      "Pool": "Pool_Common",
+      "Duration": 0.64,
+      "Loop": 0,
+      "Description": "表现说明 暴击重击",
+      "LocKey": "LOC_VFX_002"
+    },
+    {
+      "VFXID": "VFX_003",
+      "Name": "感电弧线",
+      "Type": "Hit",
+      "Pool": "Pool_Common",
+      "Duration": 0.66,
+      "Loop": 1,
+      "Description": "表现说明 感电弧线",
+      "LocKey": "LOC_VFX_003"
+    },
+    {
+      "VFXID": "VFX_004",
+      "Name": "爆燃火环",
+      "Type": "Hit",
+      "Pool": "Pool_Common",
+      "Duration": 0.6,
+      "Loop": 0,
+      "Description": "表现说明 爆燃火环",
+      "LocKey": "LOC_VFX_004"
+    },
+    {
+      "VFXID": "VFX_005",
+      "Name": "冻结晶体",
+      "Type": "Hit",
+      "Pool": "Pool_Common",
+      "Duration": 0.62,
+      "Loop": 1,
+      "Description": "表现说明 冻结晶体",
+      "LocKey": "LOC_VFX_005"
+    },
+    {
+      "VFXID": "VFX_006",
+      "Name": "金币喷发",
+      "Type": "Hit",
+      "Pool": "Pool_Common",
+      "Duration": 0.64,
+      "Loop": 0,
+      "Description": "表现说明 金币喷发",
+      "LocKey": "LOC_VFX_006"
+    },
+    {
+      "VFXID": "VFX_007",
+      "Name": "宝箱开启",
+      "Type": "Hit",
+      "Pool": "Pool_Common",
+      "Duration": 0.66,
+      "Loop": 1,
+      "Description": "表现说明 宝箱开启",
+      "LocKey": "LOC_VFX_007"
+    },
+    {
+      "VFXID": "VFX_008",
+      "Name": "传奇鼠高亮",
+      "Type": "Hit",
+      "Pool": "Pool_Common",
+      "Duration": 0.6,
+      "Loop": 0,
+      "Description": "表现说明 传奇鼠高亮",
+      "LocKey": "LOC_VFX_008"
+    },
+    {
+      "VFXID": "VFX_009",
+      "Name": "Boss警示圈",
+      "Type": "Hit",
+      "Pool": "Pool_Common",
+      "Duration": 0.62,
+      "Loop": 1,
+      "Description": "表现说明 Boss警示圈",
+      "LocKey": "LOC_VFX_009"
+    },
+    {
+      "VFXID": "VFX_010",
+      "Name": "设施激活",
+      "Type": "State",
+      "Pool": "Pool_Common",
+      "Duration": 0.64,
+      "Loop": 0,
+      "Description": "表现说明 设施激活",
+      "LocKey": "LOC_VFX_010"
+    },
+    {
+      "VFXID": "VFX_011",
+      "Name": "处决斩线",
+      "Type": "State",
+      "Pool": "Pool_Common",
+      "Duration": 0.66,
+      "Loop": 1,
+      "Description": "表现说明 处决斩线",
+      "LocKey": "LOC_VFX_011"
+    },
+    {
+      "VFXID": "VFX_012",
+      "Name": "吸金拖尾",
+      "Type": "State",
+      "Pool": "Pool_Common",
+      "Duration": 0.6,
+      "Loop": 0,
+      "Description": "表现说明 吸金拖尾",
+      "LocKey": "LOC_VFX_012"
+    },
+    {
+      "VFXID": "VFX_013",
+      "Name": "狂热边框",
+      "Type": "State",
+      "Pool": "Pool_Common",
+      "Duration": 0.62,
+      "Loop": 1,
+      "Description": "表现说明 狂热边框",
+      "LocKey": "LOC_VFX_013"
+    },
+    {
+      "VFXID": "VFX_014",
+      "Name": "地图危险波",
+      "Type": "State",
+      "Pool": "Pool_Common",
+      "Duration": 0.64,
+      "Loop": 0,
+      "Description": "表现说明 地图危险波",
+      "LocKey": "LOC_VFX_014"
+    },
+    {
+      "VFXID": "VFX_015",
+      "Name": "波次转场",
+      "Type": "State",
+      "Pool": "Pool_Common",
+      "Duration": 0.66,
+      "Loop": 1,
+      "Description": "表现说明 波次转场",
+      "LocKey": "LOC_VFX_015"
+    },
+    {
+      "VFXID": "VFX_016",
+      "Name": "胜利烟花",
+      "Type": "State",
+      "Pool": "Pool_Common",
+      "Duration": 0.6,
+      "Loop": 0,
+      "Description": "表现说明 胜利烟花",
+      "LocKey": "LOC_VFX_016"
+    },
+    {
+      "VFXID": "VFX_017",
+      "Name": "失败故障",
+      "Type": "State",
+      "Pool": "Pool_Common",
+      "Duration": 0.62,
+      "Loop": 1,
+      "Description": "表现说明 失败故障",
+      "LocKey": "LOC_VFX_017"
+    },
+    {
+      "VFXID": "VFX_018",
+      "Name": "自动锤残影",
+      "Type": "State",
+      "Pool": "Pool_Common",
+      "Duration": 0.64,
+      "Loop": 0,
+      "Description": "表现说明 自动锤残影",
+      "LocKey": "LOC_VFX_018"
+    },
+    {
+      "VFXID": "VFX_019",
+      "Name": "图腾光环",
+      "Type": "State",
+      "Pool": "Pool_Common",
+      "Duration": 0.66,
+      "Loop": 1,
+      "Description": "表现说明 图腾光环",
+      "LocKey": "LOC_VFX_019"
+    },
+    {
+      "VFXID": "VFX_020",
+      "Name": "棱镜分叉",
+      "Type": "State",
+      "Pool": "Pool_Common",
+      "Duration": 0.6,
+      "Loop": 0,
+      "Description": "表现说明 棱镜分叉",
+      "LocKey": "LOC_VFX_020"
+    }
+  ],
+  "rows": null
+}

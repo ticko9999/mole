@@ -1,0 +1,19 @@
+﻿ParamID,Name,Value,Category,DataType,Min,Max,Note
+GLB_001,BattleDurationSec,600,Battle,int,0,,默认战斗总时长 10 分钟
+GLB_002,StartingGold,0,Battle,int,0,,开局金币
+GLB_003,StartingXP,6,Battle,int,0,,开局经验
+GLB_004,StartingLife,7,Battle,int,0,,基础失误容忍
+GLB_005,StartingFacilitySlots,1,Battle,int,0,,基础设施槽位
+GLB_006,StartingReroll,1,Battle,int,0,,开局重抽
+GLB_007,ComboWindowSec,2.2,Combat,float,0,,连击断裂时间
+GLB_008,LegendWarnSec,1.2,Combat,float,0,,传奇鼠提示时间
+GLB_009,BossWarningSec,3,Combat,float,0,,Boss预警时长
+GLB_010,AutoPickupRange,1.8,Economy,float,0,,基础吸附半径
+GLB_011,InterestRate,0.06,Economy,float,0,,每波利息
+GLB_012,InterestThreshold,100,Economy,int,0,,利息门槛
+GLB_013,RarityDecay,0.15,Spawn,float,0,,同类稀有衰减
+GLB_014,MaxEventChoices,3,Event,int,0,,事件分支数
+GLB_015,ShopRefreshBase,20,Shop,int,0,,刷新价格
+GLB_016,MetaRefundRate,0.6,Meta,float,0,,重置返还率
+GLB_017,NightmareHpMult,1.38,Difficulty,float,0,,噩梦生命倍率
+GLB_018,NightmareThreatMult,1.25,Difficulty,float,0,,噩梦威胁倍率

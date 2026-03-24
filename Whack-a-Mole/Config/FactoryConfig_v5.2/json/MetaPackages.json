@@ -1,0 +1,152 @@
+{
+  "sheet_name": "MetaPackages",
+  "sheet_slug": "MetaPackages",
+  "row_count": 12,
+  "column_count": 9,
+  "headers": [
+    "PackageID",
+    "Name",
+    "Type",
+    "IncludeRoot",
+    "Price",
+    "Description",
+    "StarterOffer",
+    "Tag",
+    "LocKey"
+  ],
+  "records": [
+    {
+      "PackageID": "PACK_01",
+      "Name": "新手包",
+      "Type": "Bundle",
+      "IncludeRoot": "META_Damage_001",
+      "Price": 160,
+      "Description": "一次性解锁3个节点",
+      "StarterOffer": 1,
+      "Tag": "TAG_PACK_1",
+      "LocKey": "LOC_PACK_01"
+    },
+    {
+      "PackageID": "PACK_02",
+      "Name": "工厂包",
+      "Type": "Bundle",
+      "IncludeRoot": "META_AttackSpeed_002",
+      "Price": 200,
+      "Description": "一次性解锁4个节点",
+      "StarterOffer": 1,
+      "Tag": "TAG_PACK_2",
+      "LocKey": "LOC_PACK_02"
+    },
+    {
+      "PackageID": "PACK_03",
+      "Name": "赏金包",
+      "Type": "Bundle",
+      "IncludeRoot": "META_AOE_003",
+      "Price": 240,
+      "Description": "一次性解锁5个节点",
+      "StarterOffer": 1,
+      "Tag": "TAG_PACK_3",
+      "LocKey": "LOC_PACK_03"
+    },
+    {
+      "PackageID": "PACK_04",
+      "Name": "电链包",
+      "Type": "Bundle",
+      "IncludeRoot": "META_Crit_004",
+      "Price": 280,
+      "Description": "一次性解锁2个节点",
+      "StarterOffer": 0,
+      "Tag": "TAG_PACK_4",
+      "LocKey": "LOC_PACK_04"
+    },
+    {
+      "PackageID": "PACK_05",
+      "Name": "爆燃包",
+      "Type": "Bundle",
+      "IncludeRoot": "META_Gold_005",
+      "Price": 320,
+      "Description": "一次性解锁3个节点",
+      "StarterOffer": 0,
+      "Tag": "TAG_PACK_5",
+      "LocKey": "LOC_PACK_05"
+    },
+    {
+      "PackageID": "PACK_06",
+      "Name": "守卫包",
+      "Type": "Bundle",
+      "IncludeRoot": "META_XP_006",
+      "Price": 360,
+      "Description": "一次性解锁4个节点",
+      "StarterOffer": 0,
+      "Tag": "TAG_PACK_6",
+      "LocKey": "LOC_PACK_06"
+    },
+    {
+      "PackageID": "PACK_07",
+      "Name": "赌徒包",
+      "Type": "Bundle",
+      "IncludeRoot": "META_Auto_007",
+      "Price": 400,
+      "Description": "一次性解锁5个节点",
+      "StarterOffer": 0,
+      "Tag": "TAG_PACK_7",
+      "LocKey": "LOC_PACK_07"
+    },
+    {
+      "PackageID": "PACK_08",
+      "Name": "终局包",
+      "Type": "Bundle",
+      "IncludeRoot": "META_Facility_008",
+      "Price": 440,
+      "Description": "一次性解锁2个节点",
+      "StarterOffer": 0,
+      "Tag": "TAG_PACK_8",
+      "LocKey": "LOC_PACK_08"
+    },
+    {
+      "PackageID": "PACK_09",
+      "Name": "设施包",
+      "Type": "Bundle",
+      "IncludeRoot": "META_RareSpawn_009",
+      "Price": 480,
+      "Description": "一次性解锁3个节点",
+      "StarterOffer": 0,
+      "Tag": "TAG_PACK_9",
+      "LocKey": "LOC_PACK_09"
+    },
+    {
+      "PackageID": "PACK_10",
+      "Name": "地图包",
+      "Type": "Bundle",
+      "IncludeRoot": "META_Boss_010",
+      "Price": 520,
+      "Description": "一次性解锁4个节点",
+      "StarterOffer": 0,
+      "Tag": "TAG_PACK_10",
+      "LocKey": "LOC_PACK_10"
+    },
+    {
+      "PackageID": "PACK_11",
+      "Name": "角色包",
+      "Type": "Bundle",
+      "IncludeRoot": "META_Defense_011",
+      "Price": 560,
+      "Description": "一次性解锁5个节点",
+      "StarterOffer": 0,
+      "Tag": "TAG_PACK_11",
+      "LocKey": "LOC_PACK_11"
+    },
+    {
+      "PackageID": "PACK_12",
+      "Name": "传奇包",
+      "Type": "Bundle",
+      "IncludeRoot": "META_Utility_012",
+      "Price": 600,
+      "Description": "一次性解锁2个节点",
+      "StarterOffer": 0,
+      "Tag": "TAG_PACK_12",
+      "LocKey": "LOC_PACK_12"
+    }
+  ],
+  "rows": null
+}

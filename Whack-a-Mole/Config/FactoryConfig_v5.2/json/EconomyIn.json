@@ -1,0 +1,142 @@
+{
+  "sheet_name": "EconomyIn",
+  "sheet_slug": "EconomyIn",
+  "row_count": 18,
+  "column_count": 5,
+  "headers": [
+    "EcoID",
+    "Name",
+    "Value",
+    "ValueType",
+    "Description"
+  ],
+  "records": [
+    {
+      "EcoID": "BaseLife",
+      "Name": "基础生命/失误容忍",
+      "Value": 5,
+      "ValueType": "Const",
+      "Description": "所有模式共享基础"
+    },
+    {
+      "EcoID": "BaseReroll",
+      "Name": "基础重抽次数",
+      "Value": 1,
+      "ValueType": "Const",
+      "Description": "局内资源"
+    },
+    {
+      "EcoID": "GoldToDamage",
+      "Name": "金币转伤害系数",
+      "Value": 0.004,
+      "ValueType": "Formula",
+      "Description": "经济流使用"
+    },
+    {
+      "EcoID": "ComboDecay",
+      "Name": "连击衰减秒数",
+      "Value": 2.2,
+      "ValueType": "Const",
+      "Description": "超过时间断连击"
+    },
+    {
+      "EcoID": "KillGoldBonusRare",
+      "Name": "稀有鼠额外金币倍率",
+      "Value": 1.8,
+      "ValueType": "Const",
+      "Description": "稀有目标"
+    },
+    {
+      "EcoID": "BossChestCount",
+      "Name": "Boss基础宝箱数",
+      "Value": 2,
+      "ValueType": "Const",
+      "Description": "Boss奖励"
+    },
+    {
+      "EcoID": "FacilitySlotBase",
+      "Name": "基础设施槽位",
+      "Value": 1,
+      "ValueType": "Const",
+      "Description": "局内成长可提升"
+    },
+    {
+      "EcoID": "AutoPickupBase",
+      "Name": "基础吸附半径",
+      "Value": 1.5,
+      "ValueType": "Const",
+      "Description": "吸金相关"
+    },
+    {
+      "EcoID": "FrenzyComboReq",
+      "Name": "狂热所需连击",
+      "Value": 25,
+      "ValueType": "Const",
+      "Description": "爽局状态"
+    },
+    {
+      "EcoID": "FrenzyDuration",
+      "Name": "狂热持续秒数",
+      "Value": 5,
+      "ValueType": "Const",
+      "Description": "爽局状态"
+    },
+    {
+      "EcoID": "InterestThreshold",
+      "Name": "利息触发金币门槛",
+      "Value": 100,
+      "ValueType": "Const",
+      "Description": "经济流"
+    },
+    {
+      "EcoID": "InterestRate",
+      "Name": "利息百分比",
+      "Value": 0.06,
+      "ValueType": "Formula",
+      "Description": "每波结算"
+    },
+    {
+      "EcoID": "LegendSpawnBase",
+      "Name": "传奇鼠基础概率",
+      "Value": 0.002,
+      "ValueType": "Const",
+      "Description": "终局提升"
+    },
+    {
+      "EcoID": "RarityWeightDecay",
+      "Name": "同类稀有出现衰减",
+      "Value": 0.15,
+      "ValueType": "Formula",
+      "Description": "防止连续刷同类"
+    },
+    {
+      "EcoID": "BossEnrageTime",
+      "Name": "Boss狂暴时间",
+      "Value": 90,
+      "ValueType": "Const",
+      "Description": "Boss战压力"
+    },
+    {
+      "EcoID": "MetaGoldRetain",
+      "Name": "局后保留金币比例",
+      "Value": 0.12,
+      "ValueType": "Const",
+      "Description": "局外资源转换"
+    },
+    {
+      "EcoID": "BountyContractReward",
+      "Name": "赏金合同基础奖励",
+      "Value": 40,
+      "ValueType": "Const",
+      "Description": "事件奖励"
+    },
+    {
+      "EcoID": "RepairShopCost",
+      "Name": "维修站基础价格",
+      "Value": 30,
+      "ValueType": "Const",
+      "Description": "商店价格"
+    }
+  ],
+  "rows": null
+}

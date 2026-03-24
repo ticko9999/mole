@@ -1,0 +1,11 @@
+﻿DamageType,Rarity,Status,Trigger,WeaponType
+Arcane,Common,Bleed,Aura,Beam
+Blunt,Epic,Burn,Manual,Chain
+Explosive,Legendary,ExecuteMark,OnCombo,Drone
+Fire,Rare,Expose,OnCrit,Hammer
+Frost,Uncommon,Freeze,OnEscape,Laser
+Gold,,GreedMark,OnGoldGain,Orbital
+Poison,,Shock,OnHit,Summon
+Shock,,Slow,OnKill,Totem
+True,,Stun,OnSpawn,Trap
+,,Weaken,Periodic,Wave

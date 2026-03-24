@@ -1,0 +1,217 @@
+{
+  "sheet_name": "FieldSpec",
+  "sheet_slug": "FieldSpec",
+  "row_count": 25,
+  "column_count": 6,
+  "headers": [
+    "SheetName",
+    "Purpose",
+    "PrimaryKeyRule",
+    "MaintenanceRule",
+    "LinkRule",
+    "Note"
+  ],
+  "records": [
+    {
+      "SheetName": "Roles",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "Weapons",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "WeaponLv",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "WeaponEvo",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "Skills",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "Upgrades",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "BuildArchetypes",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "Relics",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "Facilities",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "Moles",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "EnemyAbilities",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "Bosses",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "Events",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "StageCurve",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "SpawnRules",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "Drops",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "LootTables",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "EconomyIn",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "MetaNodes",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "Tasks",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "Achievements",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "FTUE",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "UIConfigs",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "AudioCues",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    },
+    {
+      "SheetName": "VFXCues",
+      "Purpose": "见对应表",
+      "PrimaryKeyRule": "主键在第一列",
+      "MaintenanceRule": "追加行，不改列名",
+      "LinkRule": "RefID/Tag/Pool/LocKey",
+      "Note": "策划与程序共享"
+    }
+  ],
+  "rows": null
+}
