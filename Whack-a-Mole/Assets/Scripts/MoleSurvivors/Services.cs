@@ -127,6 +127,21 @@ namespace MoleSurvivors
                 state.MetaNodeLevels = new List<StringIntEntry>();
             }
 
+            if (state.RecentRuns == null)
+            {
+                state.RecentRuns = new List<RunSummary>();
+            }
+
+            if (string.IsNullOrWhiteSpace(state.SelectedDifficultyId))
+            {
+                state.SelectedDifficultyId = "DIFF_NORMAL";
+            }
+
+            if (state.SelectedChallengeId == null)
+            {
+                state.SelectedChallengeId = string.Empty;
+            }
+
             for (int i = 0; i < _defaultUnlockedWeapons.Count; i++)
             {
                 if (!state.UnlockedWeapons.Contains(_defaultUnlockedWeapons[i]))
@@ -210,8 +225,310 @@ namespace MoleSurvivors
         }
     }
 
+    public sealed class JsonSettingsRepository : ISettingsRepository
+    {
+        private const int CurrentVersion = 1;
+
+        public JsonSettingsRepository(string savePath = null)
+        {
+            SavePath = string.IsNullOrWhiteSpace(savePath)
+                ? Path.Combine(Application.persistentDataPath, "mole_survivors_client_settings_v1.json")
+                : savePath;
+        }
+
+        public string SavePath { get; }
+
+        public ClientSettingsState LoadOrCreate()
+        {
+            if (!File.Exists(SavePath))
+            {
+                ClientSettingsState created = CreateDefault();
+                Save(created);
+                return created;
+            }
+
+            try
+            {
+                string json = File.ReadAllText(SavePath);
+                ClientSettingsState loaded = JsonUtility.FromJson<ClientSettingsState>(json);
+                if (loaded == null)
+                {
+                    ClientSettingsState fallback = CreateDefault();
+                    Save(fallback);
+                    return fallback;
+                }
+
+                loaded.SaveVersion = CurrentVersion;
+                EnsureDefaults(loaded);
+                return loaded;
+            }
+            catch
+            {
+                ClientSettingsState fallback = CreateDefault();
+                Save(fallback);
+                return fallback;
+            }
+        }
+
+        public void Save(ClientSettingsState state)
+        {
+            if (state == null)
+            {
+                state = CreateDefault();
+            }
+
+            state.SaveVersion = CurrentVersion;
+            EnsureDefaults(state);
+            string directory = Path.GetDirectoryName(SavePath);
+            if (!string.IsNullOrWhiteSpace(directory) && !Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            string json = JsonUtility.ToJson(state, true);
+            File.WriteAllText(SavePath, json);
+        }
+
+        private static ClientSettingsState CreateDefault()
+        {
+            ClientSettingsState state = new ClientSettingsState();
+            EnsureDefaults(state);
+            return state;
+        }
+
+        private static void EnsureDefaults(ClientSettingsState state)
+        {
+            if (state == null)
+            {
+                return;
+            }
+
+            state.BgmVolume = Mathf.Clamp01(state.BgmVolume);
+            state.SfxVolume = Mathf.Clamp01(state.SfxVolume);
+            state.EffectsQuality = Mathf.Clamp(state.EffectsQuality, 0, 2);
+            state.ResolutionWidth = Mathf.Max(1280, state.ResolutionWidth);
+            state.ResolutionHeight = Mathf.Max(720, state.ResolutionHeight);
+            if (string.IsNullOrWhiteSpace(state.DifficultyId))
+            {
+                state.DifficultyId = "DIFF_NORMAL";
+            }
+
+            if (state.ChallengeId == null)
+            {
+                state.ChallengeId = string.Empty;
+            }
+        }
+    }
+
+    public sealed class GameFlowService : IGameFlowService
+    {
+        public bool CanOpenPauseMenu(bool upgradeOpen, bool eventOpen, bool metaOpen, bool endOpen)
+        {
+            return !upgradeOpen && !eventOpen && !metaOpen && !endOpen;
+        }
+    }
+
+    public sealed class CombatCueService : ICombatCueService
+    {
+        private readonly Action<AudioCueDef> _audioDispatch;
+        private readonly Action<VfxCueDef> _vfxDispatch;
+        private readonly Action<string> _warningLogger;
+        private readonly List<AudioCueDef> _audioCues = new List<AudioCueDef>();
+        private readonly List<VfxCueDef> _vfxCues = new List<VfxCueDef>();
+        private readonly HashSet<string> _missingWarnings = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        public CombatCueService(
+            GameContent content,
+            Action<AudioCueDef> audioDispatch,
+            Action<VfxCueDef> vfxDispatch,
+            Action<string> warningLogger)
+        {
+            _audioDispatch = audioDispatch;
+            _vfxDispatch = vfxDispatch;
+            _warningLogger = warningLogger;
+
+            if (content?.AudioCues != null)
+            {
+                _audioCues.AddRange(content.AudioCues.Where(cue => cue != null));
+            }
+
+            if (content?.VfxCues != null)
+            {
+                _vfxCues.AddRange(content.VfxCues.Where(cue => cue != null));
+            }
+        }
+
+        public void OnHit(bool crit, bool killed, bool boss)
+        {
+            if (boss)
+            {
+                DispatchAudio("Boss预警", "Boss阶段");
+                DispatchVfx("Boss", "警示");
+                return;
+            }
+
+            if (crit)
+            {
+                DispatchAudio("暴击");
+                DispatchVfx("暴击");
+                return;
+            }
+
+            if (killed)
+            {
+                DispatchAudio("爆燃", "普通命中");
+                DispatchVfx("爆燃", "锤击");
+                return;
+            }
+
+            DispatchAudio("普通命中");
+            DispatchVfx("锤击", "Hit");
+        }
+
+        public void OnEvent(RunEventType type)
+        {
+            switch (type)
+            {
+                case RunEventType.MerchantBoost:
+                    DispatchAudio("商店打开", "事件触发");
+                    DispatchVfx("波次转场", "State");
+                    break;
+                case RunEventType.TreasureRush:
+                    DispatchAudio("狂热触发", "事件触发");
+                    DispatchVfx("金币喷发", "狂热");
+                    break;
+                case RunEventType.CurseAltar:
+                    DispatchAudio("事件触发");
+                    DispatchVfx("地图危险波", "State");
+                    break;
+                case RunEventType.RepairStation:
+                    DispatchAudio("设施触发", "事件触发");
+                    DispatchVfx("设施激活", "State");
+                    break;
+                case RunEventType.BountyContract:
+                    DispatchAudio("稀有鼠出现", "事件触发");
+                    DispatchVfx("传奇鼠高亮", "State");
+                    break;
+                case RunEventType.RogueHoleZone:
+                    DispatchAudio("狂热触发", "事件触发");
+                    DispatchVfx("地图危险波", "State");
+                    break;
+            }
+        }
+
+        private void DispatchAudio(params string[] keywords)
+        {
+            AudioCueDef cue = FindBestAudioCue(keywords);
+            if (cue != null)
+            {
+                _audioDispatch?.Invoke(cue);
+                return;
+            }
+
+            WarnMissing($"Audio cue not found for keywords: {string.Join("/", keywords ?? Array.Empty<string>())}");
+        }
+
+        private void DispatchVfx(params string[] keywords)
+        {
+            VfxCueDef cue = FindBestVfxCue(keywords);
+            if (cue != null)
+            {
+                _vfxDispatch?.Invoke(cue);
+                return;
+            }
+
+            WarnMissing($"VFX cue not found for keywords: {string.Join("/", keywords ?? Array.Empty<string>())}");
+        }
+
+        private AudioCueDef FindBestAudioCue(params string[] keywords)
+        {
+            if (_audioCues.Count == 0 || keywords == null || keywords.Length == 0)
+            {
+                return _audioCues.FirstOrDefault();
+            }
+
+            for (int i = 0; i < keywords.Length; i++)
+            {
+                string keyword = keywords[i];
+                if (string.IsNullOrWhiteSpace(keyword))
+                {
+                    continue;
+                }
+
+                AudioCueDef match = _audioCues.FirstOrDefault(cue =>
+                    ContainsKeyword(cue.Id, keyword) ||
+                    ContainsKeyword(cue.Name, keyword) ||
+                    ContainsKeyword(cue.TriggerDescription, keyword));
+                if (match != null)
+                {
+                    return match;
+                }
+            }
+
+            return null;
+        }
+
+        private VfxCueDef FindBestVfxCue(params string[] keywords)
+        {
+            if (_vfxCues.Count == 0 || keywords == null || keywords.Length == 0)
+            {
+                return _vfxCues.FirstOrDefault();
+            }
+
+            for (int i = 0; i < keywords.Length; i++)
+            {
+                string keyword = keywords[i];
+                if (string.IsNullOrWhiteSpace(keyword))
+                {
+                    continue;
+                }
+
+                VfxCueDef match = _vfxCues.FirstOrDefault(cue =>
+                    ContainsKeyword(cue.Id, keyword) ||
+                    ContainsKeyword(cue.Name, keyword) ||
+                    ContainsKeyword(cue.Type, keyword) ||
+                    ContainsKeyword(cue.Description, keyword));
+                if (match != null)
+                {
+                    return match;
+                }
+            }
+
+            return null;
+        }
+
+        private static bool ContainsKeyword(string source, string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(source) || string.IsNullOrWhiteSpace(keyword))
+            {
+                return false;
+            }
+
+            return source.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        private void WarnMissing(string message)
+        {
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                return;
+            }
+
+            if (_missingWarnings.Add(message))
+            {
+                _warningLogger?.Invoke(message);
+            }
+        }
+    }
+
     public sealed class UpgradeOfferService : IUpgradeOfferService
     {
+        private const float OpeningFunctionalWindowSeconds = 120f;
+        private const int OpeningPrimaryPoolTarget = 36;
+        private const string OpeningRouteAutoTower = "auto_tower";
+        private const string OpeningRouteChainGrid = "chain_grid";
+        private const string OpeningRouteBountyFactory = "bounty_factory";
+
         private enum ProgressionBand
         {
             Opening,
@@ -222,6 +539,11 @@ namespace MoleSurvivors
 
         public List<UpgradeDef> BuildOffer(GameContent content, RunState runState, System.Random random)
         {
+            if (content == null || runState == null)
+            {
+                return new List<UpgradeDef>();
+            }
+
             List<UpgradeDef> allEligible = new List<UpgradeDef>();
             for (int i = 0; i < content.Upgrades.Count; i++)
             {
@@ -239,8 +561,7 @@ namespace MoleSurvivors
             }
 
             List<UpgradeDef> qualityPool = allEligible.Where(def => !IsPlaceholderUpgrade(def)).ToList();
-            // Safety fallback: never block level-up because of over-aggressive quality filtering.
-            List<UpgradeDef> pool = qualityPool.Count >= 3 ? qualityPool : allEligible;
+            List<UpgradeDef> pool = qualityPool.Count > 0 ? qualityPool : allEligible;
             float elapsedSeconds = Mathf.Max(0f, runState != null ? runState.ElapsedSeconds : 0f);
             ProgressionBand band = ResolveProgressionBand(content, elapsedSeconds);
             List<UpgradeDef> progressionPool = pool
@@ -251,10 +572,29 @@ namespace MoleSurvivors
                 pool = progressionPool;
             }
 
-            if (pool.Count <= 3)
+            List<UpgradeDef> openingFocusedPool = BuildOpeningFocusedPool(pool, runState, elapsedSeconds);
+            if (openingFocusedPool.Count >= 3)
             {
-                List<UpgradeDef> quickOffer = new List<UpgradeDef>(pool);
-                EnsureAutomationReliefWindow(allEligible, quickOffer, runState, elapsedSeconds);
+                pool = openingFocusedPool;
+            }
+
+            if (pool.Count < 3)
+            {
+                List<UpgradeDef> fallbackPool = qualityPool.Count > 0 ? qualityPool : allEligible;
+                List<UpgradeDef> quickOffer = BuildGuaranteedOffer(pool, fallbackPool, runState, random);
+                if (!HasUsefulOption(quickOffer, runState))
+                {
+                    UpgradeDef useful = FindBestUseful(fallbackPool, runState, quickOffer);
+                    if (useful != null && quickOffer.Count > 0)
+                    {
+                        quickOffer[0] = useful;
+                    }
+                }
+
+                EnsureAutomationReliefWindow(content, allEligible, quickOffer, runState, elapsedSeconds);
+                EnsureEarlyFunctionalGuarantee(allEligible, quickOffer, runState, elapsedSeconds);
+                NormalizeCoreTags(quickOffer);
+                EnsureBaselineCombatOption(allEligible, quickOffer);
                 return quickOffer;
             }
 
@@ -287,6 +627,37 @@ namespace MoleSurvivors
                     weight *= 1.28f;
                 }
 
+                if (def.EffectType == UpgradeEffectType.AddActiveHole)
+                {
+                    bool canExpand = runState.ActiveHoleCount <= 0 || runState.ActiveHoleCount < runState.MaxHoleCount;
+                    if (!canExpand)
+                    {
+                        weight *= 0.2f;
+                    }
+                    else if (elapsedSeconds <= 120f)
+                    {
+                        weight *= 2.2f;
+                    }
+                    else
+                    {
+                        weight *= 1.15f;
+                    }
+                }
+
+                if (elapsedSeconds <= OpeningFunctionalWindowSeconds)
+                {
+                    if (IsOpeningFunctionalUpgrade(def))
+                    {
+                        weight *= 1.65f;
+                    }
+                    else if (IsOpeningPureNumericUpgrade(def))
+                    {
+                        weight *= 0.62f;
+                    }
+                }
+
+                weight *= GetOpeningRouteWeight(runState, def, elapsedSeconds);
+
                 weight *= EvolutionWeightMultiplier(runState, def);
                 weight *= Mathf.Clamp(1f + GetSynergyScore(runState, def) * 0.2f, 0.7f, 2.5f);
                 weight *= GetProgressionWeight(def, runState, band, elapsedSeconds);
@@ -303,6 +674,13 @@ namespace MoleSurvivors
                 }
             }
 
+            if (offer.Count < 3)
+            {
+                List<UpgradeDef> fallback = BuildGuaranteedOffer(offer, pool, runState, random);
+                offer.Clear();
+                offer.AddRange(fallback);
+            }
+
             UpgradeDef guaranteedUseful = FindBestUseful(pool, runState, offer);
             if (guaranteedUseful != null && !ContainsId(offer, guaranteedUseful.Id))
             {
@@ -312,7 +690,8 @@ namespace MoleSurvivors
                 }
             }
 
-            EnsureAutomationReliefWindow(pool, offer, runState, elapsedSeconds);
+            EnsureAutomationReliefWindow(content, pool, offer, runState, elapsedSeconds);
+            EnsureEarlyFunctionalGuarantee(pool, offer, runState, elapsedSeconds);
 
             bool lowQuality = !HasUsefulOption(offer, runState) && offer.All(u => u.Rarity == Rarity.Common);
             runState.LowQualityOfferStreak = lowQuality ? runState.LowQualityOfferStreak + 1 : 0;
@@ -329,6 +708,82 @@ namespace MoleSurvivors
                     offer[UnityEngine.Random.Range(0, offer.Count)] = highestRarity;
                     runState.LowQualityOfferStreak = 0;
                 }
+            }
+
+            NormalizeCoreTags(offer);
+            EnsureBaselineCombatOption(pool, offer);
+            return offer;
+        }
+
+        private static List<UpgradeDef> BuildGuaranteedOffer(
+            List<UpgradeDef> preferredPool,
+            List<UpgradeDef> fallbackPool,
+            RunState runState,
+            System.Random random)
+        {
+            List<UpgradeDef> offer = new List<UpgradeDef>(3);
+            if (preferredPool != null)
+            {
+                for (int i = 0; i < preferredPool.Count && offer.Count < 3; i++)
+                {
+                    UpgradeDef def = preferredPool[i];
+                    if (def == null || ContainsId(offer, def.Id))
+                    {
+                        continue;
+                    }
+
+                    offer.Add(def);
+                }
+            }
+
+            if (fallbackPool != null && offer.Count < 3)
+            {
+                List<UpgradeDef> candidates = fallbackPool
+                    .Where(def => def != null && !ContainsId(offer, def.Id))
+                    .OrderByDescending(def => GetSynergyScore(runState, def))
+                    .ThenByDescending(def => def.BaseWeight)
+                    .ThenBy(def => def.UnlockAtSecond)
+                    .ToList();
+
+                for (int i = 0; i < candidates.Count && offer.Count < 3; i++)
+                {
+                    offer.Add(candidates[i]);
+                }
+            }
+
+            if (offer.Count >= 3)
+            {
+                return offer;
+            }
+
+            List<UpgradeDef> pool = new List<UpgradeDef>();
+            if (preferredPool != null)
+            {
+                pool.AddRange(preferredPool);
+            }
+
+            if (fallbackPool != null)
+            {
+                for (int i = 0; i < fallbackPool.Count; i++)
+                {
+                    UpgradeDef def = fallbackPool[i];
+                    if (def != null && !pool.Contains(def))
+                    {
+                        pool.Add(def);
+                    }
+                }
+            }
+
+            while (offer.Count < 3 && pool.Count > 0)
+            {
+                int index = random != null ? random.Next(0, pool.Count) : UnityEngine.Random.Range(0, pool.Count);
+                UpgradeDef def = pool[index];
+                if (def != null && !ContainsId(offer, def.Id))
+                {
+                    offer.Add(def);
+                }
+
+                pool.RemoveAt(index);
             }
 
             return offer;
@@ -383,19 +838,23 @@ namespace MoleSurvivors
                     switch (def.EffectType)
                     {
                         case UpgradeEffectType.AddDroneCount:
-                            return elapsedSeconds >= 135f;
+                            return elapsedSeconds >= 95f;
                         case UpgradeEffectType.UnlockAutoAim:
-                            return elapsedSeconds >= 85f;
+                            return elapsedSeconds >= 70f;
                         case UpgradeEffectType.DeployAutoHammerTower:
                         case UpgradeEffectType.DeploySensorHammer:
                         case UpgradeEffectType.DeployGoldMagnet:
                         case UpgradeEffectType.DeployBountyMarker:
-                            return elapsedSeconds >= 78f;
+                        case UpgradeEffectType.DeployTeslaCoupler:
+                        case UpgradeEffectType.DeployExecutionPlate:
+                            return elapsedSeconds >= 40f;
                         case UpgradeEffectType.FacilityCooldownMultiplier:
                         case UpgradeEffectType.FacilityPowerMultiplier:
                         case UpgradeEffectType.FacilityOverloadThresholdMultiplier:
                         case UpgradeEffectType.FacilityGoldMultiplier:
-                            return elapsedSeconds >= 105f && hasFacility;
+                            return elapsedSeconds >= 90f && hasFacility;
+                        case UpgradeEffectType.AddActiveHole:
+                            return true;
                         case UpgradeEffectType.AddBossDamageMultiplier:
                             return false;
                         default:
@@ -416,7 +875,7 @@ namespace MoleSurvivors
                     switch (def.EffectType)
                     {
                         case UpgradeEffectType.AddDroneCount:
-                            return elapsedSeconds >= 150f;
+                            return elapsedSeconds >= 120f;
                         case UpgradeEffectType.AddBossDamageMultiplier:
                             return elapsedSeconds >= 240f;
                         case UpgradeEffectType.FacilityCooldownMultiplier:
@@ -424,6 +883,8 @@ namespace MoleSurvivors
                         case UpgradeEffectType.FacilityOverloadThresholdMultiplier:
                         case UpgradeEffectType.FacilityGoldMultiplier:
                             return hasFacility || elapsedSeconds >= 180f;
+                        case UpgradeEffectType.AddActiveHole:
+                            return runState == null || runState.MaxHoleCount <= 0 || runState.ActiveHoleCount < runState.MaxHoleCount;
                         default:
                             return true;
                     }
@@ -488,9 +949,9 @@ namespace MoleSurvivors
 
             if (def.IsAutomation)
             {
-                if (elapsedSeconds < 80f)
+                if (elapsedSeconds < 60f)
                 {
-                    weight *= 0.85f;
+                    weight *= 1.28f;
                 }
                 else if (elapsedSeconds <= 150f)
                 {
@@ -499,6 +960,22 @@ namespace MoleSurvivors
                 else if (elapsedSeconds < 240f)
                 {
                     weight *= 1.32f;
+                }
+            }
+
+            if (def.EffectType == UpgradeEffectType.AddActiveHole)
+            {
+                if (runState != null && runState.MaxHoleCount > 0 && runState.ActiveHoleCount >= runState.MaxHoleCount)
+                {
+                    weight *= 0.22f;
+                }
+                else if (elapsedSeconds <= 120f)
+                {
+                    weight *= 2.1f;
+                }
+                else if (elapsedSeconds <= 220f)
+                {
+                    weight *= 1.45f;
                 }
             }
 
@@ -527,6 +1004,7 @@ namespace MoleSurvivors
         }
 
         private static void EnsureAutomationReliefWindow(
+            GameContent content,
             List<UpgradeDef> sourcePool,
             List<UpgradeDef> offer,
             RunState runState,
@@ -537,7 +1015,10 @@ namespace MoleSurvivors
                 return;
             }
 
-            if (elapsedSeconds < 80f || elapsedSeconds > 140f)
+            float minWindow = content != null ? Mathf.Clamp(content.AutomationGuaranteeMinSeconds, 10f, 180f) : 35f;
+            float maxWindow = content != null ? Mathf.Clamp(content.AutomationGuaranteeMaxSeconds, minWindow, 220f) : 45f;
+            float offerWindowMax = maxWindow + 28f;
+            if (elapsedSeconds < minWindow || elapsedSeconds > offerWindowMax)
             {
                 return;
             }
@@ -589,6 +1070,206 @@ namespace MoleSurvivors
             }
         }
 
+        private static List<UpgradeDef> BuildOpeningFocusedPool(List<UpgradeDef> sourcePool, RunState runState, float elapsedSeconds)
+        {
+            if (sourcePool == null || sourcePool.Count == 0)
+            {
+                return sourcePool ?? new List<UpgradeDef>();
+            }
+
+            if (elapsedSeconds > OpeningFunctionalWindowSeconds)
+            {
+                return sourcePool;
+            }
+
+            int targetCount = Mathf.Min(OpeningPrimaryPoolTarget, sourcePool.Count);
+            if (sourcePool.Count <= targetCount)
+            {
+                return sourcePool;
+            }
+
+            List<UpgradeDef> ordered = sourcePool
+                .Where(def => def != null && !IsPlaceholderUpgrade(def))
+                .OrderByDescending(def =>
+                {
+                    float score = def.BaseWeight + GetSynergyScore(runState, def);
+                    if (IsOpeningFunctionalUpgrade(def))
+                    {
+                        score += 1.1f;
+                    }
+                    else if (IsOpeningPureNumericUpgrade(def))
+                    {
+                        score -= 0.55f;
+                    }
+
+                    score *= GetOpeningRouteWeight(runState, def, elapsedSeconds);
+                    score += def.Rarity switch
+                    {
+                        Rarity.Common => 0.4f,
+                        Rarity.Rare => 0.55f,
+                        Rarity.Epic => 0.25f,
+                        _ => 0f,
+                    };
+                    return score;
+                })
+                .ThenBy(def => def.UnlockAtSecond)
+                .ToList();
+            if (ordered.Count < 3)
+            {
+                return sourcePool;
+            }
+
+            List<UpgradeDef> selected = new List<UpgradeDef>(targetCount);
+            HashSet<string> selectedIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            Dictionary<UpgradeEffectType, int> effectCounts = new Dictionary<UpgradeEffectType, int>();
+
+            for (int i = 0; i < ordered.Count && selected.Count < targetCount; i++)
+            {
+                UpgradeDef def = ordered[i];
+                if (!IsOpeningFunctionalUpgrade(def))
+                {
+                    continue;
+                }
+
+                TryAddToOpeningPool(selected, selectedIds, effectCounts, def, 3);
+            }
+
+            for (int i = 0; i < ordered.Count && selected.Count < targetCount; i++)
+            {
+                UpgradeDef def = ordered[i];
+                if (GetOpeningRouteWeight(runState, def, elapsedSeconds) < 1.12f)
+                {
+                    continue;
+                }
+
+                TryAddToOpeningPool(selected, selectedIds, effectCounts, def, 3);
+            }
+
+            for (int i = 0; i < ordered.Count && selected.Count < targetCount; i++)
+            {
+                UpgradeDef def = ordered[i];
+                if (!HasCoreCombatIdentity(def))
+                {
+                    continue;
+                }
+
+                TryAddToOpeningPool(selected, selectedIds, effectCounts, def, 2);
+            }
+
+            for (int i = 0; i < ordered.Count && selected.Count < targetCount; i++)
+            {
+                TryAddToOpeningPool(selected, selectedIds, effectCounts, ordered[i], 2);
+            }
+
+            if (selected.Count < targetCount)
+            {
+                for (int i = 0; i < ordered.Count && selected.Count < targetCount; i++)
+                {
+                    UpgradeDef def = ordered[i];
+                    if (def == null || selectedIds.Contains(def.Id))
+                    {
+                        continue;
+                    }
+
+                    selected.Add(def);
+                    selectedIds.Add(def.Id);
+                }
+            }
+
+            return selected.Count >= 3 ? selected : sourcePool;
+        }
+
+        private static void TryAddToOpeningPool(
+            List<UpgradeDef> selected,
+            HashSet<string> selectedIds,
+            Dictionary<UpgradeEffectType, int> effectCounts,
+            UpgradeDef def,
+            int maxPerEffect)
+        {
+            if (def == null || selectedIds.Contains(def.Id))
+            {
+                return;
+            }
+
+            int count = effectCounts.TryGetValue(def.EffectType, out int current) ? current : 0;
+            if (count >= Mathf.Max(1, maxPerEffect))
+            {
+                return;
+            }
+
+            selected.Add(def);
+            selectedIds.Add(def.Id);
+            effectCounts[def.EffectType] = count + 1;
+        }
+
+        private static void EnsureEarlyFunctionalGuarantee(
+            List<UpgradeDef> sourcePool,
+            List<UpgradeDef> offer,
+            RunState runState,
+            float elapsedSeconds)
+        {
+            if (sourcePool == null || offer == null || offer.Count == 0 || runState == null)
+            {
+                return;
+            }
+
+            if (elapsedSeconds > OpeningFunctionalWindowSeconds || HasAutomationNow(runState))
+            {
+                return;
+            }
+
+            bool hasAutomationOrExpansion = offer.Any(def => def != null && IsAutomationOrExpansionOption(def));
+            if (hasAutomationOrExpansion)
+            {
+                return;
+            }
+
+            UpgradeDef candidate = sourcePool
+                .Where(def => def != null && !ContainsId(offer, def.Id) && IsAutomationOrExpansionOption(def))
+                .OrderByDescending(def => GetOpeningRouteWeight(runState, def, elapsedSeconds))
+                .ThenByDescending(def => def.BaseWeight + GetSynergyScore(runState, def))
+                .ThenByDescending(def => def.Rarity)
+                .FirstOrDefault();
+            if (candidate == null)
+            {
+                return;
+            }
+
+            int replaceIndex = -1;
+            float weakestScore = float.MaxValue;
+            for (int i = 0; i < offer.Count; i++)
+            {
+                UpgradeDef current = offer[i];
+                if (current == null)
+                {
+                    replaceIndex = i;
+                    break;
+                }
+
+                float score = GetSynergyScore(runState, current) + (int)current.Rarity * 0.42f;
+                if (IsAutomationOrExpansionOption(current))
+                {
+                    score += 2.8f;
+                }
+
+                if (IsOpeningPureNumericUpgrade(current))
+                {
+                    score -= 1.9f;
+                }
+
+                if (score < weakestScore)
+                {
+                    weakestScore = score;
+                    replaceIndex = i;
+                }
+            }
+
+            if (replaceIndex >= 0)
+            {
+                offer[replaceIndex] = candidate;
+            }
+        }
+
         private static UpgradeDef PickWeighted(
             List<UpgradeDef> pool,
             Dictionary<string, float> weights,
@@ -635,7 +1316,7 @@ namespace MoleSurvivors
         {
             for (int i = 0; i < offer.Count; i++)
             {
-                if (GetSynergyScore(runState, offer[i]) > 0f)
+                if (IsUsefulOption(runState, offer[i]))
                 {
                     return true;
                 }
@@ -657,6 +1338,20 @@ namespace MoleSurvivors
                 }
 
                 float score = GetSynergyScore(runState, candidate);
+                if (candidate.Tags.Contains("Damage") || candidate.EffectType == UpgradeEffectType.AddDamage)
+                {
+                    score += 4.5f;
+                }
+                if (candidate.Tags.Contains("Range") || candidate.EffectType == UpgradeEffectType.AddRange || candidate.EffectType == UpgradeEffectType.AddSplash)
+                {
+                    score += 4f;
+                }
+                if (candidate.Tags.Contains("Crit") ||
+                    candidate.EffectType == UpgradeEffectType.AddCritChance ||
+                    candidate.EffectType == UpgradeEffectType.AddCritDamage)
+                {
+                    score += 3.6f;
+                }
                 if (score > best)
                 {
                     best = score;
@@ -665,6 +1360,281 @@ namespace MoleSurvivors
             }
 
             return bestDef;
+        }
+
+        private static bool IsUsefulOption(RunState runState, UpgradeDef def)
+        {
+            if (def == null)
+            {
+                return false;
+            }
+
+            switch (def.EffectType)
+            {
+                case UpgradeEffectType.AddDamage:
+                case UpgradeEffectType.AddRange:
+                case UpgradeEffectType.AddSplash:
+                case UpgradeEffectType.AddCritChance:
+                case UpgradeEffectType.AddCritDamage:
+                case UpgradeEffectType.UnlockAutoHammer:
+                case UpgradeEffectType.AddDroneCount:
+                case UpgradeEffectType.DeployAutoHammerTower:
+                case UpgradeEffectType.DeploySensorHammer:
+                case UpgradeEffectType.AddActiveHole:
+                    return true;
+            }
+
+            if (def.Tags.Contains("Damage") || def.Tags.Contains("Range") || def.Tags.Contains("Crit"))
+            {
+                return true;
+            }
+
+            return GetSynergyScore(runState, def) >= 1.2f;
+        }
+
+        private static void EnsureBaselineCombatOption(List<UpgradeDef> sourcePool, List<UpgradeDef> offer)
+        {
+            if (offer == null || offer.Count == 0)
+            {
+                return;
+            }
+
+            if (offer.Any(HasCoreCombatIdentity))
+            {
+                return;
+            }
+
+            UpgradeDef candidate = sourcePool?
+                .FirstOrDefault(def => def != null && HasCoreCombatIdentity(def));
+            if (candidate != null && !ContainsId(offer, candidate.Id))
+            {
+                offer[0] = candidate;
+                NormalizeCoreTags(offer);
+            }
+
+            if (!offer.Any(HasCoreCombatIdentity))
+            {
+                EnsureTag(offer[0], "Damage");
+            }
+        }
+
+        private static bool HasCoreCombatIdentity(UpgradeDef def)
+        {
+            if (def == null)
+            {
+                return false;
+            }
+
+            return def.Tags.Contains("Damage") ||
+                   def.Tags.Contains("Range") ||
+                   def.Tags.Contains("Crit") ||
+                   def.EffectType == UpgradeEffectType.AddDamage ||
+                   def.EffectType == UpgradeEffectType.AddRange ||
+                   def.EffectType == UpgradeEffectType.AddSplash ||
+                   def.EffectType == UpgradeEffectType.AddCritChance ||
+                   def.EffectType == UpgradeEffectType.AddCritDamage;
+        }
+
+        private static bool HasAutomationNow(RunState runState)
+        {
+            if (runState == null || runState.Stats == null)
+            {
+                return false;
+            }
+
+            return runState.Stats.AutoHammerInterval > 0f ||
+                   runState.Stats.DroneCount > 0 ||
+                   runState.ActiveFacilityCount > 0 ||
+                   runState.FacilityTriggerCount > 0;
+        }
+
+        private static bool IsAutomationOrExpansionOption(UpgradeDef def)
+        {
+            if (def == null)
+            {
+                return false;
+            }
+
+            return def.IsAutomation ||
+                   def.EffectType == UpgradeEffectType.AddActiveHole ||
+                   (def.Tags != null && def.Tags.Contains("Expansion"));
+        }
+
+        private static bool IsOpeningFunctionalUpgrade(UpgradeDef def)
+        {
+            if (def == null)
+            {
+                return false;
+            }
+
+            switch (def.EffectType)
+            {
+                case UpgradeEffectType.UnlockAutoHammer:
+                case UpgradeEffectType.AutoHammerIntervalMultiplier:
+                case UpgradeEffectType.UnlockAutoAim:
+                case UpgradeEffectType.AddDroneCount:
+                case UpgradeEffectType.DeployAutoHammerTower:
+                case UpgradeEffectType.DeploySensorHammer:
+                case UpgradeEffectType.DeployGoldMagnet:
+                case UpgradeEffectType.DeployBountyMarker:
+                case UpgradeEffectType.DeployTeslaCoupler:
+                case UpgradeEffectType.DeployExecutionPlate:
+                case UpgradeEffectType.FacilityCooldownMultiplier:
+                case UpgradeEffectType.FacilityPowerMultiplier:
+                case UpgradeEffectType.FacilityOverloadThresholdMultiplier:
+                case UpgradeEffectType.FacilityGoldMultiplier:
+                case UpgradeEffectType.AddActiveHole:
+                case UpgradeEffectType.AddGoldMultiplier:
+                case UpgradeEffectType.AddExpMultiplier:
+                case UpgradeEffectType.AddMagnetRadius:
+                case UpgradeEffectType.AddMaxDurability:
+                    return true;
+            }
+
+            if (def.Tags == null)
+            {
+                return false;
+            }
+
+            return def.Tags.Contains("Automation") ||
+                   def.Tags.Contains("Facility") ||
+                   def.Tags.Contains("Expansion") ||
+                   def.Tags.Contains("Economy");
+        }
+
+        private static bool IsOpeningPureNumericUpgrade(UpgradeDef def)
+        {
+            if (def == null)
+            {
+                return false;
+            }
+
+            switch (def.EffectType)
+            {
+                case UpgradeEffectType.AddDamage:
+                case UpgradeEffectType.AttackIntervalMultiplier:
+                case UpgradeEffectType.AddRange:
+                case UpgradeEffectType.AddCritChance:
+                case UpgradeEffectType.AddCritDamage:
+                case UpgradeEffectType.AddSplash:
+                case UpgradeEffectType.AddChainCount:
+                case UpgradeEffectType.AddBossDamageMultiplier:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private static float GetOpeningRouteWeight(RunState runState, UpgradeDef def, float elapsedSeconds)
+        {
+            if (runState == null || def == null || elapsedSeconds > OpeningFunctionalWindowSeconds)
+            {
+                return 1f;
+            }
+
+            string route = runState.OpeningRoute ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(route))
+            {
+                return 1f;
+            }
+
+            bool routeMatch = route switch
+            {
+                OpeningRouteAutoTower =>
+                    def.EffectType == UpgradeEffectType.UnlockAutoHammer ||
+                    def.EffectType == UpgradeEffectType.AutoHammerIntervalMultiplier ||
+                    def.EffectType == UpgradeEffectType.DeployAutoHammerTower ||
+                    def.EffectType == UpgradeEffectType.AddActiveHole ||
+                    def.EffectType == UpgradeEffectType.FacilityCooldownMultiplier ||
+                    def.EffectType == UpgradeEffectType.FacilityPowerMultiplier ||
+                    (def.Tags != null && (def.Tags.Contains("Automation") || def.Tags.Contains("Expansion"))),
+                OpeningRouteChainGrid =>
+                    def.EffectType == UpgradeEffectType.DeploySensorHammer ||
+                    def.EffectType == UpgradeEffectType.DeployTeslaCoupler ||
+                    def.EffectType == UpgradeEffectType.AddChainCount ||
+                    def.EffectType == UpgradeEffectType.UnlockAutoAim ||
+                    (def.Tags != null && (def.Tags.Contains("Chain") || def.Tags.Contains("Shock"))),
+                OpeningRouteBountyFactory =>
+                    def.EffectType == UpgradeEffectType.DeployBountyMarker ||
+                    def.EffectType == UpgradeEffectType.DeployGoldMagnet ||
+                    def.EffectType == UpgradeEffectType.AddGoldMultiplier ||
+                    def.EffectType == UpgradeEffectType.AddExpMultiplier ||
+                    def.EffectType == UpgradeEffectType.AddMagnetRadius ||
+                    def.EffectType == UpgradeEffectType.AddActiveHole ||
+                    (def.Tags != null && (def.Tags.Contains("Bounty") || def.Tags.Contains("Economy") || def.Tags.Contains("Gold"))),
+                _ => false,
+            };
+
+            if (routeMatch)
+            {
+                return IsOpeningFunctionalUpgrade(def) ? 1.55f : 1.25f;
+            }
+
+            if (IsOpeningPureNumericUpgrade(def))
+            {
+                return elapsedSeconds <= 70f ? 0.72f : 0.84f;
+            }
+
+            if (def.IsAutomation)
+            {
+                return 1.2f;
+            }
+
+            return 1f;
+        }
+
+        private static void NormalizeCoreTags(List<UpgradeDef> offer)
+        {
+            if (offer == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < offer.Count; i++)
+            {
+                UpgradeDef def = offer[i];
+                if (def == null)
+                {
+                    continue;
+                }
+
+                switch (def.EffectType)
+                {
+                    case UpgradeEffectType.AddDamage:
+                        EnsureTag(def, "Damage");
+                        break;
+                    case UpgradeEffectType.AddRange:
+                    case UpgradeEffectType.AddSplash:
+                        EnsureTag(def, "Range");
+                        break;
+                    case UpgradeEffectType.AddCritChance:
+                    case UpgradeEffectType.AddCritDamage:
+                        EnsureTag(def, "Crit");
+                        break;
+                    case UpgradeEffectType.AddActiveHole:
+                        EnsureTag(def, "Expansion");
+                        EnsureTag(def, "Automation");
+                        break;
+                }
+            }
+        }
+
+        private static void EnsureTag(UpgradeDef def, string tag)
+        {
+            if (def == null || string.IsNullOrWhiteSpace(tag))
+            {
+                return;
+            }
+
+            if (def.Tags == null)
+            {
+                def.Tags = new List<string>();
+            }
+
+            if (!def.Tags.Contains(tag))
+            {
+                def.Tags.Add(tag);
+            }
         }
 
         private static bool ContainsId(List<UpgradeDef> defs, string id)
@@ -763,9 +1733,31 @@ namespace MoleSurvivors
                     score += runState.ActiveFacilityCount > 0 ? 0.8f : 0f;
                 }
 
+                if (tag == "Expansion")
+                {
+                    bool canExpand = runState.MaxHoleCount <= 0 || runState.ActiveHoleCount < runState.MaxHoleCount;
+                    score += canExpand ? 1.1f : -0.4f;
+                    if (runState.ElapsedSeconds <= 140f)
+                    {
+                        score += 0.7f;
+                    }
+                }
+
                 if (tag == "Bounty" && runState.FacilityLevels.TryGetValue(FacilityType.BountyMarker, out int bountyLevel))
                 {
                     score += 0.3f + bountyLevel * 0.35f;
+                }
+
+                if ((tag == "Shock" || tag == "Chain") &&
+                    runState.FacilityLevels.TryGetValue(FacilityType.TeslaCoupler, out int teslaLevel))
+                {
+                    score += 0.22f + teslaLevel * 0.28f;
+                }
+
+                if ((tag == "Execute" || tag == "Boss") &&
+                    runState.FacilityLevels.TryGetValue(FacilityType.ExecutionPlate, out int executeLevel))
+                {
+                    score += 0.22f + executeLevel * 0.3f;
                 }
             }
 
@@ -797,6 +1789,37 @@ namespace MoleSurvivors
         }
     }
 
+    public sealed class UpgradeVisualizationService : IUpgradeVisualizationService
+    {
+        public string BuildOptionText(UpgradeDef def, RunState runState)
+        {
+            if (def == null)
+            {
+                return "无效升级";
+            }
+
+            string category = string.IsNullOrWhiteSpace(def.Category) ? "通用" : def.Category;
+            string desc = UpgradePresentationFormatter.BuildReadableDescription(def, runState);
+            string preview = UpgradePresentationFormatter.BuildPreviewLine(def, runState);
+            return $"{def.DisplayName}\n<size=24>{desc}</size>\n<size=20>选择后: {preview}</size>\n<size=18>[{category}]</size>";
+        }
+
+        public string BuildPreviewLine(UpgradeDef def, RunState runState)
+        {
+            return UpgradePresentationFormatter.BuildPreviewLine(def, runState);
+        }
+
+        public string BuildAppliedDeltaLine(UpgradeDef def, UpgradeStatsSnapshot before, UpgradeStatsSnapshot after, RunState runState)
+        {
+            return UpgradePresentationFormatter.BuildAppliedDeltaLine(def, before, after, runState);
+        }
+
+        public UpgradeVisualDelta BuildVisualDelta(UpgradeDef def, UpgradeStatsSnapshot before, UpgradeStatsSnapshot after, RunState runState)
+        {
+            return UpgradePresentationFormatter.BuildVisualDelta(def, before, after, runState);
+        }
+    }
+
     public sealed class SpawnDirector : ISpawnDirector
     {
         public bool TrySpawn(
@@ -823,6 +1846,9 @@ namespace MoleSurvivors
             {
                 threatMultiplier *= 1.12f;
             }
+
+            threatMultiplier *= Mathf.Clamp(runState.DifficultyThreatMultiplier, 0.5f, 3f);
+            threatMultiplier *= Mathf.Clamp(1f + runState.WaveThreatBonus * 0.35f, 0.45f, 2.4f);
 
             spawnerState.ThreatBudget = AccumulateThreat(
                 spawnerState.ThreatBudget,
@@ -854,7 +1880,9 @@ namespace MoleSurvivors
                 random,
                 targetHole.RareWeightMultiplier *
                 (runState.BountyContractRemaining > 0f ? 1.8f : 1f) *
-                (runState.RogueZoneRemaining > 0f ? 1.25f : 1f));
+                (runState.RogueZoneRemaining > 0f ? 1.25f : 1f) *
+                (1f + Mathf.Max(0f, runState.WaveRareBonus) * 0.65f) *
+                (1f + Mathf.Max(0f, runState.DifficultyLegendBonus) * 0.45f));
             if (selectedMole == null)
             {
                 return false;
@@ -865,18 +1893,20 @@ namespace MoleSurvivors
             float spawnSpeed = Mathf.Max(0.13f, 0.62f - runState.ElapsedSeconds * 0.0005f);
             if (runState.ElapsedSeconds < 120f)
             {
-                spawnSpeed += 0.06f;
+                spawnSpeed += 0.14f;
             }
 
             if (runState.ElapsedSeconds < 60f)
             {
-                spawnSpeed += 0.09f;
+                spawnSpeed += 0.18f;
             }
 
             if (runState.ActiveFacilityCount <= 0 && runState.ElapsedSeconds < 180f)
             {
-                spawnSpeed += 0.03f;
+                spawnSpeed += 0.05f;
             }
+
+            spawnSpeed /= Mathf.Clamp(1f + runState.WaveSpeedBonus * 0.28f, 0.55f, 1.8f);
 
             spawnerState.SpawnCooldown = spawnSpeed;
             return true;
@@ -889,15 +1919,29 @@ namespace MoleSurvivors
             float rampThreat = Mathf.Clamp(elapsedSeconds / 300f, 0f, 2.8f);
             if (elapsedSeconds < 120f)
             {
-                rampThreat *= 0.72f;
+                rampThreat *= 0.6f;
             }
 
             if (elapsedSeconds < 75f)
             {
-                rampThreat *= 0.52f;
+                rampThreat *= 0.45f;
             }
 
-            float threatPerSecond = baseThreat + rampThreat;
+            float earlyEase = 1f;
+            if (elapsedSeconds < 45f)
+            {
+                earlyEase = 0.72f;
+            }
+            else if (elapsedSeconds < 90f)
+            {
+                earlyEase = 0.82f;
+            }
+            else if (elapsedSeconds < 140f)
+            {
+                earlyEase = 0.92f;
+            }
+
+            float threatPerSecond = (baseThreat + rampThreat) * earlyEase;
             return currentBudget + (threatPerSecond * multiplier * deltaTime);
         }
 
@@ -1353,6 +2397,59 @@ namespace MoleSurvivors
 
                     break;
                 }
+                case FacilityType.TeslaCoupler:
+                {
+                    int chainHits = Mathf.Clamp(1 + Mathf.Max(0, facility.Level - 1) / 2 + (overloadActive ? 1 : 0), 1, 4);
+                    List<HoleRuntime> targets = holes
+                        .Where(h => h.HasLiveMole && Vector2.Distance(h.Position, anchorHole.Position) <= range * 1.25f)
+                        .OrderByDescending(h => h.CurrentMole.Def.Rarity)
+                        .ThenByDescending(h => h.CurrentMole.Def.GoldReward)
+                        .ThenBy(h => h.CurrentMole.RemainingHp)
+                        .Take(chainHits)
+                        .ToList();
+                    if (targets.Count > 0)
+                    {
+                        for (int i = 0; i < targets.Count; i++)
+                        {
+                            float strike = i == 0
+                                ? damage * 0.92f
+                                : damage * Mathf.Clamp(0.62f - i * 0.08f, 0.3f, 0.62f);
+                            holeDamageCallback?.Invoke(targets[i], strike, AttackSource.Facility);
+                        }
+
+                        triggered = true;
+                    }
+                    else if (hasBoss)
+                    {
+                        bossDamageCallback?.Invoke(damage * 0.44f, AttackSource.Facility);
+                        triggered = true;
+                    }
+
+                    break;
+                }
+                case FacilityType.ExecutionPlate:
+                {
+                    HoleRuntime target = holes
+                        .Where(h => h.HasLiveMole && Vector2.Distance(h.Position, anchorHole.Position) <= range * 1.15f)
+                        .OrderBy(h => h.CurrentMole.RemainingHp)
+                        .ThenByDescending(h => h.CurrentMole.Def.Rarity)
+                        .FirstOrDefault();
+                    if (target != null)
+                    {
+                        float executeThreshold = Mathf.Max(6f, damage * (0.66f + facility.Level * 0.08f));
+                        bool execute = target.CurrentMole.RemainingHp <= executeThreshold;
+                        float strike = execute ? damage * 6f : damage * 1.45f;
+                        holeDamageCallback?.Invoke(target, strike, AttackSource.Facility);
+                        triggered = true;
+                    }
+                    else if (hasBoss && runState.ElapsedSeconds >= 360f)
+                    {
+                        bossDamageCallback?.Invoke(damage * 0.58f, AttackSource.Facility);
+                        triggered = true;
+                    }
+
+                    break;
+                }
             }
 
             if (triggered)
@@ -1474,6 +2571,14 @@ namespace MoleSurvivors
                 case FacilityType.SensorHammer:
                     rareMultiplier = 1f + Mathf.Max(0f, facility.Level - 1) * 0.08f * overdrive;
                     break;
+                case FacilityType.TeslaCoupler:
+                    rareMultiplier = 1f + (0.12f + Mathf.Max(0f, facility.Level - 1) * 0.05f) * overdrive;
+                    break;
+                case FacilityType.ExecutionPlate:
+                    goldMultiplier = 1f + (0.11f + Mathf.Max(0f, facility.Level - 1) * 0.06f)
+                        * runState.FacilityGoldMultiplier
+                        * overdrive;
+                    break;
             }
 
             hole.ApplyFacilityPassives(rareMultiplier, goldMultiplier, magnetRadius);
@@ -1523,6 +2628,12 @@ namespace MoleSurvivors
                     break;
                 case FacilityType.BountyMarker:
                     score += hole.DangerLevel * 0.65f + hole.SpawnWeight * 0.5f;
+                    break;
+                case FacilityType.TeslaCoupler:
+                    score += hole.DangerLevel * 0.58f + hole.SpawnWeight * 0.3f;
+                    break;
+                case FacilityType.ExecutionPlate:
+                    score += hole.DangerLevel * 0.7f + hole.RareWeightMultiplier * 0.45f;
                     break;
             }
 
@@ -1727,6 +2838,146 @@ namespace MoleSurvivors
         }
     }
 
+    public sealed class FtueService : IFtueService
+    {
+        private readonly List<FtueStepDef> _steps = new List<FtueStepDef>();
+        private RunState _runState;
+        private bool _enabled;
+        private int _nextIndex;
+        private float _nextAllowedSecond;
+
+        public void ResetForRun(GameContent content, RunState runState, bool enabled)
+        {
+            _steps.Clear();
+            _runState = runState;
+            _nextIndex = 0;
+            _nextAllowedSecond = 6f;
+            _enabled = enabled;
+
+            if (!_enabled || content?.FtueSteps == null || content.FtueSteps.Count == 0)
+            {
+                if (_runState != null)
+                {
+                    _runState.FtueCompleted = true;
+                }
+
+                return;
+            }
+
+            _steps.AddRange(content.FtueSteps
+                .Where(step => step != null && !string.IsNullOrWhiteSpace(step.Description))
+                .OrderBy(step => step.Order)
+                .ThenBy(step => step.Id, StringComparer.OrdinalIgnoreCase)
+                .Take(8));
+
+            if (_steps.Count == 0)
+            {
+                _enabled = false;
+                if (_runState != null)
+                {
+                    _runState.FtueCompleted = true;
+                }
+            }
+        }
+
+        public void Tick(float elapsedSeconds, Action<string, float, int> messageCallback)
+        {
+            if (!_enabled || messageCallback == null)
+            {
+                return;
+            }
+
+            if (_nextIndex >= _steps.Count)
+            {
+                _enabled = false;
+                if (_runState != null)
+                {
+                    _runState.FtueCompleted = true;
+                }
+
+                return;
+            }
+
+            float triggerSecond = ResolveTriggerSecond(_nextIndex, _steps.Count);
+            if (elapsedSeconds < triggerSecond || elapsedSeconds < _nextAllowedSecond)
+            {
+                return;
+            }
+
+            FtueStepDef step = _steps[_nextIndex];
+            string text = $"新手引导 {_nextIndex + 1}/{_steps.Count}：{step.Description}";
+            float duration = Mathf.Clamp(2.4f + Mathf.Min(40, step.Description.Length) * 0.03f, 2.4f, 4.2f);
+            int priority = _nextIndex <= 1 ? 3 : 2;
+            messageCallback(text, duration, priority);
+
+            _nextIndex++;
+            _nextAllowedSecond = elapsedSeconds + Mathf.Clamp(duration + 3.6f, 6f, 12f);
+            if (_runState != null)
+            {
+                _runState.FtueNextIndex = _nextIndex;
+                _runState.FtueShownCount = Mathf.Max(_runState.FtueShownCount, _nextIndex);
+                _runState.FtueCompleted = _nextIndex >= _steps.Count;
+            }
+        }
+
+        private static float ResolveTriggerSecond(int index, int total)
+        {
+            if (total <= 1)
+            {
+                return 8f;
+            }
+
+            float t = Mathf.Clamp01(index / Mathf.Max(1f, total - 1f));
+            return Mathf.Lerp(8f, 120f, t);
+        }
+    }
+
+    public sealed class EventChoiceService : IEventChoiceService
+    {
+        public string ResolveChoiceLabel(RunEventDef runEvent, int choiceIndex)
+        {
+            if (runEvent == null)
+            {
+                return choiceIndex == 0 ? "方案A" : (choiceIndex == 1 ? "方案B" : "跳过");
+            }
+
+            string token = ResolveChoiceToken(runEvent, choiceIndex);
+            if (choiceIndex >= 2 || string.Equals(token, "Skip", StringComparison.OrdinalIgnoreCase))
+            {
+                return "跳过";
+            }
+
+            bool risky = choiceIndex == 1 ||
+                         token.IndexOf("Risk", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                         token.IndexOf("B", StringComparison.OrdinalIgnoreCase) >= 0;
+            return runEvent.Type switch
+            {
+                RunEventType.MerchantBoost => risky ? "豪赌采购" : "标准采购",
+                RunEventType.TreasureRush => risky ? "超载采掘" : "稳健采掘",
+                RunEventType.CurseAltar => risky ? "高压赌注" : "低压祭礼",
+                RunEventType.RepairStation => risky ? "深度检修" : "快速检修",
+                RunEventType.BountyContract => risky ? "高压合约" : "稳健合约",
+                RunEventType.RogueHoleZone => risky ? "全线暴走" : "局部暴走",
+                _ => risky ? "冒险方案" : "稳健方案",
+            };
+        }
+
+        private static string ResolveChoiceToken(RunEventDef runEvent, int choiceIndex)
+        {
+            if (runEvent?.Choices != null && choiceIndex >= 0 && choiceIndex < runEvent.Choices.Count)
+            {
+                return runEvent.Choices[choiceIndex] ?? string.Empty;
+            }
+
+            return choiceIndex switch
+            {
+                0 => "ChoiceA",
+                1 => "ChoiceB",
+                _ => "Skip",
+            };
+        }
+    }
+
     public sealed class AchievementService
     {
         public List<AchievementDef> Evaluate(GameContent content, RunState runState, MetaProgressState metaState)
@@ -1780,6 +3031,46 @@ namespace MoleSurvivors
                 default:
                     return false;
             }
+        }
+    }
+
+    public sealed class ConfigCoverageService : IConfigCoverageService
+    {
+        public ConfigCoverageSnapshot BuildSnapshot(Dictionary<string, int> allCsvTableRows)
+        {
+            ConfigCoverageSnapshot snapshot = new ConfigCoverageSnapshot();
+            if (allCsvTableRows == null || allCsvTableRows.Count == 0)
+            {
+                return snapshot;
+            }
+
+            HashSet<string> consumedTables = new HashSet<string>(
+                ConfigDrivenContentLoader.GetRuntimeConsumedTables(),
+                StringComparer.OrdinalIgnoreCase);
+            snapshot.TotalTables = allCsvTableRows.Count;
+
+            foreach (KeyValuePair<string, int> pair in allCsvTableRows)
+            {
+                int rows = Mathf.Max(0, pair.Value);
+                snapshot.TotalRows += rows;
+                if (consumedTables.Contains(pair.Key))
+                {
+                    snapshot.ConsumedTables++;
+                    snapshot.ConsumedRows += rows;
+                    snapshot.ConsumedTableNames.Add(pair.Key);
+                }
+                else
+                {
+                    snapshot.UnusedTableNames.Add(pair.Key);
+                }
+            }
+
+            snapshot.CoverageRate = snapshot.TotalTables > 0
+                ? (float)snapshot.ConsumedTables / snapshot.TotalTables
+                : 0f;
+            snapshot.ConsumedTableNames.Sort(StringComparer.OrdinalIgnoreCase);
+            snapshot.UnusedTableNames.Sort(StringComparer.OrdinalIgnoreCase);
+            return snapshot;
         }
     }
 
@@ -1929,6 +3220,9 @@ namespace MoleSurvivors
                 AddUpgrade(content, $"up_range_{i}", $"扩域锤风 {ToRoman(i)}", "点击判定范围提高", Rarity.Common, "Range", UpgradeEffectType.AddRange, 0.06f + i * 0.02f, maxStacks, 10, 1.12f, false, false, "Range");
             }
 
+            AddUpgrade(content, "up_hole_unlock_1", "扩洞许可 I", "解锁 1 个洞位，刷新效率提升", Rarity.Common, "Expansion", UpgradeEffectType.AddActiveHole, 1f, 1, 12, 1.28f, false, false, "Expansion", "Automation", "Economy");
+            AddUpgrade(content, "up_hole_unlock_2", "扩洞许可 II", "再解锁 1 个洞位，扩展自动化部署空间", Rarity.Rare, "Expansion", UpgradeEffectType.AddActiveHole, 1f, 2, 48, 1.04f, false, false, "Expansion", "Automation", "Economy");
+
             for (int i = 1; i <= 3; i++)
             {
                 AddUpgrade(content, $"up_crit_{i}", $"致命压击 {ToRoman(i)}", "暴击率提升", Rarity.Rare, "Crit", UpgradeEffectType.AddCritChance, 0.03f + i * 0.01f, 1, 35, 0.9f, false, false, "Crit");
@@ -1969,6 +3263,8 @@ namespace MoleSurvivors
             AddUpgrade(content, "up_facility_sensor", "感应雷锤部署", "部署感应雷锤并提升触发效率", Rarity.Epic, "Facility", UpgradeEffectType.DeploySensorHammer, 1f, 2, 140, 0.75f, true, false, "Facility", "Automation", "Chain");
             AddUpgrade(content, "up_facility_magnet", "金币吸附器部署", "部署局部吸金设施", Rarity.Epic, "Facility", UpgradeEffectType.DeployGoldMagnet, 1f, 2, 155, 0.77f, true, false, "Facility", "Economy", "Gold");
             AddUpgrade(content, "up_facility_bounty", "赏金标记器部署", "部署赏金设施，提升稀有刷怪", Rarity.Legendary, "Facility", UpgradeEffectType.DeployBountyMarker, 1f, 2, 175, 0.58f, true, false, "Facility", "Bounty", "Economy");
+            AddUpgrade(content, "up_facility_tesla", "电网耦合器部署", "部署电网设施，强化连锁覆盖", Rarity.Epic, "Facility", UpgradeEffectType.DeployTeslaCoupler, 1f, 2, 205, 0.66f, true, false, "Facility", "Chain", "Shock");
+            AddUpgrade(content, "up_facility_execute", "处决压板部署", "部署处决压板，补刀低血目标", Rarity.Epic, "Facility", UpgradeEffectType.DeployExecutionPlate, 1f, 2, 225, 0.62f, true, false, "Facility", "Execute", "Automation");
             AddUpgrade(content, "up_facility_cooldown_1", "产线提频 I", "设施冷却缩短", Rarity.Rare, "Facility", UpgradeEffectType.FacilityCooldownMultiplier, 0.88f, 1, 180, 0.88f, true, false, "Facility", "Automation");
             AddUpgrade(content, "up_facility_cooldown_2", "产线提频 II", "设施冷却进一步缩短", Rarity.Epic, "Facility", UpgradeEffectType.FacilityCooldownMultiplier, 0.84f, 1, 260, 0.68f, true, false, "Facility", "Automation");
             AddUpgrade(content, "up_facility_power_1", "锤压增幅 I", "设施打击强度提升", Rarity.Rare, "Facility", UpgradeEffectType.FacilityPowerMultiplier, 0.16f, 1, 190, 0.84f, true, false, "Facility", "Damage");
@@ -2046,6 +3342,38 @@ namespace MoleSurvivors
                 "Facility",
                 "Bounty",
                 "Economy"));
+
+            content.Facilities.Add(Facility(
+                "facility_tesla_coupler",
+                "电网耦合器",
+                "对目标洞区产生连锁电击，协同清理。",
+                FacilityType.TeslaCoupler,
+                1.28f,
+                8.6f,
+                2.15f,
+                0.14f,
+                185,
+                19f,
+                6.2f,
+                "Facility",
+                "Chain",
+                "Shock"));
+
+            content.Facilities.Add(Facility(
+                "facility_execution_plate",
+                "处决压板",
+                "优先处决低血目标并提高终结效率。",
+                FacilityType.ExecutionPlate,
+                1.42f,
+                9.8f,
+                1.95f,
+                0.08f,
+                205,
+                20f,
+                6.4f,
+                "Facility",
+                "Execute",
+                "Automation"));
         }
 
         private static void BuildBosses(GameContent content)
@@ -2206,7 +3534,7 @@ namespace MoleSurvivors
 
         private static void BuildEvents(GameContent content)
         {
-            content.Events.Add(Event("event_merchant", "流动商人", "支付金币，随机获得一项立即生效强化。", RunEventType.MerchantBoost, 70f, 999f, 150, 1f));
+            content.Events.Add(Event("event_merchant", "流动商人", "支付金币，随机获得一项立即生效强化。", RunEventType.MerchantBoost, 42f, 999f, 10, 1f));
             content.Events.Add(Event("event_treasure", "暴富时刻", "30 秒内金币收益翻倍。", RunEventType.TreasureRush, 95f, 999f, 0, 30f));
             content.Events.Add(Event("event_curse", "诅咒祭坛", "35 秒威胁上涨且收益更高。", RunEventType.CurseAltar, 120f, 999f, 0, 35f));
             content.Events.Add(Event("event_repair", "维修站", "恢复农场耐久。", RunEventType.RepairStation, 60f, 999f, 0, 3f));
@@ -2355,7 +3683,10 @@ namespace MoleSurvivors
             float minTime,
             float maxTime,
             int goldCost,
-            float value)
+            float value,
+            float rewardMult = 1f,
+            float riskMult = 0.1f,
+            params string[] choices)
         {
             RunEventDef def = ScriptableObject.CreateInstance<RunEventDef>();
             def.Id = id;
@@ -2366,6 +3697,25 @@ namespace MoleSurvivors
             def.MaxTime = maxTime;
             def.GoldCost = goldCost;
             def.Value = value;
+            def.RewardMult = rewardMult;
+            def.RiskMult = riskMult;
+            if (choices != null && choices.Length > 0)
+            {
+                for (int i = 0; i < choices.Length; i++)
+                {
+                    string token = choices[i];
+                    if (!string.IsNullOrWhiteSpace(token))
+                    {
+                        def.Choices.Add(token.Trim());
+                    }
+                }
+            }
+            if (def.Choices.Count == 0)
+            {
+                def.Choices.Add("ChoiceA");
+                def.Choices.Add("ChoiceB");
+                def.Choices.Add("Skip");
+            }
             return def;
         }
 

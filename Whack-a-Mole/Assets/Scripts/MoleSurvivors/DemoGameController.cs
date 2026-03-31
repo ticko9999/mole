@@ -31,11 +31,13 @@ namespace MoleSurvivors
 
     public sealed class MoleRuntime
     {
-        public MoleRuntime(MoleDef def, float hpScale)
+        public MoleRuntime(MoleDef def, float hpScale, bool canSplitOnDeath = true, float spawnedAtSecond = 0f)
         {
             Def = def;
             RemainingHp = def.BaseHp * hpScale;
             ShieldHp = def.Traits.HasFlag(MoleTrait.Shield) ? Mathf.Max(6f, Def.BaseHp * 0.35f) : 0f;
+            CanSplitOnDeath = canSplitOnDeath && def.Traits.HasFlag(MoleTrait.Split);
+            SpawnedAtSecond = Mathf.Max(0f, spawnedAtSecond);
         }
 
         public MoleDef Def { get; }
@@ -43,6 +45,23 @@ namespace MoleSurvivors
         public float RemainingHp { get; private set; }
 
         public float ShieldHp { get; private set; }
+
+        public bool CanSplitOnDeath { get; }
+
+        public float SpawnedAtSecond { get; }
+
+        public int TotalHitCount { get; private set; }
+
+        public int ManualHitCount { get; private set; }
+
+        public void RegisterHit(AttackSource source)
+        {
+            TotalHitCount++;
+            if (source == AttackSource.Manual)
+            {
+                ManualHitCount++;
+            }
+        }
 
         public DamageResult ApplyDamage(float amount)
         {
@@ -74,6 +93,7 @@ namespace MoleSurvivors
         private readonly SpriteRenderer _moleRenderer;
         private readonly TextMesh _hpText;
         private readonly TextMesh _facilityText;
+        private readonly TextMesh _lockText;
         private readonly PresentationSkin _presentationSkin;
         private readonly Dictionary<string, MoleVisualEntry> _moleVisualLookup;
         private float _timer;
@@ -95,6 +115,7 @@ namespace MoleSurvivors
             SpriteRenderer moleRenderer,
             TextMesh hpText,
             TextMesh facilityText = null,
+            TextMesh lockText = null,
             PresentationSkin presentationSkin = null,
             Dictionary<string, MoleVisualEntry> moleVisualLookup = null)
         {
@@ -106,6 +127,7 @@ namespace MoleSurvivors
             _moleRenderer = moleRenderer;
             _hpText = hpText;
             _facilityText = facilityText;
+            _lockText = lockText;
             _presentationSkin = presentationSkin;
             _moleVisualLookup = moleVisualLookup;
             _hasHoleArtSprite = _holeRenderer != null &&
@@ -131,7 +153,11 @@ namespace MoleSurvivors
 
         public FacilityRuntime Facility { get; private set; }
 
-        public bool CanInstallFacility => Facility == null;
+        public bool IsActive { get; private set; } = true;
+
+        public bool IsLocked => !IsActive;
+
+        public bool CanInstallFacility => IsActive && Facility == null;
 
         public float RareWeightMultiplier { get; private set; } = 1f;
 
@@ -139,11 +165,11 @@ namespace MoleSurvivors
 
         public float LocalMagnetRadius { get; private set; }
 
-        public bool CanSpawn => State == HoleState.Idle && CurrentMole == null;
+        public bool CanSpawn => IsActive && State == HoleState.Idle && CurrentMole == null;
 
-        public bool HasLiveMole => CurrentMole != null && State == HoleState.HitWindow;
+        public bool HasLiveMole => IsActive && CurrentMole != null && State == HoleState.HitWindow;
 
-        public bool IsTargetable => CurrentMole != null && (State == HoleState.HitWindow || State == HoleState.HitFlash);
+        public bool IsTargetable => IsActive && CurrentMole != null && (State == HoleState.HitWindow || State == HoleState.HitFlash);
 
         public bool EventPressureActive => _eventPressureActive;
 
@@ -172,7 +198,7 @@ namespace MoleSurvivors
 
         public void InstallFacility(FacilityRuntime facility)
         {
-            if (facility == null)
+            if (!IsActive || facility == null)
             {
                 return;
             }
@@ -199,15 +225,33 @@ namespace MoleSurvivors
 
         public void ApplyFacilityPassives(float rareWeightMultiplier, float goldRewardMultiplier, float localMagnetRadius)
         {
+            if (!IsActive)
+            {
+                RareWeightMultiplier = 1f;
+                GoldRewardMultiplier = 1f;
+                LocalMagnetRadius = 0f;
+                return;
+            }
+
             RareWeightMultiplier = Mathf.Max(1f, rareWeightMultiplier);
             GoldRewardMultiplier = Mathf.Max(1f, goldRewardMultiplier);
             LocalMagnetRadius = Mathf.Max(0f, localMagnetRadius);
             RefreshFacilityLabel();
         }
 
-        public void Spawn(MoleDef def, float hpScale, float timingScale = 1f)
+        public void Spawn(
+            MoleDef def,
+            float hpScale,
+            float timingScale = 1f,
+            bool canSplitOnDeath = true,
+            float spawnedAtSecond = 0f)
         {
-            CurrentMole = new MoleRuntime(def, hpScale);
+            if (!IsActive)
+            {
+                return;
+            }
+
+            CurrentMole = new MoleRuntime(def, hpScale, canSplitOnDeath, spawnedAtSecond);
             _lastMoleDef = def;
             _timingScale = Mathf.Clamp(timingScale, 0.85f, 2f);
             State = HoleState.Warning;
@@ -215,8 +259,51 @@ namespace MoleSurvivors
             RefreshVisual();
         }
 
+        public void SetActive(bool active)
+        {
+            if (IsActive == active)
+            {
+                return;
+            }
+
+            IsActive = active;
+            if (!IsActive)
+            {
+                CurrentMole = null;
+                _lastMoleDef = null;
+                State = HoleState.Idle;
+                _timer = 0f;
+                ClearFacility();
+                RareWeightMultiplier = 1f;
+                GoldRewardMultiplier = 1f;
+                LocalMagnetRadius = 0f;
+            }
+            else
+            {
+                State = HoleState.Idle;
+                _timer = 0f;
+            }
+
+            RefreshVisual();
+        }
+
         public void Tick(float deltaTime, Action<HoleRuntime> escapeCallback)
         {
+            if (!IsActive)
+            {
+                if (_hpText != null)
+                {
+                    _hpText.gameObject.SetActive(false);
+                }
+
+                if (_facilityText != null)
+                {
+                    _facilityText.gameObject.SetActive(false);
+                }
+
+                return;
+            }
+
             _timer -= deltaTime;
             switch (State)
             {
@@ -429,6 +516,37 @@ namespace MoleSurvivors
                 return;
             }
 
+            if (!IsActive)
+            {
+                _holeRenderer.color = new Color(0.42f, 0.46f, 0.5f, 0.92f);
+                _moleRenderer.gameObject.SetActive(false);
+                if (_hpText != null)
+                {
+                    _hpText.gameObject.SetActive(false);
+                }
+
+                if (_facilityText != null)
+                {
+                    _facilityText.gameObject.SetActive(false);
+                    _facilityText.text = string.Empty;
+                }
+
+                if (_lockText != null)
+                {
+                    _lockText.gameObject.SetActive(true);
+                    _lockText.text = "锁定";
+                    _lockText.color = new Color(0.96f, 0.9f, 0.62f, 0.9f);
+                }
+
+                return;
+            }
+
+            if (_lockText != null)
+            {
+                _lockText.gameObject.SetActive(false);
+                _lockText.text = string.Empty;
+            }
+
             if (!_hasVisualState)
             {
                 _lastVisualState = State;
@@ -485,6 +603,21 @@ namespace MoleSurvivors
                     _holeRenderer.color = ResolveHoleColor(HoleState.OccupiedByEvent);
                     _moleRenderer.gameObject.SetActive(false);
                     break;
+            }
+
+            if (_moleRenderer != null)
+            {
+                float yOffset = State switch
+                {
+                    HoleState.Warning => 0.02f,
+                    HoleState.HitWindow => 0.16f,
+                    HoleState.HitFlash => 0.18f,
+                    HoleState.Retreat => 0.06f,
+                    HoleState.Cooldown => -0.01f,
+                    _ => 0.14f,
+                };
+                Vector3 current = _moleRenderer.transform.localPosition;
+                _moleRenderer.transform.localPosition = new Vector3(0f, yOffset, current.z);
             }
 
             if (_moleRenderer.gameObject.activeSelf)
@@ -845,6 +978,8 @@ namespace MoleSurvivors
                 FacilityType.SensorHammer => "雷锤",
                 FacilityType.GoldMagnet => "吸金",
                 FacilityType.BountyMarker => "赏金",
+                FacilityType.TeslaCoupler => "电网",
+                FacilityType.ExecutionPlate => "处决",
                 _ => "设施",
             };
             string stateText = Facility.State switch
@@ -1139,6 +1274,7 @@ namespace MoleSurvivors
         private static Sprite _whiteSprite;
         private static Sprite _placeholderBlockSprite;
         private static Sprite _holeFallbackSprite;
+        private static Sprite _holeLipSprite;
         private static Sprite _holeCoreSprite;
 
         public static Sprite WhiteSprite
@@ -1307,13 +1443,82 @@ namespace MoleSurvivors
                 return _holeCoreSprite;
             }
         }
+
+        public static Sprite HoleLipSprite
+        {
+            get
+            {
+                if (_holeLipSprite != null)
+                {
+                    return _holeLipSprite;
+                }
+
+                const int width = 180;
+                const int height = 92;
+                Texture2D tex = new Texture2D(width, height, TextureFormat.RGBA32, false)
+                {
+                    name = "MS_HoleLipTex",
+                    filterMode = FilterMode.Bilinear,
+                    wrapMode = TextureWrapMode.Clamp,
+                };
+
+                float cx = (width - 1) * 0.5f;
+                float cy = height * 0.58f;
+                float rx = width * 0.46f;
+                float ry = height * 0.38f;
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        float dx = (x - cx) / rx;
+                        float dy = (y - cy) / ry;
+                        float r = Mathf.Sqrt(dx * dx + dy * dy);
+                        if (r > 1.02f || y > cy + 2f)
+                        {
+                            tex.SetPixel(x, y, Color.clear);
+                            continue;
+                        }
+
+                        if (y < cy - 12f)
+                        {
+                            tex.SetPixel(x, y, Color.clear);
+                            continue;
+                        }
+
+                        float band = Mathf.InverseLerp(1.02f, 0.72f, r);
+                        float alpha = Mathf.Clamp01(band) * Mathf.InverseLerp(cy - 12f, cy + 2f, y) * 0.92f;
+                        Color edge = Color.Lerp(new Color(0.86f, 0.9f, 0.95f, 0f), new Color(0.72f, 0.78f, 0.84f, alpha), band);
+                        tex.SetPixel(x, y, edge);
+                    }
+                }
+
+                tex.Apply();
+                _holeLipSprite = Sprite.Create(
+                    tex,
+                    new Rect(0, 0, width, height),
+                    new Vector2(0.5f, 0.5f),
+                    100f);
+                _holeLipSprite.name = "MS_HoleLipSprite";
+                return _holeLipSprite;
+            }
+        }
     }
 
-    public sealed class DemoGameController : MonoBehaviour
+    public sealed partial class DemoGameController : MonoBehaviour
     {
         private const float DefaultRunDurationSeconds = 600f;
         private const float DefaultBossGraceSeconds = 60f;
         private const string DefaultSkinResourcePath = "MoleSurvivors/DefaultPresentationSkin";
+        private const string OpeningRouteAutoTower = "auto_tower";
+        private const string OpeningRouteChainGrid = "chain_grid";
+        private const string OpeningRouteBountyFactory = "bounty_factory";
+        private static readonly FacilityType[] StarterFacilityTypes =
+        {
+            FacilityType.AutoHammerTower,
+            FacilityType.SensorHammer,
+            FacilityType.GoldMagnet,
+        };
+        private static readonly float[] StarterFacilityWeights = { 0.45f, 0.35f, 0.2f };
         private static Font _uiFont;
 
         [Header("Presentation")]
@@ -1365,11 +1570,18 @@ namespace MoleSurvivors
         private GameContent _content;
         private ISaveRepository _saveRepository;
         private IUpgradeOfferService _upgradeOfferService;
+        private IUpgradeVisualizationService _upgradeVisualizationService;
         private ISpawnDirector _spawnDirector;
         private IAutomationService _automationService;
         private IFacilityService _facilityService;
         private IBossEncounterService _bossEncounterService;
+        private IFtueService _ftueService;
+        private IEventChoiceService _eventChoiceService;
         private AchievementService _achievementService;
+        private DifficultyModeDef _activeDifficulty;
+        private ChallengeModDef _activeChallenge;
+        private WaveModDef _activeWaveMod;
+        private readonly Dictionary<string, string> _localizationLookup = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         private MetaProgressState _meta;
         private RunState _run;
@@ -1428,6 +1640,9 @@ namespace MoleSurvivors
         private Text _upgradeTitle;
         private readonly Button[] _upgradeButtons = new Button[3];
         private readonly Text[] _upgradeButtonTexts = new Text[3];
+        private readonly Image[] _upgradeCardBackgrounds = new Image[3];
+        private readonly Image[] _upgradeCardFrames = new Image[3];
+        private readonly Image[] _upgradeCardIcons = new Image[3];
         private List<UpgradeDef> _currentOffer = new List<UpgradeDef>();
 
         private GameObject _eventPanel;
@@ -1435,10 +1650,16 @@ namespace MoleSurvivors
         private Image _eventIcon;
         private Button _eventAcceptButton;
         private Button _eventSkipButton;
+        private Button _eventRerollButton;
         private RunEventDef _pendingEvent;
+        private bool _merchantShopMode;
+        private readonly List<UpgradeDef> _merchantShopOffers = new List<UpgradeDef>(3);
+        private readonly List<int> _merchantShopCosts = new List<int>(3);
 
         private GameObject _endPanel;
+        private Image _endPanelImage;
         private Text _endSummary;
+        private Image _endResultStamp;
 
         private GameObject _metaPanel;
         private Text _metaHeader;
@@ -1454,6 +1675,7 @@ namespace MoleSurvivors
         private float _shakeSeedY;
         private float _rareHintCooldown;
         private float _earlyReliefRepairTimer;
+        private float _starterAutomationTargetSecond = -1f;
         private int _messagePriority;
         private string _activeArtSummary = "占位";
         private string _activeUiSummary = "默认";
@@ -1465,6 +1687,7 @@ namespace MoleSurvivors
         private bool _endOpen;
         private bool _bossWarningShown;
         private bool _midBossWarningShown;
+        private const int MaxRecentRunHistory = 8;
 
         public bool EnableAutoPilotForTests { get; set; }
 
@@ -1480,6 +1703,11 @@ namespace MoleSurvivors
 
         public int ActiveFacilityCount => _holes.Count(h => h.Facility != null);
 
+        public float EarlyCommonAverageManualHits =>
+            _run != null && _run.EarlyCommonKillSamples > 0 ? _run.EarlyCommonManualHitAverage : -1f;
+
+        public int EarlyCommonSampleCount => _run != null ? _run.EarlyCommonKillSamples : 0;
+
         public string LastEditorHotReloadMessage { get; private set; } = "Not started.";
 
         private void Awake()
@@ -1494,17 +1722,22 @@ namespace MoleSurvivors
 
             _random = new System.Random();
             _content = DefaultContentFactory.CreateDefault();
+            RebuildLocalizationLookup();
             ApplyConfigDrivenPresentationSettings();
+            InitializeFlowSystems();
             _saveRepository = new JsonSaveRepository(
                 defaultUnlockedWeapons: _content.StartupUnlockedWeaponIds,
                 defaultUnlockedCharacters: _content.StartupUnlockedCharacterIds,
                 defaultWeaponId: ResolveConfiguredDefaultWeaponId(),
                 defaultCharacterId: ResolveConfiguredDefaultCharacterId());
             _upgradeOfferService = new UpgradeOfferService();
+            _upgradeVisualizationService = new UpgradeVisualizationService();
             _spawnDirector = new SpawnDirector();
             _automationService = new AutomationService();
             _facilityService = new FacilityService();
             _bossEncounterService = new BossEncounterService();
+            _ftueService = new FtueService();
+            _eventChoiceService = new EventChoiceService();
             _achievementService = new AchievementService();
 
             _meta = _saveRepository.LoadOrCreate();
@@ -1514,10 +1747,19 @@ namespace MoleSurvivors
 
             EnsureCamera();
             EnsureAudioSource();
+            ApplyClientSettings(false);
             EnsureEventSystem();
             BuildWorld();
             BuildUI();
-            StartRun();
+            if (ShouldAutoStartRunOnBoot())
+            {
+                StartRun();
+            }
+            else
+            {
+                OpenMainMenu();
+            }
+
             _isInitialized = true;
         }
 
@@ -1618,6 +1860,50 @@ namespace MoleSurvivors
             }
         }
 
+        private void RebuildLocalizationLookup()
+        {
+            _localizationLookup.Clear();
+            if (_content == null || _content.LocalizationEntries == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < _content.LocalizationEntries.Count; i++)
+            {
+                LocalizationEntryDef entry = _content.LocalizationEntries[i];
+                if (entry == null || string.IsNullOrWhiteSpace(entry.Key))
+                {
+                    continue;
+                }
+
+                string value = !string.IsNullOrWhiteSpace(entry.ZhCn) ? entry.ZhCn : entry.EnUs;
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    continue;
+                }
+
+                string trimmed = value.Trim();
+                if (trimmed.StartsWith("示例文本", StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                _localizationLookup[entry.Key.Trim()] = trimmed;
+            }
+        }
+
+        private string L(string key, string fallback)
+        {
+            if (!string.IsNullOrWhiteSpace(key) &&
+                _localizationLookup.TryGetValue(key.Trim(), out string localized) &&
+                !string.IsNullOrWhiteSpace(localized))
+            {
+                return localized;
+            }
+
+            return fallback;
+        }
+
         public bool EditorHotReloadFromConfig()
         {
             if (!Application.isPlaying)
@@ -1636,7 +1922,9 @@ namespace MoleSurvivors
                 }
 
                 _content = reloaded;
+                RebuildLocalizationLookup();
                 ApplyConfigDrivenPresentationSettings();
+                RebuildCombatCueService();
                 _saveRepository = new JsonSaveRepository(
                     defaultUnlockedWeapons: _content.StartupUnlockedWeaponIds,
                     defaultUnlockedCharacters: _content.StartupUnlockedCharacterIds,
@@ -1711,12 +1999,25 @@ namespace MoleSurvivors
                 _alertFlashOverlay = null;
                 _upgradePanel = null;
                 _eventPanel = null;
+                _eventAcceptButton = null;
+                _eventSkipButton = null;
+                _eventRerollButton = null;
                 _endPanel = null;
+                _endPanelImage = null;
+                _endResultStamp = null;
                 _metaPanel = null;
+            }
+
+            for (int i = 0; i < _upgradeButtons.Length; i++)
+            {
+                _upgradeCardBackgrounds[i] = null;
+                _upgradeCardFrames[i] = null;
+                _upgradeCardIcons[i] = null;
             }
 
             EnsureCamera();
             EnsureAudioSource();
+            ApplyClientSettings(false);
             EnsureEventSystem();
             BuildWorld();
             BuildUI();
@@ -1741,7 +2042,7 @@ namespace MoleSurvivors
                 HandleInput(gameplayDelta);
             }
 
-            if (!_upgradeOpen && !_eventOpen && !_metaOpen && !_endOpen)
+            if (!IsFlowOverlayBlockingGameplay() && !_upgradeOpen && !_eventOpen && !_metaOpen && !_endOpen)
             {
                 TickRun(gameplayDelta);
             }
@@ -1756,6 +2057,7 @@ namespace MoleSurvivors
                 }
             }
 
+            TickRound7VisualFeedback(unscaledDelta, gameplayDelta);
             UpdateHud();
         }
 
@@ -1773,7 +2075,7 @@ namespace MoleSurvivors
 
                 if (_eventOpen)
                 {
-                    ResolveEvent(true);
+                    ResolveEventChoice(0);
                     continue;
                 }
 
@@ -1862,6 +2164,11 @@ namespace MoleSurvivors
             }
 
             return SpriteCache.HoleFallbackSprite;
+        }
+
+        private Sprite ResolveHoleForegroundSprite()
+        {
+            return SpriteCache.HoleLipSprite;
         }
 
         private static bool IsHoleSpriteUsable(Sprite sprite)
@@ -2184,8 +2491,9 @@ namespace MoleSurvivors
             float volumeMultiplier = _presentationSkin != null
                 ? Mathf.Max(0f, _presentationSkin.SfxVolumeMultiplier)
                 : 1f;
+            float settingsVolume = _clientSettings != null ? Mathf.Clamp01(_clientSettings.SfxVolume) : 1f;
             _sfxSource.pitch = 1f + UnityEngine.Random.Range(-pitchJitter, pitchJitter);
-            _sfxSource.PlayOneShot(clip, Mathf.Clamp01(volume * volumeMultiplier));
+            _sfxSource.PlayOneShot(clip, Mathf.Clamp01(volume * volumeMultiplier * settingsVolume));
             _sfxSource.pitch = 1f;
         }
 
@@ -2233,6 +2541,7 @@ namespace MoleSurvivors
             }
 
             _boss = null;
+            InitializeRound7VisualFeedbackWorld();
         }
 
         private void FitBackgroundToCamera(Transform backgroundTransform, SpriteRenderer renderer)
@@ -2294,6 +2603,15 @@ namespace MoleSurvivors
                     holeCoreRenderer.color = new Color(0.03f, 0.04f, 0.05f, 0.85f);
                     holeCoreGo.transform.localScale = new Vector3(1.06f, 0.72f, 1f);
 
+                    GameObject holeFrontGo = new GameObject("HoleFront");
+                    holeFrontGo.transform.SetParent(holeGo.transform, false);
+                    holeFrontGo.transform.localPosition = new Vector3(0f, -0.02f, 0f);
+                    SpriteRenderer holeFrontRenderer = holeFrontGo.AddComponent<SpriteRenderer>();
+                    holeFrontRenderer.sprite = ResolveHoleForegroundSprite();
+                    holeFrontRenderer.sortingOrder = 4;
+                    holeFrontRenderer.color = new Color(0.92f, 0.94f, 0.98f, 0.95f);
+                    holeFrontGo.transform.localScale = new Vector3(1.08f, 0.56f, 1f);
+
                     GameObject moleGo = new GameObject("Mole");
                     moleGo.transform.SetParent(holeGo.transform, false);
                     moleGo.transform.localPosition = new Vector3(0f, 0.14f, 0f);
@@ -2323,6 +2641,17 @@ namespace MoleSurvivors
                     facilityText.color = new Color(0.8f, 0.88f, 0.96f);
                     facilityGo.SetActive(false);
 
+                    GameObject lockGo = new GameObject("HoleLock");
+                    lockGo.transform.SetParent(holeGo.transform, false);
+                    lockGo.transform.localPosition = new Vector3(0f, -0.04f, 0f);
+                    TextMesh lockText = lockGo.AddComponent<TextMesh>();
+                    lockText.anchor = TextAnchor.MiddleCenter;
+                    lockText.alignment = TextAlignment.Center;
+                    lockText.characterSize = 0.12f;
+                    lockText.fontSize = 46;
+                    lockText.color = new Color(0.96f, 0.9f, 0.62f, 0.9f);
+                    lockGo.SetActive(false);
+
                     float spawnWeight = 1f + UnityEngine.Random.Range(0f, 0.45f);
                     int danger = row + 1;
                     HoleRuntime hole = new HoleRuntime(
@@ -2334,6 +2663,7 @@ namespace MoleSurvivors
                         moleRenderer,
                         hpText,
                         facilityText,
+                        lockText,
                         _presentationSkin,
                         _moleVisualLookup);
                     _holes.Add(hole);
@@ -2438,6 +2768,8 @@ namespace MoleSurvivors
             BuildEventPanel(canvasGo.transform);
             BuildEndPanel(canvasGo.transform);
             BuildMetaPanel(canvasGo.transform);
+            BuildGameFlowPanels(canvasGo.transform);
+            BuildRound7HudExtensions(canvasGo.transform, rightBar, bottomBar);
         }
 
         private RectTransform CreateHudChrome(
@@ -2460,218 +2792,6 @@ namespace MoleSurvivors
             image.color = color;
             image.raycastTarget = false;
             return rect;
-        }
-
-        private void BuildHudMeters(Transform canvasRoot, RectTransform rightBar)
-        {
-            _bossBarRoot = CreateMeterRoot(
-                "BossHudBar",
-                canvasRoot,
-                new Vector2(0.5f, 1f),
-                new Vector2(0.5f, 1f),
-                new Vector2(940f, 72f),
-                new Vector2(0f, -124f));
-            _bossBarBackground = CreateMeterLayer(
-                "Bg",
-                _bossBarRoot,
-                _externalUiSkin != null ? _externalUiSkin.BossHpBackgroundSprite : null,
-                new Color(0.05f, 0.07f, 0.1f, 0.84f),
-                false);
-            _bossBarShieldFill = CreateMeterLayer(
-                "ShieldFill",
-                _bossBarRoot,
-                _externalUiSkin != null ? _externalUiSkin.BossHpShieldFillSprite : null,
-                new Color(0.45f, 0.82f, 0.95f, 0.85f),
-                true);
-            _bossBarFill = CreateMeterLayer(
-                "Fill",
-                _bossBarRoot,
-                _externalUiSkin != null ? _externalUiSkin.BossHpFillSprite : null,
-                new Color(0.95f, 0.36f, 0.32f, 0.96f),
-                true);
-            _bossBarWarnGlow = CreateMeterLayer(
-                "WarnGlow",
-                _bossBarRoot,
-                _externalUiSkin != null ? _externalUiSkin.BossHpWarnGlowSprite : null,
-                new Color(1f, 0.28f, 0.2f, 0f),
-                false);
-            _bossBarFrame = CreateMeterLayer(
-                "Frame",
-                _bossBarRoot,
-                _externalUiSkin != null ? _externalUiSkin.BossHpFrameSprite : null,
-                new Color(1f, 1f, 1f, 0.75f),
-                false);
-            _bossBarLabel = CreateText(
-                "BossHudLabel",
-                _bossBarRoot,
-                new Vector2(0f, 0f),
-                new Vector2(1f, 1f),
-                new Vector2(0.5f, 0.5f),
-                Vector2.zero,
-                24,
-                TextAnchor.MiddleCenter,
-                Color.white);
-            _bossBarLabel.rectTransform.offsetMin = new Vector2(18f, 0f);
-            _bossBarLabel.rectTransform.offsetMax = new Vector2(-18f, 0f);
-            _bossBarRoot.gameObject.SetActive(false);
-
-            _durabilityBarRoot = CreateMeterRoot(
-                "DurabilityBar",
-                rightBar,
-                new Vector2(1f, 1f),
-                new Vector2(1f, 1f),
-                new Vector2(336f, 34f),
-                new Vector2(-16f, -24f));
-            _durabilityBarFill = CreateMeterLayer(
-                "Fill",
-                _durabilityBarRoot,
-                _externalUiSkin != null ? _externalUiSkin.DurabilityFillSprite : null,
-                new Color(0.34f, 0.88f, 0.48f, 0.96f),
-                true);
-            _durabilityBarDangerOverlay = CreateMeterLayer(
-                "Danger",
-                _durabilityBarRoot,
-                _externalUiSkin != null ? _externalUiSkin.DurabilityDangerOverlaySprite : null,
-                new Color(0.95f, 0.22f, 0.2f, 0f),
-                false);
-            _durabilityBarFrame = CreateMeterLayer(
-                "Frame",
-                _durabilityBarRoot,
-                _externalUiSkin != null ? _externalUiSkin.DurabilityFrameSprite : null,
-                new Color(1f, 1f, 1f, 0.75f),
-                false);
-            _durabilityBarLabel = CreateText(
-                "DurabilityLabel",
-                _durabilityBarRoot,
-                new Vector2(0f, 0f),
-                new Vector2(1f, 1f),
-                new Vector2(0.5f, 0.5f),
-                Vector2.zero,
-                19,
-                TextAnchor.MiddleCenter,
-                Color.white);
-
-            _expBarRoot = CreateMeterRoot(
-                "ExpBar",
-                rightBar,
-                new Vector2(1f, 1f),
-                new Vector2(1f, 1f),
-                new Vector2(336f, 34f),
-                new Vector2(-16f, -70f));
-            _expBarFill = CreateMeterLayer(
-                "Fill",
-                _expBarRoot,
-                _externalUiSkin != null ? _externalUiSkin.ExpBarFillSprite : null,
-                new Color(0.36f, 0.86f, 0.95f, 0.96f),
-                true);
-            _expBarLevelFlash = CreateMeterLayer(
-                "Flash",
-                _expBarRoot,
-                _externalUiSkin != null ? _externalUiSkin.ExpLevelFlashSprite : null,
-                new Color(0.95f, 0.95f, 0.6f, 0f),
-                false);
-            _expBarFrame = CreateMeterLayer(
-                "Frame",
-                _expBarRoot,
-                _externalUiSkin != null ? _externalUiSkin.ExpBarFrameSprite : null,
-                new Color(1f, 1f, 1f, 0.74f),
-                false);
-            _expBarLabel = CreateText(
-                "ExpLabel",
-                _expBarRoot,
-                new Vector2(0f, 0f),
-                new Vector2(1f, 1f),
-                new Vector2(0.5f, 0.5f),
-                Vector2.zero,
-                19,
-                TextAnchor.MiddleCenter,
-                Color.white);
-
-            _comboBarRoot = CreateMeterRoot(
-                "ComboBar",
-                rightBar,
-                new Vector2(1f, 1f),
-                new Vector2(1f, 1f),
-                new Vector2(336f, 34f),
-                new Vector2(-16f, -116f));
-            _comboBarFill = CreateMeterLayer(
-                "Fill",
-                _comboBarRoot,
-                _externalUiSkin != null ? _externalUiSkin.ComboBarFillSprite : null,
-                new Color(0.98f, 0.72f, 0.24f, 0.96f),
-                true);
-            _comboBarMaxState = CreateMeterLayer(
-                "Max",
-                _comboBarRoot,
-                _externalUiSkin != null ? _externalUiSkin.ComboBarMaxSprite : null,
-                new Color(1f, 0.95f, 0.62f, 0f),
-                false);
-            _comboBarFrame = CreateMeterLayer(
-                "Frame",
-                _comboBarRoot,
-                _externalUiSkin != null ? _externalUiSkin.ComboBarFrameSprite : null,
-                new Color(1f, 1f, 1f, 0.74f),
-                false);
-            _comboBarLabel = CreateText(
-                "ComboLabel",
-                _comboBarRoot,
-                new Vector2(0f, 0f),
-                new Vector2(1f, 1f),
-                new Vector2(0.5f, 0.5f),
-                Vector2.zero,
-                19,
-                TextAnchor.MiddleCenter,
-                Color.white);
-        }
-
-        private static RectTransform CreateMeterRoot(
-            string name,
-            Transform parent,
-            Vector2 anchorMin,
-            Vector2 anchorMax,
-            Vector2 size,
-            Vector2 anchoredPosition)
-        {
-            GameObject rootGo = new GameObject(name, typeof(RectTransform));
-            rootGo.transform.SetParent(parent, false);
-            RectTransform root = rootGo.GetComponent<RectTransform>();
-            root.anchorMin = anchorMin;
-            root.anchorMax = anchorMax;
-            root.pivot = new Vector2(0.5f, 0.5f);
-            root.sizeDelta = size;
-            root.anchoredPosition = anchoredPosition;
-            return root;
-        }
-
-        private static Image CreateMeterLayer(
-            string name,
-            RectTransform parent,
-            Sprite sprite,
-            Color fallbackColor,
-            bool filled)
-        {
-            GameObject layerGo = new GameObject(name, typeof(RectTransform), typeof(Image));
-            layerGo.transform.SetParent(parent, false);
-            RectTransform rect = layerGo.GetComponent<RectTransform>();
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = Vector2.one;
-            rect.offsetMin = Vector2.zero;
-            rect.offsetMax = Vector2.zero;
-
-            Image image = layerGo.GetComponent<Image>();
-            image.raycastTarget = false;
-            image.sprite = sprite != null ? sprite : SpriteCache.WhiteSprite;
-            image.color = sprite != null ? Color.white : fallbackColor;
-            image.type = filled ? Image.Type.Filled : Image.Type.Simple;
-            image.preserveAspect = false;
-            if (filled)
-            {
-                image.fillMethod = Image.FillMethod.Horizontal;
-                image.fillOrigin = (int)Image.OriginHorizontal.Left;
-                image.fillAmount = 1f;
-            }
-
-            return image;
         }
 
         private void BuildAlertOverlay(Transform parent)
@@ -2714,6 +2834,7 @@ namespace MoleSurvivors
                 button.onClick.AddListener(() => OnUpgradeSelected(index));
                 _upgradeButtons[i] = button;
                 _upgradeButtonTexts[i] = button.GetComponentInChildren<Text>();
+                ConfigureUpgradeCardVisual(button, i);
             }
         }
 
@@ -2748,28 +2869,39 @@ namespace MoleSurvivors
             _eventAcceptButton = CreateButton(
                 "EventAccept",
                 _eventPanel.transform,
-                new Vector2(0.4f, 0.4f),
-                new Vector2(300f, 100f),
+                new Vector2(0.3f, 0.4f),
+                new Vector2(260f, 100f),
                 new Vector2(0f, -40f));
-            _eventAcceptButton.GetComponentInChildren<Text>().text = "接受";
-            _eventAcceptButton.onClick.AddListener(() => ResolveEvent(true));
+            _eventAcceptButton.GetComponentInChildren<Text>().text = "方案A";
+            _eventAcceptButton.onClick.AddListener(() => ResolveEventChoice(0));
             SetButtonIcon(_eventAcceptButton, _externalUiSkin != null ? _externalUiSkin.AcceptIconSprite : null, new Color(0.88f, 1f, 0.9f));
 
             _eventSkipButton = CreateButton(
                 "EventSkip",
                 _eventPanel.transform,
-                new Vector2(0.6f, 0.4f),
-                new Vector2(300f, 100f),
+                new Vector2(0.5f, 0.4f),
+                new Vector2(260f, 100f),
                 new Vector2(0f, -40f));
-            _eventSkipButton.GetComponentInChildren<Text>().text = "跳过";
-            _eventSkipButton.onClick.AddListener(() => ResolveEvent(false));
+            _eventSkipButton.GetComponentInChildren<Text>().text = "方案B";
+            _eventSkipButton.onClick.AddListener(() => ResolveEventChoice(1));
             SetButtonIcon(_eventSkipButton, _externalUiSkin != null ? _externalUiSkin.SkipIconSprite : null, new Color(1f, 0.86f, 0.86f));
+
+            _eventRerollButton = CreateButton(
+                "EventRerollOrSkip",
+                _eventPanel.transform,
+                new Vector2(0.7f, 0.4f),
+                new Vector2(260f, 100f),
+                new Vector2(0f, -40f));
+            _eventRerollButton.GetComponentInChildren<Text>().text = "跳过";
+            _eventRerollButton.onClick.AddListener(OnEventThirdButtonPressed);
+            SetButtonIcon(_eventRerollButton, _externalUiSkin != null ? _externalUiSkin.SkipIconSprite : null, new Color(0.85f, 0.92f, 1f));
         }
 
         private void BuildEndPanel(Transform parent)
         {
             _endPanel = CreatePanel("EndPanel", parent, new Color(0f, 0f, 0f, 0.82f));
             _endPanel.SetActive(false);
+            _endPanelImage = _endPanel.GetComponent<Image>();
 
             _endSummary = CreateText(
                 "EndSummary",
@@ -2781,6 +2913,17 @@ namespace MoleSurvivors
                 30,
                 TextAnchor.MiddleCenter,
                 Color.white);
+
+            GameObject stampGo = new GameObject("ResultStamp", typeof(RectTransform), typeof(Image));
+            stampGo.transform.SetParent(_endPanel.transform, false);
+            RectTransform stampRect = stampGo.GetComponent<RectTransform>();
+            stampRect.anchorMin = new Vector2(0.86f, 0.76f);
+            stampRect.anchorMax = new Vector2(0.86f, 0.76f);
+            stampRect.pivot = new Vector2(0.5f, 0.5f);
+            stampRect.sizeDelta = new Vector2(228f, 228f);
+            _endResultStamp = stampGo.GetComponent<Image>();
+            _endResultStamp.raycastTarget = false;
+            _endResultStamp.gameObject.SetActive(false);
 
             Button restart = CreateButton(
                 "RestartButton",
@@ -3092,6 +3235,7 @@ namespace MoleSurvivors
 
         private void StartRun()
         {
+            ApplyFlowStateForFreshRun();
             _endOpen = false;
             _endPanel.SetActive(false);
             _upgradeOpen = false;
@@ -3128,9 +3272,22 @@ namespace MoleSurvivors
                 WeaponId = ResolveActiveWeaponId(),
                 CharacterId = ResolveActiveCharacterId(),
                 FacilityOverloadThresholdCurrent = ResolveInitialFacilityOverloadThreshold(),
+                StarterAutomationGrantedSecond = -1f,
+                StarterAutomationPackageGiven = false,
+                FirstAutomationSecond = -1f,
+                MerchantVisitCount = 0,
             };
 
             ApplyLoadoutAndMeta();
+            ConfigureRunDifficultyAndChallenge();
+            ApplyRunModifierToLoadout();
+            ConfigureActiveHolesAtRunStart();
+            float guaranteeMin = _content != null ? Mathf.Clamp(_content.AutomationGuaranteeMinSeconds, 10f, 180f) : 35f;
+            float guaranteeMax = _content != null ? Mathf.Clamp(_content.AutomationGuaranteeMaxSeconds, guaranteeMin, 220f) : 45f;
+            _starterAutomationTargetSecond = Mathf.Clamp((guaranteeMin + guaranteeMax) * 0.5f, guaranteeMin, guaranteeMax);
+            _run.OpeningRoute = RollOpeningRoute();
+            RefreshAutomationProgress();
+            _ftueService?.ResetForRun(_content, _run, true);
             _manualAttackCooldown = 0f;
             _botAttackTimer = 0f;
             _hitStopTimer = 0f;
@@ -3148,10 +3305,14 @@ namespace MoleSurvivors
             }
 
             _currentOffer.Clear();
+            ResetRound7VisualFeedbackState();
             string artHint = _activeArtSummary.StartsWith("外部包", StringComparison.Ordinal)
                 ? $"（{_activeArtSummary}）"
                 : string.Empty;
-            ShowMessage($"开始新一局：从点击敲鼠开始。{artHint}", 2.2f);
+            string difficultyHint = _activeDifficulty != null ? _activeDifficulty.Name : "标准";
+            string challengeHint = _activeChallenge != null ? _activeChallenge.Name : "无挑战";
+            string routeHint = BuildOpeningRouteLabel().Replace("开局路线: ", string.Empty);
+            ShowMessage($"开始新一局：{difficultyHint} / {challengeHint}。路线建议：{routeHint}。{artHint}", 2.2f);
         }
 
         private string ResolveConfiguredDefaultWeaponId()
@@ -3262,6 +3423,49 @@ namespace MoleSurvivors
                     _meta.ActiveCharacterId = _meta.UnlockedCharacters[0];
                 }
             }
+
+            if (_meta.RecentRuns == null)
+            {
+                _meta.RecentRuns = new List<RunSummary>();
+            }
+
+            if (_meta.RecentRuns.Count > MaxRecentRunHistory)
+            {
+                _meta.RecentRuns = _meta.RecentRuns.Take(MaxRecentRunHistory).ToList();
+            }
+
+            if (_content.DifficultyModes != null && _content.DifficultyModes.Count > 0)
+            {
+                bool difficultyValid = _content.DifficultyModes.Any(def =>
+                    def != null &&
+                    string.Equals(def.Id, _meta.SelectedDifficultyId, StringComparison.OrdinalIgnoreCase));
+                if (!difficultyValid)
+                {
+                    _meta.SelectedDifficultyId = !string.IsNullOrWhiteSpace(_content.DefaultDifficultyId)
+                        ? _content.DefaultDifficultyId
+                        : _content.DifficultyModes.FirstOrDefault(def => def != null)?.Id ?? "DIFF_NORMAL";
+                }
+            }
+            else
+            {
+                _meta.SelectedDifficultyId = "DIFF_NORMAL";
+            }
+
+            if (_content.ChallengeMods != null && _content.ChallengeMods.Count > 0)
+            {
+                bool challengeValid = string.IsNullOrWhiteSpace(_meta.SelectedChallengeId) ||
+                                      _content.ChallengeMods.Any(def =>
+                                          def != null &&
+                                          string.Equals(def.Id, _meta.SelectedChallengeId, StringComparison.OrdinalIgnoreCase));
+                if (!challengeValid)
+                {
+                    _meta.SelectedChallengeId = string.Empty;
+                }
+            }
+            else
+            {
+                _meta.SelectedChallengeId = string.Empty;
+            }
         }
 
         private int ResolveInitialFacilityOverloadThreshold()
@@ -3277,6 +3481,403 @@ namespace MoleSurvivors
                 .DefaultIfEmpty(18f)
                 .Average();
             return Mathf.Clamp(Mathf.RoundToInt(average), 10, 70);
+        }
+
+        private void ConfigureRunDifficultyAndChallenge()
+        {
+            if (_run == null)
+            {
+                return;
+            }
+
+            _activeDifficulty = ResolveDifficultyForRun();
+            _activeChallenge = ResolveChallengeForRun();
+            _activeWaveMod = null;
+
+            _run.DifficultyId = _activeDifficulty != null ? _activeDifficulty.Id : "DIFF_NORMAL";
+            _run.ChallengeId = _activeChallenge != null ? _activeChallenge.Id : string.Empty;
+            _run.DifficultyHpMultiplier = Mathf.Clamp(_activeDifficulty != null ? _activeDifficulty.HpMult : 1f, 0.55f, 3f);
+            _run.DifficultyThreatMultiplier = Mathf.Clamp(_activeDifficulty != null ? _activeDifficulty.ThreatMult : 1f, 0.55f, 3f);
+            _run.DifficultyRewardMultiplier = Mathf.Clamp(_activeDifficulty != null ? _activeDifficulty.RewardMult : 1f, 0.55f, 3f);
+            _run.DifficultyLegendBonus = Mathf.Clamp(_activeDifficulty != null ? _activeDifficulty.LegendBonus : 0f, 0f, 1.6f);
+            _run.WaveModId = string.Empty;
+            _run.WaveModName = string.Empty;
+            _run.WaveModRemaining = 0f;
+            _run.WaveThreatBonus = 0f;
+            _run.WaveSpeedBonus = 0f;
+            _run.WaveRareBonus = 0f;
+            _run.WaveEliteBonus = 0f;
+            _run.NextWaveModRollSecond = 80f;
+
+            if (HasChallenge("CHAL_03"))
+            {
+                _run.DifficultyLegendBonus += 0.16f;
+            }
+
+            if (HasChallenge("CHAL_04"))
+            {
+                _run.WaveRareBonus += 0.18f;
+            }
+
+            if (HasChallenge("CHAL_05"))
+            {
+                _run.FacilityPowerMultiplier = Mathf.Min(_run.FacilityPowerMultiplier, 0.84f);
+                _run.FacilityCooldownMultiplier = Mathf.Max(_run.FacilityCooldownMultiplier, 1.12f);
+            }
+
+            if (HasChallenge("CHAL_07"))
+            {
+                _run.DifficultyThreatMultiplier *= 1.05f;
+            }
+
+            _run.DifficultyLegendBonus = Mathf.Clamp(_run.DifficultyLegendBonus, 0f, 1.9f);
+            _run.DifficultyThreatMultiplier = Mathf.Clamp(_run.DifficultyThreatMultiplier, 0.55f, 3.5f);
+            _run.DifficultyHpMultiplier = Mathf.Clamp(_run.DifficultyHpMultiplier, 0.55f, 3.5f);
+            _run.DifficultyRewardMultiplier = Mathf.Clamp(_run.DifficultyRewardMultiplier, 0.55f, 3.5f);
+        }
+
+        private DifficultyModeDef ResolveDifficultyForRun()
+        {
+            if (_content == null || _content.DifficultyModes == null || _content.DifficultyModes.Count == 0)
+            {
+                return null;
+            }
+
+            string selectedId = _clientSettings != null ? _clientSettings.DifficultyId : string.Empty;
+            if (string.IsNullOrWhiteSpace(selectedId))
+            {
+                selectedId = _meta != null ? _meta.SelectedDifficultyId : string.Empty;
+            }
+
+            if (string.IsNullOrWhiteSpace(selectedId))
+            {
+                selectedId = _content.DefaultDifficultyId;
+            }
+
+            DifficultyModeDef selected = _content.DifficultyModes.FirstOrDefault(def =>
+                def != null &&
+                string.Equals(def.Id, selectedId, StringComparison.OrdinalIgnoreCase));
+            if (selected == null)
+            {
+                selected = _content.DifficultyModes.FirstOrDefault(def =>
+                    def != null &&
+                    string.Equals(def.Id, "DIFF_NORMAL", StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (selected == null)
+            {
+                selected = _content.DifficultyModes.FirstOrDefault(def => def != null);
+            }
+
+            if (selected != null)
+            {
+                if (_clientSettings != null)
+                {
+                    _clientSettings.DifficultyId = selected.Id;
+                }
+
+                if (_meta != null)
+                {
+                    _meta.SelectedDifficultyId = selected.Id;
+                }
+            }
+
+            return selected;
+        }
+
+        private ChallengeModDef ResolveChallengeForRun()
+        {
+            if (_content == null || _content.ChallengeMods == null || _content.ChallengeMods.Count == 0)
+            {
+                return null;
+            }
+
+            string selectedId = _clientSettings != null ? _clientSettings.ChallengeId : string.Empty;
+            if (string.IsNullOrWhiteSpace(selectedId))
+            {
+                selectedId = _meta != null ? _meta.SelectedChallengeId : string.Empty;
+            }
+
+            if (string.IsNullOrWhiteSpace(selectedId))
+            {
+                selectedId = _content.DefaultChallengeId;
+            }
+
+            if (string.IsNullOrWhiteSpace(selectedId))
+            {
+                return null;
+            }
+
+            ChallengeModDef selected = _content.ChallengeMods.FirstOrDefault(def =>
+                def != null &&
+                string.Equals(def.Id, selectedId, StringComparison.OrdinalIgnoreCase));
+            if (selected == null)
+            {
+                return null;
+            }
+
+            if (_clientSettings != null)
+            {
+                _clientSettings.ChallengeId = selected.Id;
+            }
+
+            if (_meta != null)
+            {
+                _meta.SelectedChallengeId = selected.Id;
+            }
+
+            return selected;
+        }
+
+        private bool HasChallenge(string challengeToken)
+        {
+            if (string.IsNullOrWhiteSpace(challengeToken))
+            {
+                return false;
+            }
+
+            if (_activeChallenge != null &&
+                !string.IsNullOrWhiteSpace(_activeChallenge.Id) &&
+                _activeChallenge.Id.IndexOf(challengeToken, StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                return true;
+            }
+
+            return _run != null &&
+                !string.IsNullOrWhiteSpace(_run.ChallengeId) &&
+                _run.ChallengeId.IndexOf(challengeToken, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        private float ResolveRunRewardMultiplier()
+        {
+            float reward = _run != null ? Mathf.Max(0.55f, _run.DifficultyRewardMultiplier) : 1f;
+            if (_activeChallenge != null)
+            {
+                reward *= 1f + Mathf.Clamp(_activeChallenge.RewardBonus, 0f, 2f);
+            }
+
+            return Mathf.Clamp(reward, 0.55f, 5f);
+        }
+
+        private void ApplyRunModifierToLoadout()
+        {
+            if (_run == null || _run.Stats == null)
+            {
+                return;
+            }
+
+            if (HasChallenge("CHAL_07"))
+            {
+                if (_run.Stats.AutoHammerInterval > 0f)
+                {
+                    _run.Stats.AutoHammerInterval = Mathf.Clamp(_run.Stats.AutoHammerInterval * 1.22f, 0.16f, 2.8f);
+                }
+
+                if (_run.Stats.DroneCount > 0)
+                {
+                    _run.Stats.DroneCount = Mathf.Max(1, _run.Stats.DroneCount - 1);
+                }
+            }
+        }
+
+        private void ConfigureActiveHolesAtRunStart()
+        {
+            if (_run == null || _holes == null || _holes.Count == 0)
+            {
+                return;
+            }
+
+            int maxHoles = ResolveConfiguredMaxHoleCount();
+            int startActive = Mathf.Clamp(_content != null ? _content.StartingActiveHoles : 5, 1, maxHoles);
+            for (int i = 0; i < _holes.Count; i++)
+            {
+                bool inMap = i < maxHoles;
+                bool active = inMap && i < startActive;
+                _holes[i].SetActive(active);
+            }
+
+            _run.MaxHoleCount = maxHoles;
+            _run.ActiveHoleCount = startActive;
+            _run.HoleUnlockPurchasedCount = 0;
+        }
+
+        private int ResolveConfiguredMaxHoleCount()
+        {
+            if (_holes == null || _holes.Count == 0)
+            {
+                return 0;
+            }
+
+            if (_content == null || _content.StageMaps == null || _content.StageMaps.Count == 0)
+            {
+                return _holes.Count;
+            }
+
+            StageMapDef map = _content.StageMaps
+                .FirstOrDefault(candidate => candidate != null && string.Equals(candidate.Id, "MAP_FACTORY", StringComparison.OrdinalIgnoreCase));
+            if (map == null)
+            {
+                map = _content.StageMaps.FirstOrDefault(candidate => candidate != null);
+            }
+
+            int mapHoles = map != null ? Mathf.Max(1, map.HoleCount) : _holes.Count;
+            if (HasChallenge("CHAL_10"))
+            {
+                mapHoles = Mathf.Max(4, mapHoles - 4);
+            }
+
+            return Mathf.Clamp(mapHoles, 1, _holes.Count);
+        }
+
+        private int UnlockNextActiveHoles(int count, bool countAsPurchase)
+        {
+            if (_run == null || _holes == null || count <= 0)
+            {
+                return 0;
+            }
+
+            int unlocked = 0;
+            int unlockLimit = Mathf.Clamp(_run.MaxHoleCount, 0, _holes.Count);
+            for (int i = 0; i < _holes.Count && unlocked < count; i++)
+            {
+                if (i >= unlockLimit)
+                {
+                    continue;
+                }
+
+                HoleRuntime hole = _holes[i];
+                if (hole == null || !hole.IsLocked)
+                {
+                    continue;
+                }
+
+                hole.SetActive(true);
+                unlocked++;
+            }
+
+            if (unlocked > 0)
+            {
+                _run.ActiveHoleCount = Mathf.Clamp(_run.ActiveHoleCount + unlocked, 0, unlockLimit);
+                if (countAsPurchase)
+                {
+                    _run.HoleUnlockPurchasedCount += unlocked;
+                }
+            }
+
+            return unlocked;
+        }
+
+        private string RollOpeningRoute()
+        {
+            float roll = _random != null ? (float)_random.NextDouble() : UnityEngine.Random.value;
+            if (roll < 0.34f)
+            {
+                return OpeningRouteAutoTower;
+            }
+
+            if (roll < 0.68f)
+            {
+                return OpeningRouteChainGrid;
+            }
+
+            return OpeningRouteBountyFactory;
+        }
+
+        private FacilityType RollStarterFacilityType()
+        {
+            float totalWeight = 0f;
+            for (int i = 0; i < StarterFacilityWeights.Length; i++)
+            {
+                totalWeight += Mathf.Max(0.01f, StarterFacilityWeights[i]);
+            }
+
+            if (totalWeight <= 0.001f)
+            {
+                return FacilityType.AutoHammerTower;
+            }
+
+            float roll = (_random != null ? (float)_random.NextDouble() : UnityEngine.Random.value) * totalWeight;
+            float acc = 0f;
+            for (int i = 0; i < StarterFacilityTypes.Length; i++)
+            {
+                acc += Mathf.Max(0.01f, StarterFacilityWeights[i]);
+                if (roll <= acc)
+                {
+                    return StarterFacilityTypes[i];
+                }
+            }
+
+            return StarterFacilityTypes[StarterFacilityTypes.Length - 1];
+        }
+
+        private int ComputeAutomationForms()
+        {
+            if (_run == null || _run.Stats == null)
+            {
+                return 0;
+            }
+
+            int forms = 0;
+            if (_run.Stats.AutoHammerInterval > 0f)
+            {
+                forms++;
+            }
+
+            if (_run.Stats.DroneCount > 0)
+            {
+                forms++;
+            }
+
+            int facilities = _run.ActiveFacilityCount;
+            if (facilities <= 0 && _holes != null)
+            {
+                facilities = _holes.Count(h => h != null && h.Facility != null);
+            }
+
+            if (facilities > 0)
+            {
+                forms++;
+            }
+
+            return forms;
+        }
+
+        private void RefreshAutomationProgress()
+        {
+            if (_run == null)
+            {
+                return;
+            }
+
+            _run.CurrentAutomationForms = ComputeAutomationForms();
+            if (_run.CurrentAutomationForms > 0)
+            {
+                if (_run.FirstAutomationSecond < 0f)
+                {
+                    _run.FirstAutomationSecond = _run.ElapsedSeconds;
+                }
+
+                if (_run.FirstReliefSecond < 0f)
+                {
+                    _run.FirstReliefSecond = _run.ElapsedSeconds;
+                }
+            }
+        }
+
+        private bool HasRealAutomation()
+        {
+            if (_run == null)
+            {
+                return false;
+            }
+
+            int forms = ComputeAutomationForms();
+            if (forms > 0)
+            {
+                return true;
+            }
+
+            return _run.FacilityTriggerCount > 0;
         }
 
         private float GetRunDurationSeconds()
@@ -3327,6 +3928,99 @@ namespace MoleSurvivors
             }
 
             return Mathf.Max(10f, _content.BossGraceSeconds);
+        }
+
+        private float GetFirstUpgradeEarliestSecond()
+        {
+            float runDuration = GetRunDurationSeconds();
+            float fallback = Mathf.Clamp(runDuration * 0.075f, 45f, 60f);
+            if (_content == null)
+            {
+                return fallback;
+            }
+
+            return Mathf.Clamp(_content.FirstUpgradeEarliestSeconds, 10f, Mathf.Min(runDuration * 0.5f, 180f));
+        }
+
+        private float GetFirstUpgradeLatestSecond()
+        {
+            float earliest = GetFirstUpgradeEarliestSecond();
+            float runDuration = GetRunDurationSeconds();
+            float fallback = Mathf.Clamp(earliest + 12f, earliest + 4f, Mathf.Min(runDuration * 0.55f, 220f));
+            if (_content == null)
+            {
+                return fallback;
+            }
+
+            return Mathf.Clamp(_content.FirstUpgradeLatestSeconds, earliest + 4f, Mathf.Min(runDuration * 0.6f, 240f));
+        }
+
+        private float GetEarlyCommonTtkWindowSeconds()
+        {
+            return _content != null
+                ? Mathf.Clamp(_content.EarlyCommonTtkWindowSeconds, 10f, 120f)
+                : 45f;
+        }
+
+        private float GetEarlyCommonTtkMinHits()
+        {
+            return _content != null
+                ? Mathf.Clamp(_content.EarlyCommonTtkMinHits, 1f, 8f)
+                : 2f;
+        }
+
+        private float GetEarlyCommonTtkMaxHits()
+        {
+            float minHits = GetEarlyCommonTtkMinHits();
+            return _content != null
+                ? Mathf.Clamp(_content.EarlyCommonTtkMaxHits, minHits, 10f)
+                : 3f;
+        }
+
+        private float AdjustEarlyCommonTtkHpScale(float baseHpScale, MoleDef mole)
+        {
+            if (_run == null || _run.Stats == null || mole == null)
+            {
+                return baseHpScale;
+            }
+
+            if (mole.Rarity != Rarity.Common)
+            {
+                return baseHpScale;
+            }
+
+            float ttkWindow = GetEarlyCommonTtkWindowSeconds();
+            if (_run.ElapsedSeconds > ttkWindow)
+            {
+                return baseHpScale;
+            }
+
+            float minHits = GetEarlyCommonTtkMinHits();
+            float maxHits = GetEarlyCommonTtkMaxHits();
+            float progress = Mathf.Clamp01(_run.ElapsedSeconds / Mathf.Max(1f, ttkWindow));
+            float targetHits = Mathf.Lerp(maxHits, minHits, progress * 0.55f);
+
+            float critChance = Mathf.Clamp01(_run.Stats.CritChance);
+            float critDamageBonus = Mathf.Max(0f, _run.Stats.CritDamage - 1f);
+            float expectedDamage = _run.Stats.Damage * (1f + critChance * critDamageBonus * 0.35f);
+            float desiredHp = Mathf.Max(2f, expectedDamage * targetHits);
+            float desiredScale = desiredHp / Mathf.Max(1f, mole.BaseHp);
+
+            if (_run.EarlyCommonKillSamples >= 4 && _run.EarlyCommonManualHitAverage > 0f)
+            {
+                float observed = _run.EarlyCommonManualHitAverage;
+                if (observed < minHits)
+                {
+                    desiredScale *= 1.12f;
+                }
+                else if (observed > maxHits)
+                {
+                    desiredScale *= 0.9f;
+                }
+            }
+
+            float tunedScale = Mathf.Clamp(desiredScale, 1f, 4.4f);
+            return Mathf.Max(baseHpScale, tunedScale);
         }
 
         private void ApplyConfigDrivenPresentationSettings()
@@ -3512,7 +4206,7 @@ namespace MoleSurvivors
             _run.Gold += startGoldBonus;
             _run.Durability = Mathf.Min(_run.MaxDurability, _run.Durability);
             float runScale = Mathf.Clamp(GetRunDurationSeconds() / 600f, 0.85f, 1.15f);
-            _run.NextExperience = Mathf.Clamp(24f * runScale, 18f, 32f);
+            _run.NextExperience = Mathf.Clamp(40f * runScale, 34f, 50f);
             if (_run.Experience >= _run.NextExperience)
             {
                 _run.PendingLevelUps = Mathf.Max(1, Mathf.FloorToInt(_run.Experience / _run.NextExperience));
@@ -3640,8 +4334,16 @@ namespace MoleSurvivors
                 }
             }
 
+            _run.ActiveHoleCount = _holes.Count(h => h != null && h.IsActive);
+            if (_run.MaxHoleCount <= 0)
+            {
+                _run.MaxHoleCount = Mathf.Max(1, _holes.Count);
+            }
+
             _run.ActiveFacilityCount = _holes.Count(h => h.Facility != null);
+            RefreshAutomationProgress();
             _rareHintCooldown = Mathf.Max(0f, _rareHintCooldown - deltaTime);
+            TickWaveModDirector(deltaTime);
             _run.BountyContractRemaining = Mathf.Max(0f, _run.BountyContractRemaining - deltaTime);
             _run.RogueZoneRemaining = Mathf.Max(0f, _run.RogueZoneRemaining - deltaTime);
             if (_run.RogueZoneRemaining <= 0f && _rogueHoleIndices.Count > 0)
@@ -3661,11 +4363,16 @@ namespace MoleSurvivors
             TickAutomation(deltaTime);
             float overloadBefore = _run.FacilityOverloadTimer;
             TickFacilities(deltaTime);
+            _run.ActiveFacilityCount = _holes.Count(h => h.Facility != null);
+            RefreshAutomationProgress();
             TickDrops(deltaTime);
             TickBoss(deltaTime);
+            EnsureFirstUpgradePacing();
             TryOpenPendingUpgrade();
             CheckMilestones();
             _run.BuildIdentity = ResolveBuildIdentity();
+            UpdatePacingSnapshot();
+            _ftueService?.Tick(_run.ElapsedSeconds, (text, duration, priority) => ShowMessage(text, duration, priority));
 
             if (overloadBefore <= 0f && _run.FacilityOverloadTimer > 0f)
             {
@@ -3740,6 +4447,11 @@ namespace MoleSurvivors
 
         private void HandleInput(float deltaTime)
         {
+            if (HandleGameFlowOverlayInput())
+            {
+                return;
+            }
+
             if (_upgradeOpen)
             {
                 if (Input.GetKeyDown(KeyCode.R) && _run.EventTickets > 0)
@@ -3752,6 +4464,36 @@ namespace MoleSurvivors
 
             if (_eventOpen)
             {
+                if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1))
+                {
+                    ResolveEventChoice(0);
+                }
+                else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2))
+                {
+                    ResolveEventChoice(1);
+                }
+                else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3))
+                {
+                    ResolveEventChoice(2);
+                }
+                else if (Input.GetKeyDown(KeyCode.R))
+                {
+                    ResolveEventRerollOrSkip();
+                }
+                else if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    if (_merchantShopMode && _pendingEvent != null && _pendingEvent.Type == RunEventType.MerchantBoost)
+                    {
+                        ShowMessage("你离开了商店。", 0.85f, 1);
+                        _run.EventSkipCount++;
+                        CloseEventPanelAndScheduleCooldown();
+                    }
+                    else
+                    {
+                        ResolveEventChoice(2);
+                    }
+                }
+
                 return;
             }
 
@@ -3774,7 +4516,14 @@ namespace MoleSurvivors
         {
             CollectDropsNear(worldPoint, 0.62f);
             bool isManual = source == AttackSource.Manual;
-            float clickRadius = Mathf.Max(_run.Stats.AttackRadius, isManual ? 0.68f : 0.52f);
+            float elapsed = _run != null ? Mathf.Max(0f, _run.ElapsedSeconds) : 0f;
+            float manualAssistRadius = Mathf.Lerp(0.52f, 0.64f, Mathf.Clamp01(elapsed / 180f));
+            float autoAssistRadius = Mathf.Lerp(0.48f, 0.56f, Mathf.Clamp01(elapsed / 180f));
+            float clickRadius = Mathf.Max(_run.Stats.AttackRadius, isManual ? manualAssistRadius : autoAssistRadius);
+            if (isManual)
+            {
+                RegisterManualAttackVisual(worldPoint, clickRadius);
+            }
 
             List<HoleRuntime> inRange = _holes
                 .Where(h => h.IsTargetable && Vector2.Distance(h.Position, worldPoint) <= clickRadius)
@@ -3808,7 +4557,7 @@ namespace MoleSurvivors
                     .Where(h => h.IsTargetable)
                     .OrderBy(h => Vector2.Distance(h.Position, worldPoint))
                     .FirstOrDefault();
-                if (fallback != null && Vector2.Distance(fallback.Position, worldPoint) <= clickRadius * 2.2f)
+                if (fallback != null && Vector2.Distance(fallback.Position, worldPoint) <= clickRadius * 1.9f)
                 {
                     inRange.Add(fallback);
                 }
@@ -3820,7 +4569,8 @@ namespace MoleSurvivors
                     .Where(h => h.IsTargetable)
                     .OrderBy(h => h.DistanceToVisualCenter(worldPoint))
                     .FirstOrDefault();
-                if (nearest != null && nearest.DistanceToVisualCenter(worldPoint) <= clickRadius * 2.4f)
+                float fallbackFactor = Mathf.Lerp(1.35f, 1.8f, Mathf.Clamp01(elapsed / 240f));
+                if (nearest != null && nearest.DistanceToVisualCenter(worldPoint) <= clickRadius * fallbackFactor)
                 {
                     inRange.Add(nearest);
                 }
@@ -3840,7 +4590,9 @@ namespace MoleSurvivors
                     }
                 }
 
-                RegisterMiss();
+                RegisterAttackMissVisual(worldPoint, source);
+                bool hasTargetableMole = _holes.Any(h => h != null && h.IsTargetable);
+                RegisterMiss(hasTargetableMole);
                 return false;
             }
 
@@ -3855,7 +4607,14 @@ namespace MoleSurvivors
                     HoleRuntime splashTarget = inRange[i];
                     if (Vector2.Distance(primary.Position, splashTarget.Position) <= _run.Stats.SplashRadius)
                     {
-                        DealDamageToHole(splashTarget, damage * 0.55f, AttackSource.Chain, false, false);
+                        DealDamageToHole(
+                            splashTarget,
+                            damage * 0.55f,
+                            AttackSource.Chain,
+                            false,
+                            false,
+                            false,
+                            primary.Position);
                     }
                 }
             }
@@ -3870,7 +4629,14 @@ namespace MoleSurvivors
 
                 for (int i = 0; i < chainTargets.Count; i++)
                 {
-                    DealDamageToHole(chainTargets[i], damage * 0.62f, AttackSource.Chain, false, false);
+                    DealDamageToHole(
+                        chainTargets[i],
+                        damage * 0.62f,
+                        AttackSource.Chain,
+                        false,
+                        false,
+                        false,
+                        primary.Position);
                 }
             }
 
@@ -3889,6 +4655,10 @@ namespace MoleSurvivors
                 AttackSource.Chain => 0.64f,
                 _ => 1f,
             };
+            if (HasChallenge("CHAL_07") && source != AttackSource.Manual)
+            {
+                sourceMultiplier *= 0.78f;
+            }
 
             float final = baseDamage * comboMultiplier * sourceMultiplier;
             crit = UnityEngine.Random.value <= Mathf.Clamp01(_run.Stats.CritChance);
@@ -3911,7 +4681,8 @@ namespace MoleSurvivors
             AttackSource source,
             bool allowTraitEffects,
             bool triggerFeedback,
-            bool crit = false)
+            bool crit = false,
+            Vector2? feedbackLinkFrom = null)
         {
             if (hole == null || !hole.IsTargetable || hole.CurrentMole == null)
             {
@@ -3919,6 +4690,7 @@ namespace MoleSurvivors
             }
 
             MoleRuntime mole = hole.CurrentMole;
+            mole.RegisterHit(source);
             DamageResult result = mole.ApplyDamage(damage);
             if (result.ShieldBroken)
             {
@@ -3931,12 +4703,28 @@ namespace MoleSurvivors
                 TriggerImpactFeedback(result.Killed, crit, false);
             }
 
+            if (_combatCueService != null && (triggerFeedback || crit || result.Killed))
+            {
+                _combatCueService.OnHit(crit, result.Killed, false);
+            }
+
+            RegisterCombatHitVisual(
+                hole.Position + new Vector2(0f, 0.1f),
+                damage,
+                source,
+                crit,
+                result.Killed,
+                false,
+                source == AttackSource.Facility ? ResolvePrimaryFacilityType() : default,
+                feedbackLinkFrom);
+
             if (!result.Killed)
             {
                 return;
             }
 
             MoleDef def = mole.Def;
+            RecordEarlyCommonTtkSample(mole, def);
 
             _run.TotalKills++;
             if (source == AttackSource.Manual)
@@ -3953,7 +4741,8 @@ namespace MoleSurvivors
                 _run.RareKillCount++;
             }
 
-            int goldReward = Mathf.RoundToInt(def.GoldReward * _run.Stats.GoldMultiplier * hole.GoldRewardMultiplier);
+            float runRewardMultiplier = ResolveRunRewardMultiplier();
+            int goldReward = Mathf.RoundToInt(def.GoldReward * _run.Stats.GoldMultiplier * hole.GoldRewardMultiplier * runRewardMultiplier);
             if (_run.TreasureRushRemaining > 0f)
             {
                 goldReward = Mathf.RoundToInt(goldReward * 2f);
@@ -3974,7 +4763,7 @@ namespace MoleSurvivors
                 goldReward = Mathf.RoundToInt(goldReward * 1.25f);
             }
 
-            int expReward = Mathf.RoundToInt(def.ExpReward * _run.Stats.ExpMultiplier);
+            int expReward = Mathf.RoundToInt(def.ExpReward * _run.Stats.ExpMultiplier * Mathf.Clamp(runRewardMultiplier, 0.8f, 2.8f));
             int coreReward = def.CoreReward;
 
             if (def.Traits.HasFlag(MoleTrait.Chest))
@@ -3988,6 +4777,17 @@ namespace MoleSurvivors
                 }
             }
 
+            if (def.Traits.HasFlag(MoleTrait.Wealthy))
+            {
+                _run.WealthyKillCount++;
+                goldReward += Mathf.Max(18, Mathf.RoundToInt(goldReward * 0.6f));
+                if (UnityEngine.Random.value <= 0.28f)
+                {
+                    _run.EventTickets += 1;
+                    ShowMessage("富裕鼠掉落事件券", 0.85f, 2);
+                }
+            }
+
             if (def.Traits.HasFlag(MoleTrait.Elite))
             {
                 coreReward += 4;
@@ -3998,6 +4798,21 @@ namespace MoleSurvivors
                 }
             }
 
+            if (def.Traits.HasFlag(MoleTrait.Commander))
+            {
+                _run.CommanderKillCount++;
+                _run.BountyContractRemaining = Mathf.Max(_run.BountyContractRemaining, 8f);
+                coreReward += 2;
+            }
+
+            if (def.Traits.HasFlag(MoleTrait.Legend))
+            {
+                _run.LegendKillCount++;
+                coreReward += 6;
+                _run.EventTickets += 1;
+                ShowMessage("传奇目标击破：额外事件券 +1", 1.05f, 3);
+            }
+
             SpawnDrop(DropType.Gold, goldReward, hole.Position + new Vector2(0f, 0.5f));
             SpawnDrop(DropType.Experience, expReward, hole.Position + new Vector2(0.2f, 0.35f));
             if (coreReward > 0)
@@ -4006,6 +4821,11 @@ namespace MoleSurvivors
             }
 
             _run.CodexUnlockedThisRun.Add($"codex_{def.Id}");
+
+            if (allowTraitEffects && mole.CanSplitOnDeath && TrySpawnSplitChild(hole, def))
+            {
+                ShowMessage("分裂鼠：额外子体出现", 0.8f, 2);
+            }
 
             if (allowTraitEffects && def.Traits.HasFlag(MoleTrait.Chain))
             {
@@ -4018,6 +4838,36 @@ namespace MoleSurvivors
                     DealDamageToHole(extra, damage * 0.45f, AttackSource.Chain, false, false);
                 }
             }
+        }
+
+        private void RecordEarlyCommonTtkSample(MoleRuntime mole, MoleDef def)
+        {
+            if (_run == null || mole == null || def == null)
+            {
+                return;
+            }
+
+            if (def.Rarity != Rarity.Common)
+            {
+                return;
+            }
+
+            float ttkWindow = GetEarlyCommonTtkWindowSeconds();
+            if (_run.ElapsedSeconds > ttkWindow)
+            {
+                return;
+            }
+
+            if (mole.ManualHitCount <= 0)
+            {
+                return;
+            }
+
+            int manualHits = Mathf.Max(1, mole.ManualHitCount);
+            _run.EarlyCommonKillSamples++;
+            _run.EarlyCommonManualHitTotal += manualHits;
+            _run.EarlyCommonManualHitAverage = _run.EarlyCommonManualHitTotal / (float)_run.EarlyCommonKillSamples;
+            _run.EarlyCommonLastSampleSecond = _run.ElapsedSeconds;
         }
 
         private void DealBossDamage(float damage, AttackSource source, bool crit = false, bool triggerFeedback = false)
@@ -4034,14 +4884,33 @@ namespace MoleSurvivors
                 TriggerImpactFeedback(killed, crit, true);
             }
 
+            if (_combatCueService != null && (triggerFeedback || crit || killed))
+            {
+                _combatCueService.OnHit(crit, killed, true);
+            }
+
+            RegisterCombatHitVisual(
+                GetActiveBossPosition() + new Vector2(0f, 0.22f),
+                damage,
+                source,
+                crit,
+                killed,
+                true,
+                source == AttackSource.Facility ? ResolvePrimaryFacilityType() : default);
+
             if (killed)
             {
                 BossDef defeatedBoss = _boss.Def;
                 bool finalEncounter = IsFinalBossEncounter(_activeBossEncounter);
                 _run.CodexUnlockedThisRun.Add(GetBossCodexId(defeatedBoss));
                 _run.CodexUnlockedThisRun.Add("codex_boss");
-                int rewardGold = defeatedBoss != null ? defeatedBoss.RewardGold : 0;
-                int rewardCore = defeatedBoss != null ? defeatedBoss.RewardCore : 0;
+                float runRewardMultiplier = ResolveRunRewardMultiplier();
+                int rewardGold = defeatedBoss != null
+                    ? Mathf.RoundToInt(defeatedBoss.RewardGold * runRewardMultiplier)
+                    : 0;
+                int rewardCore = defeatedBoss != null
+                    ? Mathf.RoundToInt(defeatedBoss.RewardCore * Mathf.Clamp(runRewardMultiplier, 0.8f, 2.8f))
+                    : 0;
                 _run.Gold += rewardGold;
                 _run.CoreShards += rewardCore;
                 SpawnDrop(DropType.Gold, rewardGold, _boss.Root.transform.position);
@@ -4074,9 +4943,21 @@ namespace MoleSurvivors
         private void RegisterHitSuccess(AttackSource source)
         {
             _run.Combo++;
-            _run.ComboTimer = _content != null
-                ? Mathf.Max(0.2f, _content.ComboWindowSeconds)
-                : 2.5f;
+            int activeTargets = _holes != null ? _holes.Count(h => h != null && h.IsTargetable) : 0;
+            float baseWindow = _content != null
+                ? Mathf.Max(0.25f, _content.ComboWindowSeconds * 1.2f)
+                : 3f;
+            if (HasChallenge("CHAL_09"))
+            {
+                baseWindow *= 0.72f;
+            }
+
+            if (activeTargets <= 1)
+            {
+                baseWindow *= 1.2f;
+            }
+
+            _run.ComboTimer = baseWindow;
             _run.HighestCombo = Mathf.Max(_run.HighestCombo, _run.Combo);
             _run.TotalDamageEvents++;
             if (source == AttackSource.Manual && _run.Combo % 15 == 0)
@@ -4085,16 +4966,22 @@ namespace MoleSurvivors
             }
         }
 
-        private void RegisterMiss()
+        private void RegisterMiss(bool heavyPenalty = true)
         {
-            if (_run.Combo > 0)
+            if (_run.Combo > 0 && heavyPenalty)
             {
-                _run.Combo = Mathf.Max(0, _run.Combo - 4);
+                _run.Combo = Mathf.Max(0, _run.Combo - 2);
             }
 
-            _run.ComboTimer = _content != null
-                ? Mathf.Max(0.1f, _content.ComboMissWindowSeconds)
-                : 0.8f;
+            float softWindow = _content != null
+                ? Mathf.Max(0.55f, _content.ComboWindowSeconds * 0.65f)
+                : 1.4f;
+            float missWindow = _content != null
+                ? Mathf.Max(0.15f, _content.ComboMissWindowSeconds * 1.35f)
+                : 1.05f;
+            _run.ComboTimer = heavyPenalty
+                ? missWindow
+                : Mathf.Max(_run.ComboTimer, softWindow);
         }
 
         private void TickCombo(float deltaTime)
@@ -4109,9 +4996,52 @@ namespace MoleSurvivors
             {
                 _run.Combo = Mathf.Max(0, _run.Combo - 1);
                 float decayTick = _content != null
-                    ? Mathf.Max(0.1f, _content.ComboDecayTickSeconds)
-                    : 0.4f;
+                    ? Mathf.Max(0.2f, _content.ComboDecayTickSeconds * 1.6f)
+                    : 0.64f;
                 _run.ComboTimer = _run.Combo > 0 ? decayTick : 0f;
+            }
+        }
+
+        private bool TrySpawnSplitChild(HoleRuntime sourceHole, MoleDef parentDef)
+        {
+            if (sourceHole == null || parentDef == null || _holes == null || _holes.Count == 0)
+            {
+                return false;
+            }
+
+            HoleRuntime target = _holes
+                .Where(h => h != sourceHole && h.CanSpawn)
+                .OrderBy(h => Vector2.Distance(h.Position, sourceHole.Position))
+                .ThenBy(h => h.Index)
+                .FirstOrDefault();
+            if (target == null)
+            {
+                return false;
+            }
+
+            target.Spawn(parentDef, 0.45f, 1.35f, canSplitOnDeath: false, spawnedAtSecond: _run != null ? _run.ElapsedSeconds : 0f);
+            _run.SplitSpawnCount++;
+            return true;
+        }
+
+        private void ApplyCommanderPressureOnSpawn(HoleRuntime anchorHole, MoleDef def)
+        {
+            if (anchorHole == null || def == null)
+            {
+                return;
+            }
+
+            int affectCount = def.Traits.HasFlag(MoleTrait.Legend) ? 4 : 2;
+            float duration = def.Traits.HasFlag(MoleTrait.Legend) ? 7.5f : 4.8f;
+            List<HoleRuntime> affected = _holes
+                .Where(h => h != null && h.IsActive)
+                .OrderBy(h => Vector2.Distance(h.Position, anchorHole.Position))
+                .ThenByDescending(h => h.DangerLevel)
+                .Take(Mathf.Clamp(affectCount, 1, Mathf.Max(1, _holes.Count(h => h != null && h.IsActive))))
+                .ToList();
+            for (int i = 0; i < affected.Count; i++)
+            {
+                ApplyRogueHolePressure(affected[i], duration);
             }
         }
 
@@ -4123,9 +5053,16 @@ namespace MoleSurvivors
             }
 
             float earlyEase = _run != null ? Mathf.Clamp01(_run.ElapsedSeconds / 210f) : 1f;
-            int maxAttempts = HasActiveBoss() ? 2 : (_run != null && _run.ElapsedSeconds < 130f ? 1 : 2);
-            float paceScale = Mathf.Lerp(0.36f, 1f, earlyEase);
-            float spawnDelta = deltaTime * paceScale * (HasActiveBoss() ? Mathf.Clamp(_bossSpawnScale, 0.35f, 1f) : 1f);
+            int maxAttempts = HasActiveBoss() ? 2 : (_run != null && _run.ElapsedSeconds < 95f ? 1 : 2);
+            float paceScale = Mathf.Lerp(0.34f, 1f, earlyEase);
+            float threatScale = _run != null
+                ? Mathf.Clamp(
+                    _run.DifficultyThreatMultiplier *
+                    (1f + _run.WaveThreatBonus * 0.35f),
+                    0.45f,
+                    2.4f)
+                : 1f;
+            float spawnDelta = deltaTime * paceScale * threatScale * (HasActiveBoss() ? Mathf.Clamp(_bossSpawnScale, 0.35f, 1f) : 1f);
             for (int spawnAttempts = 0; spawnAttempts < maxAttempts; spawnAttempts++)
             {
                 bool spawned = _spawnDirector.TrySpawn(
@@ -4143,11 +5080,31 @@ namespace MoleSurvivors
                     break;
                 }
 
-                float earlyHpEase = Mathf.Lerp(0.62f, 1f, earlyEase);
-                float lateScale = Mathf.Clamp01((_run.ElapsedSeconds - 160f) / 320f) * 0.78f;
-                float hpScale = earlyHpEase + lateScale;
+                float hpOpen = Mathf.Lerp(2.05f, 1.25f, Mathf.Clamp01(_run.ElapsedSeconds / 95f));
+                float lateScale = Mathf.Clamp01((_run.ElapsedSeconds - 170f) / 340f) * 0.62f;
+                float hpScale = hpOpen + lateScale;
+                float difficultyHp = Mathf.Clamp(_run.DifficultyHpMultiplier, 0.55f, 3f);
+                float rarityPressure = Mathf.Max(0f, _run.DifficultyLegendBonus) * (int)mole.Rarity * 0.12f;
+                float elitePressure = (mole.Traits.HasFlag(MoleTrait.Elite) || mole.Rarity >= Rarity.Epic)
+                    ? Mathf.Max(0f, _run.WaveEliteBonus) * 0.25f
+                    : Mathf.Max(0f, _run.WaveEliteBonus) * 0.08f;
+                hpScale *= difficultyHp * (1f + rarityPressure + elitePressure);
+                hpScale = AdjustEarlyCommonTtkHpScale(hpScale, mole);
                 float timingScale = Mathf.Lerp(1.75f, 1f, earlyEase);
-                hole.Spawn(mole, hpScale, timingScale);
+                float waveSpeedScale = Mathf.Clamp(1f + _run.WaveSpeedBonus * 0.38f, 0.55f, 1.85f);
+                timingScale /= waveSpeedScale;
+                hole.Spawn(mole, hpScale, timingScale, spawnedAtSecond: _run.ElapsedSeconds);
+
+                if (mole.Traits.HasFlag(MoleTrait.Commander) || mole.Traits.HasFlag(MoleTrait.Legend))
+                {
+                    ApplyCommanderPressureOnSpawn(hole, mole);
+                    if (_rareHintCooldown <= 0f)
+                    {
+                        ShowMessage(mole.Traits.HasFlag(MoleTrait.Legend) ? "传奇指挥鼠入场：全局高压" : "指挥鼠入场：邻洞压力提升", 1f, 3);
+                        _rareHintCooldown = GetRareHintCooldownSeconds();
+                        _run.ReadabilityAlertCount++;
+                    }
+                }
 
                 if (mole.Rarity >= Rarity.Epic && _rareHintCooldown <= 0f)
                 {
@@ -4170,6 +5127,19 @@ namespace MoleSurvivors
             {
                 damage += 1;
             }
+            if (def.Traits.HasFlag(MoleTrait.Commander))
+            {
+                damage += 1;
+            }
+            if (def.Traits.HasFlag(MoleTrait.Legend))
+            {
+                damage += 1;
+                _run.ReadabilityAlertCount++;
+            }
+            if (def.Traits.HasFlag(MoleTrait.Wealthy))
+            {
+                damage = Mathf.Max(0, damage - 1);
+            }
 
             // Front-load some forgiveness so the first 1-2 minutes are learnable instead of punishing.
             float survivalEase = Mathf.Clamp01(_run.ElapsedSeconds / 210f);
@@ -4187,7 +5157,7 @@ namespace MoleSurvivors
             }
             _spawner.EscapedCount++;
             hole.EscapeAndRetreat();
-            RegisterMiss();
+            RegisterMiss(true);
 
             // Keep PlayMode fast-forward tests deterministic until boss phase starts.
             if (EnableAutoPilotForTests && !_run.BossSpawned)
@@ -4364,6 +5334,7 @@ namespace MoleSurvivors
                     break;
             }
 
+            RegisterDropCollectVisual(drop, automated);
             drop.MarkCollected();
         }
 
@@ -4374,7 +5345,10 @@ namespace MoleSurvivors
             {
                 _run.Experience -= _run.NextExperience;
                 _run.Level++;
-                _run.NextExperience = Mathf.Round(_run.NextExperience * 1.13f + 3f);
+                bool openingLevels = _run.Level <= 3;
+                float growth = openingLevels ? 1.085f : 1.115f;
+                float additive = openingLevels ? 2.2f : 2.8f;
+                _run.NextExperience = Mathf.Round(_run.NextExperience * growth + additive);
                 _run.PendingLevelUps++;
                 _expBarFlashTimer = Mathf.Max(_expBarFlashTimer, 0.42f);
             }
@@ -4383,6 +5357,11 @@ namespace MoleSurvivors
         private void TryOpenPendingUpgrade()
         {
             if (_run.PendingLevelUps <= 0 || _upgradeOpen || _eventOpen || _metaOpen || _endOpen)
+            {
+                return;
+            }
+
+            if (_run.FirstUpgradeSecond < 0f && _run.ElapsedSeconds < GetFirstUpgradeEarliestSecond())
             {
                 return;
             }
@@ -4408,6 +5387,12 @@ namespace MoleSurvivors
                 _upgradeButtons[i].gameObject.SetActive(true);
                 UpgradeDef def = _currentOffer[i];
                 _upgradeButtonTexts[i].text = BuildUpgradeOptionText(def);
+                ApplyUpgradeCardVisual(i, def);
+            }
+
+            if (_run.FirstUpgradeSecond < 0f)
+            {
+                _run.FirstUpgradeSecond = _run.ElapsedSeconds;
             }
 
             _upgradePanel.SetActive(true);
@@ -4416,6 +5401,11 @@ namespace MoleSurvivors
 
         private string BuildUpgradeOptionText(UpgradeDef def)
         {
+            if (_upgradeVisualizationService != null)
+            {
+                return _upgradeVisualizationService.BuildOptionText(def, _run);
+            }
+
             if (def == null)
             {
                 return "无效升级";
@@ -4475,6 +5465,7 @@ namespace MoleSurvivors
                 _upgradeButtons[i].gameObject.SetActive(true);
                 UpgradeDef def = _currentOffer[i];
                 _upgradeButtonTexts[i].text = BuildUpgradeOptionText(def);
+                ApplyUpgradeCardVisual(i, def);
             }
 
             ShowMessage("消耗事件券：升级方案已重构", 1.1f, 2);
@@ -4485,6 +5476,11 @@ namespace MoleSurvivors
             if (def == null)
             {
                 return;
+            }
+
+            if (_run.FirstUpgradeSecond < 0f)
+            {
+                _run.FirstUpgradeSecond = _run.ElapsedSeconds;
             }
 
             UpgradeStatsSnapshot beforeSnapshot = UpgradeStatsSnapshot.Capture(_run);
@@ -4579,6 +5575,12 @@ namespace MoleSurvivors
                 case UpgradeEffectType.DeployBountyMarker:
                     ApplyFacilityDeployUpgrade(FacilityType.BountyMarker, Mathf.RoundToInt(Mathf.Max(1f, def.Value)));
                     break;
+                case UpgradeEffectType.DeployTeslaCoupler:
+                    ApplyFacilityDeployUpgrade(FacilityType.TeslaCoupler, Mathf.RoundToInt(Mathf.Max(1f, def.Value)));
+                    break;
+                case UpgradeEffectType.DeployExecutionPlate:
+                    ApplyFacilityDeployUpgrade(FacilityType.ExecutionPlate, Mathf.RoundToInt(Mathf.Max(1f, def.Value)));
+                    break;
                 case UpgradeEffectType.FacilityCooldownMultiplier:
                     _run.FacilityCooldownMultiplier = Mathf.Clamp(_run.FacilityCooldownMultiplier * def.Value, 0.45f, 1.2f);
                     break;
@@ -4594,12 +5596,31 @@ namespace MoleSurvivors
                 case UpgradeEffectType.FacilityGoldMultiplier:
                     _run.FacilityGoldMultiplier = Mathf.Clamp(_run.FacilityGoldMultiplier + def.Value, 0.5f, 4f);
                     break;
+                case UpgradeEffectType.AddActiveHole:
+                {
+                    int requested = Mathf.Max(1, Mathf.RoundToInt(def.Value));
+                    int unlocked = UnlockNextActiveHoles(requested, true);
+                    if (unlocked > 0)
+                    {
+                        ShowMessage($"扩洞完成：+{unlocked}（{_run.ActiveHoleCount}/{_run.MaxHoleCount}）", 0.95f, 2);
+                    }
+
+                    break;
+                }
             }
 
-            if (_run.Stats.AutoHammerInterval > 0f &&
-                _run.ElapsedSeconds >= GetRunDurationSeconds() * 0.15f)
+            RefreshAutomationProgress();
+            if (HasRealAutomation())
             {
                 _run.AutomationMilestoneReached = true;
+                if (_run.FirstAutomationSecond < 0f)
+                {
+                    _run.FirstAutomationSecond = _run.ElapsedSeconds;
+                }
+                if (_run.FirstReliefSecond < 0f)
+                {
+                    _run.FirstReliefSecond = _run.ElapsedSeconds;
+                }
             }
 
             if (_holes.Any(h => h.Facility != null))
@@ -4609,8 +5630,11 @@ namespace MoleSurvivors
 
             CheckEvolution();
             UpgradeStatsSnapshot afterSnapshot = UpgradeStatsSnapshot.Capture(_run);
-            string deltaSummary = UpgradePresentationFormatter.BuildAppliedDeltaLine(def, beforeSnapshot, afterSnapshot, _run);
+            string deltaSummary = _upgradeVisualizationService != null
+                ? _upgradeVisualizationService.BuildAppliedDeltaLine(def, beforeSnapshot, afterSnapshot, _run)
+                : UpgradePresentationFormatter.BuildAppliedDeltaLine(def, beforeSnapshot, afterSnapshot, _run);
             RecordUpgradeSelection(def, deltaSummary);
+            RegisterUpgradeVisualDelta(def, beforeSnapshot, afterSnapshot, deltaSummary);
             ShowMessage($"获得升级：{def.DisplayName}\n{deltaSummary}", 1.35f, 2);
         }
 
@@ -4667,6 +5691,7 @@ namespace MoleSurvivors
                 }
 
                 string typeName = hole.Facility?.Def != null ? hole.Facility.Def.DisplayName : "设施";
+                RegisterFacilityDeploymentVisual(hole, type, _run.FacilityLevels[type]);
                 ShowMessage($"{typeName} 已部署至洞口 {hole.Index + 1}", 1.1f);
             }
         }
@@ -4767,10 +5792,24 @@ namespace MoleSurvivors
 
         private void OpenEvent(RunEventDef runEvent)
         {
+            if (runEvent == null)
+            {
+                return;
+            }
+
             _pendingEvent = runEvent;
             _eventOpen = true;
             _eventPanel.SetActive(true);
-            _eventText.text = $"{runEvent.DisplayName}\n<size=25>{runEvent.Description}</size>";
+            _combatCueService?.OnEvent(runEvent.Type);
+            _merchantShopMode = runEvent.Type == RunEventType.MerchantBoost;
+            _merchantShopOffers.Clear();
+            _merchantShopCosts.Clear();
+            if (_merchantShopMode)
+            {
+                _run.MerchantVisitCount += 1;
+                PrepareMerchantShopOffers(runEvent);
+            }
+
             Sprite eventSprite = ResolveEventSprite(runEvent.Type);
             if (_eventIcon != null)
             {
@@ -4779,16 +5818,323 @@ namespace MoleSurvivors
                 _eventIcon.gameObject.SetActive(eventSprite != null);
             }
 
+            if (_merchantShopMode)
+            {
+                RefreshMerchantEventUi(runEvent);
+                if (_presentationSkin != null)
+                {
+                    PlayClip(_presentationSkin.EventAlertSfx, 0.92f, 0.02f);
+                }
+
+                return;
+            }
+
+            string choiceA = _eventChoiceService != null
+                ? _eventChoiceService.ResolveChoiceLabel(runEvent, 0)
+                : "方案A";
+            string choiceB = _eventChoiceService != null
+                ? _eventChoiceService.ResolveChoiceLabel(runEvent, 1)
+                : "方案B";
+            bool hasSecondChoice = runEvent.Choices == null || runEvent.Choices.Count > 1;
+            int baseMerchantCost = runEvent.Type == RunEventType.MerchantBoost
+                ? ResolveMerchantCostForChoice(runEvent, false)
+                : 0;
+            int riskyMerchantCost = runEvent.Type == RunEventType.MerchantBoost
+                ? ResolveMerchantCostForChoice(runEvent, true)
+                : 0;
+
             _eventAcceptButton.GetComponentInChildren<Text>().text = runEvent.Type == RunEventType.MerchantBoost
-                ? $"接受 (-{runEvent.GoldCost}G)"
-                : "接受";
-            _eventSkipButton.GetComponentInChildren<Text>().text = _run.EventTickets > 0
-                ? $"重构 (-1券)"
-                : "跳过";
+                ? $"{choiceA} (-{baseMerchantCost}G)"
+                : choiceA;
+            _eventSkipButton.GetComponentInChildren<Text>().text = hasSecondChoice
+                ? (runEvent.Type == RunEventType.MerchantBoost ? $"{choiceB} (-{riskyMerchantCost}G)" : choiceB)
+                : "无次选";
+            _eventSkipButton.interactable = hasSecondChoice;
+            if (_eventRerollButton != null)
+            {
+                _eventRerollButton.GetComponentInChildren<Text>().text = _run.EventTickets > 0
+                    ? $"重构 (-1券)"
+                    : "跳过";
+            }
+
+            string optionA = BuildEventChoicePreview(runEvent, 0, baseMerchantCost);
+            string optionB = hasSecondChoice
+                ? BuildEventChoicePreview(runEvent, 1, riskyMerchantCost)
+                : "无";
+            string optionC = _run.EventTickets > 0 ? "重构当前事件（消耗1券）" : "跳过本次事件";
+            _eventText.text =
+                $"{runEvent.DisplayName}\n" +
+                $"<size=25>{runEvent.Description}</size>\n\n" +
+                $"<size=22>1) {optionA}\n2) {optionB}\nR) {optionC}</size>";
+
             if (_presentationSkin != null)
             {
                 PlayClip(_presentationSkin.EventAlertSfx, 0.92f, 0.02f);
             }
+        }
+
+        private void RefreshMerchantEventUi(RunEventDef runEvent)
+        {
+            if (runEvent == null)
+            {
+                return;
+            }
+
+            int displayCount = Mathf.Min(3, Mathf.Min(_merchantShopOffers.Count, _merchantShopCosts.Count));
+            if (displayCount <= 0)
+            {
+                _merchantShopMode = false;
+                return;
+            }
+
+            string firstLabel = displayCount > 0
+                ? $"{L("LOC_UI_EVENT_SLOT", "槽位")}1 (-{_merchantShopCosts[0]}G)"
+                : "槽位1";
+            string secondLabel = displayCount > 1
+                ? $"{L("LOC_UI_EVENT_SLOT", "槽位")}2 (-{_merchantShopCosts[1]}G)"
+                : "无货";
+            string thirdLabel = displayCount > 2
+                ? $"{L("LOC_UI_EVENT_SLOT", "槽位")}3 (-{_merchantShopCosts[2]}G)"
+                : "无货";
+
+            _eventAcceptButton.GetComponentInChildren<Text>().text = firstLabel;
+            _eventSkipButton.GetComponentInChildren<Text>().text = secondLabel;
+            _eventSkipButton.interactable = displayCount > 1;
+            if (_eventRerollButton != null)
+            {
+                _eventRerollButton.GetComponentInChildren<Text>().text = thirdLabel;
+                _eventRerollButton.interactable = displayCount > 2;
+            }
+
+            string optionA = BuildMerchantOfferPreview(0);
+            string optionB = BuildMerchantOfferPreview(1);
+            string optionC = BuildMerchantOfferPreview(2);
+            string rerollHint = _run.EventTickets > 0
+                ? "R) 重构货架 (-1券)"
+                : "R) 无事件券，无法重构";
+            _eventText.text =
+                $"{runEvent.DisplayName}\n" +
+                $"<size=25>{runEvent.Description}</size>\n\n" +
+                $"<size=22>1) {optionA}\n2) {optionB}\n3) {optionC}\n{rerollHint}\nEsc) 离开商店</size>";
+        }
+
+        private string BuildMerchantOfferPreview(int slotIndex)
+        {
+            if (slotIndex < 0 ||
+                slotIndex >= _merchantShopOffers.Count ||
+                slotIndex >= _merchantShopCosts.Count)
+            {
+                return "无货";
+            }
+
+            UpgradeDef offer = _merchantShopOffers[slotIndex];
+            int cost = _merchantShopCosts[slotIndex];
+            if (offer == null)
+            {
+                return "无货";
+            }
+
+            bool affordable = _run != null && _run.Gold >= cost;
+            string readable = UpgradePresentationFormatter.BuildReadableDescription(offer, _run);
+            string preview = UpgradePresentationFormatter.BuildPreviewLine(offer, _run);
+            string affordText = affordable ? "可购买" : "金币不足";
+            return $"{offer.DisplayName} ({cost}G,{affordText})\n<size=20>{readable} / 选择后: {preview}</size>";
+        }
+
+        private void PrepareMerchantShopOffers(RunEventDef runEvent)
+        {
+            _merchantShopOffers.Clear();
+            _merchantShopCosts.Clear();
+
+            if (runEvent == null || _content == null || _content.Upgrades == null || _run == null)
+            {
+                return;
+            }
+
+            int slotCount = 3;
+            if (_content.Shops != null && _content.Shops.Count > 0)
+            {
+                int visit = Mathf.Max(1, _run.MerchantVisitCount);
+                int index = Mathf.Clamp(visit - 1, 0, _content.Shops.Count - 1);
+                ShopProfileDef profile = _content.Shops[index];
+                if (profile != null)
+                {
+                    slotCount = Mathf.Clamp(profile.SlotCount, 1, 3);
+                }
+            }
+
+            float unlockWindow = _run.ElapsedSeconds + 180f;
+            List<UpgradeDef> eligible = _content.Upgrades
+                .Where(def =>
+                    def != null &&
+                    (!_run.UpgradeStacks.ContainsKey(def.Id) || _run.UpgradeStacks[def.Id] < def.MaxStacks) &&
+                    def.UnlockAtSecond <= unlockWindow &&
+                    !IsPlaceholderShopUpgrade(def))
+                .Distinct()
+                .ToList();
+            if (eligible.Count == 0)
+            {
+                eligible = _content.Upgrades
+                    .Where(def => def != null && (!_run.UpgradeStacks.ContainsKey(def.Id) || _run.UpgradeStacks[def.Id] < def.MaxStacks))
+                    .Distinct()
+                    .ToList();
+            }
+
+            bool earlyVisit = _run.MerchantVisitCount <= 2;
+            List<UpgradeDef> picks = eligible
+                .OrderByDescending(def => ScoreMerchantOfferUpgrade(def, earlyVisit))
+                .ThenBy(def => def.UnlockAtSecond)
+                .ThenBy(_ => UnityEngine.Random.value)
+                .Take(slotCount)
+                .ToList();
+
+            while (picks.Count < slotCount)
+            {
+                UpgradeDef fallback = eligible.FirstOrDefault(def => !picks.Contains(def));
+                if (fallback == null)
+                {
+                    break;
+                }
+
+                picks.Add(fallback);
+            }
+
+            int visitCount = Mathf.Max(1, _run.MerchantVisitCount);
+            int earlyMin = _content != null ? Mathf.Max(0, _content.EarlyShopMinPrice) : 5;
+            int earlyMax = _content != null ? Mathf.Max(earlyMin, _content.EarlyShopMaxPrice) : 12;
+            int baseCost = ResolveMerchantBaseCost(runEvent);
+            for (int i = 0; i < picks.Count; i++)
+            {
+                UpgradeDef offer = picks[i];
+                int rarityStep = offer != null ? Mathf.Clamp((int)offer.Rarity, 0, 4) : 0;
+                float slotFactor = i switch
+                {
+                    0 => 0.85f,
+                    1 => 1f,
+                    _ => 1.15f,
+                };
+                int price = Mathf.RoundToInt(baseCost * slotFactor * (1f + rarityStep * 0.12f));
+                if (visitCount <= 2)
+                {
+                    price = Mathf.Clamp(price, earlyMin, earlyMax);
+                }
+
+                _merchantShopOffers.Add(offer);
+                _merchantShopCosts.Add(Mathf.Max(0, price));
+            }
+
+            EnsureMerchantHasAffordableOffer();
+        }
+
+        private void EnsureMerchantHasAffordableOffer()
+        {
+            if (_run == null || _merchantShopOffers.Count == 0 || _merchantShopCosts.Count == 0)
+            {
+                return;
+            }
+
+            bool hasAffordable = false;
+            for (int i = 0; i < _merchantShopCosts.Count; i++)
+            {
+                if (_merchantShopCosts[i] <= _run.Gold)
+                {
+                    hasAffordable = true;
+                    break;
+                }
+            }
+
+            if (hasAffordable)
+            {
+                return;
+            }
+
+            int cheapestIndex = 0;
+            for (int i = 1; i < _merchantShopCosts.Count; i++)
+            {
+                if (_merchantShopCosts[i] < _merchantShopCosts[cheapestIndex])
+                {
+                    cheapestIndex = i;
+                }
+            }
+
+            _merchantShopCosts[cheapestIndex] = Mathf.Max(0, _run.Gold);
+        }
+
+        private static bool IsPlaceholderShopUpgrade(UpgradeDef def)
+        {
+            if (def == null)
+            {
+                return true;
+            }
+
+            if (!string.IsNullOrWhiteSpace(def.Id) &&
+                def.Id.StartsWith("UPG_MISC_", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            string name = def.DisplayName ?? string.Empty;
+            string desc = def.Description ?? string.Empty;
+            return desc.IndexOf("向泛用条目", StringComparison.Ordinal) >= 0 ||
+                   (name.IndexOf("升级", StringComparison.Ordinal) >= 0 && desc.IndexOf("向泛用", StringComparison.Ordinal) >= 0);
+        }
+
+        private float ScoreMerchantOfferUpgrade(UpgradeDef def, bool earlyVisit)
+        {
+            if (def == null || _run == null)
+            {
+                return -999f;
+            }
+
+            float score = def.BaseWeight + (int)def.Rarity * 0.32f;
+            if (earlyVisit)
+            {
+                score += def.EffectType switch
+                {
+                    UpgradeEffectType.AddActiveHole => 5.8f,
+                    UpgradeEffectType.UnlockAutoHammer => 5.2f,
+                    UpgradeEffectType.AutoHammerIntervalMultiplier => 3.8f,
+                    UpgradeEffectType.DeployAutoHammerTower => 4.6f,
+                    UpgradeEffectType.DeploySensorHammer => 4.5f,
+                    UpgradeEffectType.DeployGoldMagnet => 4.4f,
+                    UpgradeEffectType.AddDroneCount => 3.2f,
+                    _ => 0f,
+                };
+            }
+
+            if (def.Tags.Contains("Automation"))
+            {
+                score += earlyVisit ? 2.2f : 1.15f;
+            }
+
+            if (def.Tags.Contains("Facility"))
+            {
+                score += earlyVisit ? 1.9f : 1.05f;
+            }
+
+            if (def.Tags.Contains("Expansion"))
+            {
+                bool canExpand = _run.ActiveHoleCount < _run.MaxHoleCount;
+                score += canExpand ? 2.7f : -0.6f;
+            }
+
+            if (def.UnlockAtSecond > _run.ElapsedSeconds + 90f)
+            {
+                score -= 2.5f;
+            }
+
+            return score;
+        }
+
+        private void OnEventThirdButtonPressed()
+        {
+            if (_merchantShopMode && _pendingEvent != null && _pendingEvent.Type == RunEventType.MerchantBoost)
+            {
+                ResolveEventChoice(2);
+                return;
+            }
+
+            ResolveEventRerollOrSkip();
         }
 
         private Sprite ResolveEventSprite(RunEventType type)
@@ -4810,16 +6156,162 @@ namespace MoleSurvivors
             };
         }
 
-        private void ResolveEvent(bool accept)
+        private string BuildEventChoicePreview(RunEventDef runEvent, int choiceIndex, int merchantCost)
+        {
+            if (runEvent == null)
+            {
+                return "无";
+            }
+
+            bool risky = choiceIndex == 1;
+            float rewardScale = ResolveEventRewardScale(runEvent, choiceIndex);
+            float riskScale = ResolveEventRiskScale(runEvent, choiceIndex);
+            return runEvent.Type switch
+            {
+                RunEventType.MerchantBoost => risky
+                    ? $"付费 {merchantCost}G，获得2条升级并附带诅咒压力"
+                    : $"付费 {merchantCost}G，获得1条升级（前期优先自动化）",
+                RunEventType.TreasureRush => risky
+                    ? $"高收益采掘 {runEvent.Value * rewardScale:0}s，并增加风险"
+                    : $"稳健采掘 {runEvent.Value * rewardScale:0}s，金币收益提升",
+                RunEventType.CurseAltar => risky
+                    ? $"诅咒强化 {runEvent.Value * 1.25f:0}s，返还1张事件券"
+                    : $"适中诅咒 {runEvent.Value * 0.9f:0}s，换取额外赏金",
+                RunEventType.RepairStation => risky
+                    ? $"耐久修复并超频设施（风险 {riskScale:0.00}）"
+                    : $"恢复耐久并降低设施冷却",
+                RunEventType.BountyContract => risky
+                    ? $"高压赏金 {runEvent.Value * rewardScale:0}s + 暴走洞区"
+                    : $"稳健赏金 {runEvent.Value * rewardScale:0}s，提升稀有收益",
+                RunEventType.RogueHoleZone => risky
+                    ? $"全线暴走 {runEvent.Value * 1.25f:0}s，高压高收益"
+                    : $"局部暴走 {runEvent.Value * 0.85f:0}s，可控高压",
+                _ => runEvent.Description,
+            };
+        }
+
+        private void ResolveEventChoice(int choiceIndex)
         {
             if (!_eventOpen || _pendingEvent == null)
             {
                 return;
             }
 
-            if (!accept && _run.EventTickets > 0)
+            if (choiceIndex < 0)
+            {
+                return;
+            }
+
+            bool participated = false;
+            bool isMerchant = _merchantShopMode &&
+                              _pendingEvent.Type == RunEventType.MerchantBoost;
+            if (isMerchant)
+            {
+                int available = Mathf.Min(_merchantShopOffers.Count, _merchantShopCosts.Count);
+                if (available <= 0)
+                {
+                    ShowMessage("商店暂时无货。", 0.9f, 1);
+                    return;
+                }
+
+                if (choiceIndex >= available)
+                {
+                    ShowMessage("该槽位暂无可购买条目。", 0.9f, 1);
+                    return;
+                }
+
+                int slotIndex = choiceIndex;
+                bool success = ApplyEventChoice(_pendingEvent, slotIndex);
+                if (!success)
+                {
+                    return;
+                }
+
+                participated = true;
+                if (slotIndex == 0)
+                {
+                    _run.EventChoiceACount++;
+                }
+                else
+                {
+                    _run.EventChoiceBCount++;
+                }
+            }
+            else
+            {
+                if (_pendingEvent.Choices != null &&
+                    _pendingEvent.Choices.Count > 0 &&
+                    choiceIndex >= _pendingEvent.Choices.Count)
+                {
+                    choiceIndex = Mathf.Max(0, _pendingEvent.Choices.Count - 1);
+                }
+
+                if (IsSkipChoice(_pendingEvent, choiceIndex))
+                {
+                    choiceIndex = 2;
+                }
+
+                if (choiceIndex == 0)
+                {
+                    bool success = ApplyEventChoice(_pendingEvent, 0);
+                    if (!success)
+                    {
+                        return;
+                    }
+
+                    participated = true;
+                    _run.EventChoiceACount++;
+                }
+                else if (choiceIndex == 1)
+                {
+                    bool success = ApplyEventChoice(_pendingEvent, 1);
+                    if (!success)
+                    {
+                        return;
+                    }
+
+                    participated = true;
+                    _run.EventChoiceBCount++;
+                }
+                else
+                {
+                    _run.EventSkipCount++;
+                    ShowMessage("你选择了跳过事件。", 0.9f, 1);
+                }
+            }
+
+            if (participated)
+            {
+                _run.EventParticipationCount++;
+            }
+
+            string eventCodexId = GetEventCodexId(_pendingEvent);
+            if (!string.IsNullOrWhiteSpace(eventCodexId))
+            {
+                _run.CodexUnlockedThisRun.Add(eventCodexId);
+            }
+
+            CloseEventPanelAndScheduleCooldown();
+        }
+
+        private void ResolveEventRerollOrSkip()
+        {
+            if (!_eventOpen || _pendingEvent == null)
+            {
+                return;
+            }
+
+            if (_run.EventTickets > 0)
             {
                 _run.EventTickets -= 1;
+                if (_merchantShopMode && _pendingEvent.Type == RunEventType.MerchantBoost)
+                {
+                    PrepareMerchantShopOffers(_pendingEvent);
+                    RefreshMerchantEventUi(_pendingEvent);
+                    ShowMessage("商店货架已重构", 1f, 2);
+                    return;
+                }
+
                 RunEventDef reroll = SelectEventForCurrentStage(_pendingEvent.Id);
                 if (reroll != null)
                 {
@@ -4829,63 +6321,13 @@ namespace MoleSurvivors
                 }
             }
 
-            if (accept)
-            {
-                _run.EventParticipationCount++;
-                switch (_pendingEvent.Type)
-                {
-                    case RunEventType.MerchantBoost:
-                        if (_run.Gold >= _pendingEvent.GoldCost)
-                        {
-                            _run.Gold -= _pendingEvent.GoldCost;
-                            UpgradeDef gift = _content.Upgrades
-                                .Where(u => !_run.UpgradeStacks.ContainsKey(u.Id) || _run.UpgradeStacks[u.Id] < u.MaxStacks)
-                                .OrderByDescending(u => u.Rarity)
-                                .ThenBy(_ => UnityEngine.Random.value)
-                                .FirstOrDefault();
-                            if (gift != null)
-                            {
-                                ApplyUpgrade(gift);
-                                ShowMessage("商人提供了额外强化", 1.2f);
-                            }
-                        }
-                        else
-                        {
-                            ShowMessage("金币不足，商人离开了", 1f);
-                        }
+            _run.EventSkipCount++;
+            ShowMessage("你选择了跳过事件。", 0.9f, 1);
+            CloseEventPanelAndScheduleCooldown();
+        }
 
-                        break;
-                    case RunEventType.TreasureRush:
-                        _run.TreasureRushRemaining = Mathf.Max(_run.TreasureRushRemaining, _pendingEvent.Value);
-                        ShowMessage("暴富时刻开启", 1.2f);
-                        break;
-                    case RunEventType.CurseAltar:
-                        _run.CurseRemaining = Mathf.Max(_run.CurseRemaining, _pendingEvent.Value);
-                        ShowMessage("诅咒生效：刷新提速，收益提高", 1.4f, 2);
-                        break;
-                    case RunEventType.RepairStation:
-                        _run.Durability = Mathf.Min(_run.MaxDurability, _run.Durability + Mathf.RoundToInt(_pendingEvent.Value));
-                        bool boosted = _facilityService.BoostFacilitiesForRepair(_holes, 0.45f);
-                        ShowMessage(boosted ? "维修站：耐久恢复并完成设施检修" : "农场耐久恢复", 1.2f);
-                        break;
-                    case RunEventType.BountyContract:
-                        _run.BountyContractRemaining = Mathf.Max(_run.BountyContractRemaining, _pendingEvent.Value);
-                        _run.BountyContractCount++;
-                        ShowMessage("赏金合约生效：稀有目标概率提升", 1.25f, 2);
-                        break;
-                    case RunEventType.RogueHoleZone:
-                        ActivateRogueZone(_pendingEvent.Value, 5);
-                        ShowMessage("暴走洞区启动：高压高收益", 1.25f, 2);
-                        break;
-                }
-            }
-
-            string eventCodexId = GetEventCodexId(_pendingEvent);
-            if (!string.IsNullOrWhiteSpace(eventCodexId))
-            {
-                _run.CodexUnlockedThisRun.Add(eventCodexId);
-            }
-
+        private void CloseEventPanelAndScheduleCooldown()
+        {
             float progress = Mathf.Clamp01(_run.ElapsedSeconds / GetRunDurationSeconds());
             float minCooldown = Mathf.Lerp(95f, 62f, progress);
             float maxCooldown = Mathf.Lerp(130f, 92f, progress);
@@ -4893,6 +6335,331 @@ namespace MoleSurvivors
             _eventOpen = false;
             _eventPanel.SetActive(false);
             _pendingEvent = null;
+            _merchantShopMode = false;
+            _merchantShopOffers.Clear();
+            _merchantShopCosts.Clear();
+        }
+
+        private bool ApplyEventChoice(RunEventDef runEvent, int choiceIndex)
+        {
+            if (runEvent == null)
+            {
+                return false;
+            }
+
+            bool riskyChoice = choiceIndex == 1;
+            float rewardScale = ResolveEventRewardScale(runEvent, choiceIndex);
+            float riskScale = ResolveEventRiskScale(runEvent, choiceIndex);
+            switch (runEvent.Type)
+            {
+                case RunEventType.MerchantBoost:
+                {
+                    if (HasChallenge("CHAL_01"))
+                    {
+                        ShowMessage("挑战【禁商店】生效：本次交易被禁用。", 1.2f, 2);
+                        return true;
+                    }
+
+                    if (_merchantShopMode && _merchantShopOffers.Count > 0 && _merchantShopCosts.Count > 0)
+                    {
+                        int available = Mathf.Min(_merchantShopOffers.Count, _merchantShopCosts.Count);
+                        if (choiceIndex < 0 || choiceIndex >= available)
+                        {
+                            ShowMessage("该槽位暂无可用强化。", 0.95f, 1);
+                            return false;
+                        }
+
+                        int slotIndex = choiceIndex;
+                        UpgradeDef selectedOffer = _merchantShopOffers[slotIndex];
+                        int cost = _merchantShopCosts[slotIndex];
+                        if (selectedOffer == null)
+                        {
+                            ShowMessage("该槽位暂无可用强化。", 0.95f, 1);
+                            return false;
+                        }
+
+                        if (_run.Gold < cost)
+                        {
+                            ShowMessage("金币不足，无法购买该槽位。", 1f, 2);
+                            return false;
+                        }
+
+                        _run.Gold -= cost;
+                        ApplyUpgrade(selectedOffer);
+                        ShowMessage($"商店采购：{selectedOffer.DisplayName} (-{cost}G)", 1.15f, 2);
+                        return true;
+                    }
+
+                    int legacyCost = ResolveMerchantCostForChoice(runEvent, riskyChoice);
+                    if (_run.Gold < legacyCost)
+                    {
+                        ShowMessage("金币不足，商人拒绝交易。", 1f, 2);
+                        return false;
+                    }
+
+                    _run.Gold -= legacyCost;
+                    int giftCount = riskyChoice ? 2 : 1;
+                    bool guaranteedGiven = false;
+                    bool earlyVisit = _run.MerchantVisitCount <= 2;
+                    if (earlyVisit)
+                    {
+                        UpgradeDef guaranteed = PickEarlyAutomationOrExpansionGift();
+                        if (guaranteed != null)
+                        {
+                            ApplyUpgrade(guaranteed);
+                            guaranteedGiven = true;
+                        }
+                    }
+
+                    for (int i = 0; i < giftCount; i++)
+                    {
+                        UpgradeDef gift = (!guaranteedGiven && i == 0)
+                            ? PickEarlyAutomationOrExpansionGift()
+                            : null;
+                        gift ??= PickEventGiftUpgrade(riskyChoice);
+                        if (gift != null)
+                        {
+                            ApplyUpgrade(gift);
+                            guaranteedGiven = true;
+                        }
+                    }
+
+                    if (riskyChoice)
+                    {
+                        _run.CurseRemaining = Mathf.Max(_run.CurseRemaining, 7f + 12f * riskScale);
+                    }
+
+                    ShowMessage(riskyChoice ? "豪赌采购完成：获得双强化并承受诅咒压力" : "标准采购完成：获得额外强化", 1.3f, 2);
+                    return true;
+                }
+                case RunEventType.TreasureRush:
+                    _run.TreasureRushRemaining = Mathf.Max(_run.TreasureRushRemaining, runEvent.Value * rewardScale);
+                    if (riskyChoice)
+                    {
+                        _run.CurseRemaining = Mathf.Max(_run.CurseRemaining, 5f + 8f * riskScale);
+                    }
+                    ShowMessage(riskyChoice ? "超载采掘启动：收益更高，风险同步上升" : "稳健采掘启动：短时高收益", 1.25f, 2);
+                    return true;
+                case RunEventType.CurseAltar:
+                    _run.CurseRemaining = Mathf.Max(_run.CurseRemaining, runEvent.Value * (riskyChoice ? 1.25f : 0.9f));
+                    _run.BountyContractRemaining = Mathf.Max(_run.BountyContractRemaining, runEvent.Value * 0.3f * rewardScale);
+                    if (riskyChoice)
+                    {
+                        _run.EventTickets += 1;
+                    }
+                    ShowMessage(riskyChoice ? "高压赌注生效：诅咒升级并返还事件券" : "低压祭礼生效：适中风险换取收益", 1.35f, 2);
+                    return true;
+                case RunEventType.RepairStation:
+                {
+                    int heal = HasChallenge("CHAL_02")
+                        ? 0
+                        : Mathf.RoundToInt(runEvent.Value * (riskyChoice ? 0.72f : 1f));
+                    _run.Durability = Mathf.Min(_run.MaxDurability, _run.Durability + heal);
+                    bool boosted = _facilityService.BoostFacilitiesForRepair(_holes, riskyChoice ? 0.62f : 0.45f);
+                    if (riskyChoice)
+                    {
+                        _run.FacilityPowerMultiplier = Mathf.Clamp(_run.FacilityPowerMultiplier + 0.08f + 0.08f * riskScale, 0.6f, 4f);
+                    }
+
+                    ShowMessage(HasChallenge("CHAL_02")
+                        ? "挑战【无回复】生效：维修站仅提供设施维护。"
+                        : boosted
+                        ? (riskyChoice ? "深度检修完成：设施超频并恢复耐久" : "快速检修完成：耐久恢复并修复设施")
+                        : "维修站完成：农场耐久恢复", 1.25f, 2);
+                    return true;
+                }
+                case RunEventType.BountyContract:
+                    _run.BountyContractRemaining = Mathf.Max(_run.BountyContractRemaining, runEvent.Value * rewardScale);
+                    _run.BountyContractCount++;
+                    if (riskyChoice)
+                    {
+                        ActivateRogueZone(Mathf.Clamp(6f + runEvent.Value * 0.35f, 6f, 16f), 4);
+                    }
+                    ShowMessage(riskyChoice ? "高压合约生效：赏金提升并叠加暴走洞区" : "稳健合约生效：稀有权重与收益提升", 1.25f, 2);
+                    return true;
+                case RunEventType.RogueHoleZone:
+                {
+                    float duration = runEvent.Value * (riskyChoice ? 1.25f : 0.85f);
+                    int holeCount = riskyChoice ? 6 : 4;
+                    ActivateRogueZone(duration, holeCount);
+                    if (riskyChoice)
+                    {
+                        _run.BountyContractRemaining = Mathf.Max(_run.BountyContractRemaining, 10f * rewardScale);
+                    }
+                    ShowMessage(riskyChoice ? "全线暴走：高压高收益阶段启动" : "局部暴走：可控高压区形成", 1.25f, 2);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private UpgradeDef PickEventGiftUpgrade(bool risky)
+        {
+            IEnumerable<UpgradeDef> pool = _content.Upgrades
+                .Where(u => !_run.UpgradeStacks.ContainsKey(u.Id) || _run.UpgradeStacks[u.Id] < u.MaxStacks);
+            if (risky)
+            {
+                pool = pool.OrderByDescending(u => u.Rarity).ThenBy(_ => UnityEngine.Random.value);
+            }
+            else
+            {
+                pool = pool.OrderByDescending(u => u.BaseWeight).ThenByDescending(u => u.Rarity).ThenBy(_ => UnityEngine.Random.value);
+            }
+
+            return pool.FirstOrDefault();
+        }
+
+        private int ResolveMerchantCostForChoice(RunEventDef runEvent, bool riskyChoice)
+        {
+            int baseCost = ResolveMerchantBaseCost(runEvent);
+            int visit = Mathf.Max(1, _run != null ? _run.MerchantVisitCount : 1);
+            int earlyMin = _content != null ? Mathf.Max(0, _content.EarlyShopMinPrice) : 5;
+            int earlyMax = _content != null ? Mathf.Max(earlyMin, _content.EarlyShopMaxPrice) : 12;
+            if (visit <= 2)
+            {
+                baseCost = Mathf.Clamp(baseCost, earlyMin, earlyMax);
+            }
+
+            int finalCost = Mathf.RoundToInt(baseCost * (riskyChoice ? 1.35f : 1f));
+            if (!riskyChoice && visit <= 2 && _run != null && finalCost > _run.Gold)
+            {
+                finalCost = Mathf.Max(0, _run.Gold);
+            }
+
+            return Mathf.Max(0, finalCost);
+        }
+
+        private int ResolveMerchantBaseCost(RunEventDef runEvent)
+        {
+            if (_content != null && _content.Shops != null && _content.Shops.Count > 0)
+            {
+                int visit = Mathf.Max(1, _run != null ? _run.MerchantVisitCount : 1);
+                int index = Mathf.Clamp(visit - 1, 0, _content.Shops.Count - 1);
+                ShopProfileDef profile = _content.Shops[index];
+                if (profile != null)
+                {
+                    float growth = Mathf.Clamp(profile.PriceGrowth, 1f, 1.6f);
+                    float scaled = profile.BasePrice * Mathf.Pow(growth, Mathf.Clamp(index, 0, 8) * 0.42f);
+                    return Mathf.Max(1, Mathf.RoundToInt(scaled));
+                }
+            }
+
+            return runEvent != null ? Mathf.Max(0, runEvent.GoldCost) : 0;
+        }
+
+        private UpgradeDef PickEarlyAutomationOrExpansionGift()
+        {
+            if (_content == null || _content.Upgrades == null || _run == null)
+            {
+                return null;
+            }
+
+            bool canExpand = _run.ActiveHoleCount < _run.MaxHoleCount;
+            float unlockWindow = _run.ElapsedSeconds + 130f;
+            IEnumerable<UpgradeDef> basePool = _content.Upgrades
+                .Where(u => u != null &&
+                            (!_run.UpgradeStacks.ContainsKey(u.Id) || _run.UpgradeStacks[u.Id] < u.MaxStacks) &&
+                            u.UnlockAtSecond <= unlockWindow);
+
+            IEnumerable<UpgradeDef> focusPool = basePool.Where(u =>
+                u.EffectType == UpgradeEffectType.AddActiveHole ||
+                u.EffectType == UpgradeEffectType.UnlockAutoHammer ||
+                u.EffectType == UpgradeEffectType.AutoHammerIntervalMultiplier ||
+                u.EffectType == UpgradeEffectType.DeployAutoHammerTower ||
+                u.EffectType == UpgradeEffectType.DeploySensorHammer ||
+                u.EffectType == UpgradeEffectType.DeployGoldMagnet ||
+                u.EffectType == UpgradeEffectType.AddDroneCount ||
+                u.Tags.Contains("Automation") ||
+                u.Tags.Contains("Facility") ||
+                u.Tags.Contains("Expansion"));
+
+            if (!focusPool.Any())
+            {
+                return null;
+            }
+
+            return focusPool
+                .OrderByDescending(def => ScoreEarlyGiftUpgrade(def, canExpand))
+                .ThenBy(def => def.UnlockAtSecond)
+                .ThenBy(_ => UnityEngine.Random.value)
+                .FirstOrDefault();
+        }
+
+        private float ScoreEarlyGiftUpgrade(UpgradeDef def, bool canExpand)
+        {
+            if (def == null)
+            {
+                return -999f;
+            }
+
+            float score = def.BaseWeight + (int)def.Rarity * 0.35f;
+            if (def.EffectType == UpgradeEffectType.AddActiveHole)
+            {
+                score += canExpand ? 6f : -4f;
+            }
+
+            if (def.EffectType == UpgradeEffectType.UnlockAutoHammer)
+            {
+                score += _run.Stats.AutoHammerInterval > 0f ? 0.6f : 5f;
+            }
+
+            if (def.EffectType == UpgradeEffectType.AutoHammerIntervalMultiplier)
+            {
+                score += _run.Stats.AutoHammerInterval > 0f ? 4.5f : 1.4f;
+            }
+
+            if (def.EffectType == UpgradeEffectType.DeployAutoHammerTower ||
+                def.EffectType == UpgradeEffectType.DeploySensorHammer ||
+                def.EffectType == UpgradeEffectType.DeployGoldMagnet)
+            {
+                score += _run.ActiveFacilityCount > 0 ? 1.2f : 4.2f;
+            }
+
+            if (def.EffectType == UpgradeEffectType.AddDroneCount)
+            {
+                score += _run.Stats.DroneCount > 0 ? 1.6f : 2.8f;
+            }
+
+            if (def.Tags.Contains("Expansion") || def.Tags.Contains("Automation"))
+            {
+                score += 1.2f;
+            }
+
+            return score;
+        }
+
+        private static float ResolveEventRewardScale(RunEventDef runEvent, int choiceIndex)
+        {
+            float baseScale = choiceIndex switch
+            {
+                0 => 1f,
+                1 => 1.35f,
+                _ => 0f,
+            };
+            return baseScale * Mathf.Clamp(runEvent != null ? runEvent.RewardMult : 1f, 0.55f, 2f);
+        }
+
+        private static float ResolveEventRiskScale(RunEventDef runEvent, int choiceIndex)
+        {
+            float baseScale = choiceIndex switch
+            {
+                0 => 0.55f,
+                1 => 1f,
+                _ => 0f,
+            };
+            return baseScale * Mathf.Clamp(runEvent != null ? runEvent.RiskMult : 0.1f, 0f, 2f);
+        }
+
+        private static bool IsSkipChoice(RunEventDef runEvent, int choiceIndex)
+        {
+            if (runEvent?.Choices == null || choiceIndex < 0 || choiceIndex >= runEvent.Choices.Count)
+            {
+                return choiceIndex >= 2;
+            }
+
+            string token = runEvent.Choices[choiceIndex] ?? string.Empty;
+            return token.IndexOf("Skip", StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
         private RunEventDef SelectEventForCurrentStage(string excludeId)
@@ -4900,6 +6667,7 @@ namespace MoleSurvivors
             List<RunEventDef> candidates = _content.Events
                 .Where(e => _run.ElapsedSeconds >= e.MinTime &&
                             _run.ElapsedSeconds <= e.MaxTime &&
+                            (!HasChallenge("CHAL_01") || e.Type != RunEventType.MerchantBoost) &&
                             (string.IsNullOrEmpty(excludeId) || e.Id != excludeId))
                 .ToList();
             if (candidates.Count == 0)
@@ -4953,6 +6721,16 @@ namespace MoleSurvivors
                 _ => 1f,
             };
 
+            if (HasChallenge("CHAL_01") && def.Type == RunEventType.MerchantBoost)
+            {
+                return 0.01f;
+            }
+
+            if (HasChallenge("CHAL_02") && def.Type == RunEventType.RepairStation)
+            {
+                weight *= 0.18f;
+            }
+
             if (def.Type == RunEventType.TreasureRush && _run.TreasureRushRemaining > 3f)
             {
                 weight *= 0.35f;
@@ -4986,9 +6764,10 @@ namespace MoleSurvivors
         {
             ClearRogueHolePressure();
             List<HoleRuntime> selected = _holes
+                .Where(h => h != null && h.IsActive)
                 .OrderByDescending(h => h.DangerLevel * 2f + h.SpawnWeight)
                 .ThenBy(h => h.Index)
-                .Take(Mathf.Clamp(holeCount, 1, _holes.Count))
+                .Take(Mathf.Clamp(holeCount, 1, Mathf.Max(1, _holes.Count(h => h != null && h.IsActive))))
                 .ToList();
             for (int i = 0; i < selected.Count; i++)
             {
@@ -5032,6 +6811,11 @@ namespace MoleSurvivors
             }
 
             int durabilityDamage = _boss.Def.DurabilityDamage;
+            if (HasChallenge("CHAL_06"))
+            {
+                durabilityDamage += 1;
+            }
+
             _run.Durability = Mathf.Max(0, _run.Durability - durabilityDamage);
 
             if (EnableAutoPilotForTests &&
@@ -5092,6 +6876,11 @@ namespace MoleSurvivors
             _boss = runtime;
             float hpScale = Mathf.Max(0.55f, pending.Def.HpMultiplier) *
                 (1f + Mathf.Clamp01(_run.ElapsedSeconds / GetRunDurationSeconds()) * 0.18f);
+            if (HasChallenge("CHAL_06"))
+            {
+                hpScale *= 1.16f;
+            }
+
             _boss.Activate(hpScale);
             _boss.SetShieldActive(false);
             _bossSpawnScale = _bossEncounterService.ResolveSpawnScale(_activeBossEncounter);
@@ -5099,6 +6888,7 @@ namespace MoleSurvivors
             if (pending.Def.IsFinalBoss)
             {
                 _run.BossSpawned = true;
+                _combatCueService?.OnHit(false, false, true);
                 ShowMessage($"10:00 - {pending.Boss.DisplayName} 出现", 2f, 3);
             }
             else
@@ -5111,6 +6901,7 @@ namespace MoleSurvivors
                 }
 
                 _run.MidBossSpawned = true;
+                _combatCueService?.OnHit(false, false, true);
                 ShowMessage($"5:00 - {pending.Boss.DisplayName} 出现", 1.8f, 3);
                 if (_presentationSkin != null)
                 {
@@ -5144,20 +6935,56 @@ namespace MoleSurvivors
         private void CheckMilestones()
         {
             float runDuration = GetRunDurationSeconds();
-            float automationSecond = runDuration * 0.15f;
-            float facilitySecond = runDuration * 0.36f;
+            float facilitySecond = runDuration * 0.4f;
             float buildSecond = runDuration * 0.5f;
             float overdriveSecond = runDuration * 0.7f;
+            float automationGuaranteeTarget = _starterAutomationTargetSecond > 0f
+                ? _starterAutomationTargetSecond
+                : (_content != null ? Mathf.Clamp(_content.AutomationGuaranteeMaxSeconds, 20f, 240f) : 45f);
 
-            if (!_run.AutomationMilestoneReached && _run.ElapsedSeconds >= automationSecond)
+            if (!HasRealAutomation() &&
+                _run.StarterAutomationGrantedSecond < 0f &&
+                _run.ElapsedSeconds >= automationGuaranteeTarget)
             {
-                if (_run.Stats.AutoHammerInterval <= 0f && _run.Stats.DroneCount <= 0)
+                GrantStarterAutomationPackage();
+            }
+
+            if (HasRealAutomation() && !_run.AutomationMilestoneReached)
+            {
+                _run.AutomationMilestoneReached = true;
+                if (_run.FirstAutomationSecond < 0f)
                 {
-                    _run.Stats.AutoHammerInterval = 1.55f;
+                    _run.FirstAutomationSecond = _run.ElapsedSeconds;
+                }
+                if (_run.FirstReliefSecond < 0f)
+                {
+                    _run.FirstReliefSecond = _run.ElapsedSeconds;
                 }
 
-                _run.AutomationMilestoneReached = true;
-                ShowMessage("自动化已上线，开始省力。", 1.4f);
+                ShowMessage($"自动化上线：已进入半自动期（形态 {_run.CurrentAutomationForms}）", 1.2f, 2);
+            }
+
+            int earlyHoleTarget = 0;
+            if (_run.ElapsedSeconds >= 120f)
+            {
+                earlyHoleTarget = Mathf.Min(_run.MaxHoleCount, 8);
+            }
+            else if (_run.ElapsedSeconds >= 90f)
+            {
+                earlyHoleTarget = Mathf.Min(_run.MaxHoleCount, 7);
+            }
+            else if (_run.ElapsedSeconds >= 40f)
+            {
+                earlyHoleTarget = Mathf.Min(_run.MaxHoleCount, 6);
+            }
+
+            if (earlyHoleTarget > 0 && _run.ActiveHoleCount < earlyHoleTarget)
+            {
+                int unlocked = UnlockNextActiveHoles(earlyHoleTarget - _run.ActiveHoleCount, false);
+                if (unlocked > 0)
+                {
+                    ShowMessage($"生产线扩建：已激活 {_run.ActiveHoleCount}/{_run.MaxHoleCount} 洞口", 1.05f, 2);
+                }
             }
 
             if (!_run.BuildMilestoneReached && _run.ElapsedSeconds >= buildSecond)
@@ -5184,6 +7011,10 @@ namespace MoleSurvivors
                 }
 
                 _run.BuildMilestoneReached = true;
+                if (_run.FirstBuildFormedSecond < 0f)
+                {
+                    _run.FirstBuildFormedSecond = _run.ElapsedSeconds;
+                }
                 ShowMessage("流派成型：构筑方向已明确。", 1.4f);
             }
 
@@ -5229,8 +7060,171 @@ namespace MoleSurvivors
                     ApplyFacilityDeployUpgrade(FacilityType.GoldMagnet, 1);
                 }
 
+                if (_run.ActiveFacilityCount < 4)
+                {
+                    ApplyFacilityDeployUpgrade(FacilityType.TeslaCoupler, 1);
+                }
+
+                if (_run.ActiveFacilityCount < 4)
+                {
+                    ApplyFacilityDeployUpgrade(FacilityType.ExecutionPlate, 1);
+                }
+
                 ShowMessage("工厂联动高频阶段开启。", 1.4f);
             }
+        }
+
+        private void GrantStarterAutomationPackage()
+        {
+            if (_run == null || _run.Stats == null || _run.StarterAutomationGrantedSecond >= 0f)
+            {
+                return;
+            }
+
+            bool changed = false;
+            if (_run.Stats.AutoHammerInterval <= 0f)
+            {
+                _run.Stats.AutoHammerInterval = 1.58f;
+                changed = true;
+            }
+
+            FacilityType grantedFacilityType = FacilityType.AutoHammerTower;
+            if (_run.ActiveFacilityCount <= 0)
+            {
+                grantedFacilityType = RollStarterFacilityType();
+                ApplyFacilityDeployUpgrade(grantedFacilityType, 1);
+                changed = true;
+            }
+
+            int holeTarget = Mathf.Min(_run.MaxHoleCount, 6);
+            if (_run.ActiveHoleCount < holeTarget)
+            {
+                int unlocked = UnlockNextActiveHoles(holeTarget - _run.ActiveHoleCount, false);
+                if (unlocked > 0)
+                {
+                    changed = true;
+                }
+            }
+
+            RefreshAutomationProgress();
+            if (changed)
+            {
+                _run.StarterAutomationGrantedSecond = _run.ElapsedSeconds;
+                _run.StarterAutomationPackageGiven = true;
+                string facilityName = ShortFacilityName(grantedFacilityType);
+                ShowMessage($"40s 保底自动化：自动锤 + {facilityName}", 1.2f, 2);
+            }
+        }
+
+        private void EnsureFirstUpgradePacing()
+        {
+            if (_run == null || _run.RunEnded || _run.FirstUpgradeSecond >= 0f)
+            {
+                return;
+            }
+
+            float earliest = GetFirstUpgradeEarliestSecond();
+            float latest = GetFirstUpgradeLatestSecond();
+            if (_run.ElapsedSeconds < earliest)
+            {
+                return;
+            }
+
+            if (_run.PendingLevelUps > 0)
+            {
+                return;
+            }
+
+            if (_run.ElapsedSeconds < latest)
+            {
+                return;
+            }
+
+            _run.PendingLevelUps = 1;
+            ShowMessage("工坊发放应急升级方案。", 1.1f, 2);
+        }
+
+        private void UpdatePacingSnapshot()
+        {
+            if (_run == null || _run.Stats == null)
+            {
+                return;
+            }
+
+            if (_run.FirstAutomationSecond < 0f && _run.CurrentAutomationForms > 0)
+            {
+                _run.FirstAutomationSecond = _run.ElapsedSeconds;
+            }
+
+            if (_run.FirstReliefSecond < 0f &&
+                (_run.AutomationMilestoneReached || HasRealAutomation()))
+            {
+                _run.FirstReliefSecond = _run.ElapsedSeconds;
+            }
+
+            if (_run.FirstBuildFormedSecond < 0f &&
+                !string.Equals(_run.BuildIdentity, "未成型", StringComparison.Ordinal))
+            {
+                _run.FirstBuildFormedSecond = _run.ElapsedSeconds;
+            }
+        }
+
+        private void TickWaveModDirector(float deltaTime)
+        {
+            if (_run == null)
+            {
+                return;
+            }
+
+            if (_run.WaveModRemaining > 0f)
+            {
+                _run.WaveModRemaining = Mathf.Max(0f, _run.WaveModRemaining - deltaTime);
+                if (_run.WaveModRemaining <= 0f)
+                {
+                    _activeWaveMod = null;
+                    _run.WaveModId = string.Empty;
+                    _run.WaveModName = string.Empty;
+                    _run.WaveThreatBonus = 0f;
+                    _run.WaveSpeedBonus = 0f;
+                    _run.WaveRareBonus = HasChallenge("CHAL_04") ? 0.18f : 0f;
+                    _run.WaveEliteBonus = 0f;
+                    ShowMessage("波次修饰结束", 0.7f, 1);
+                }
+
+                return;
+            }
+
+            if (_content == null || _content.WaveMods == null || _content.WaveMods.Count == 0)
+            {
+                return;
+            }
+
+            if (_run.ElapsedSeconds < Mathf.Max(20f, _run.NextWaveModRollSecond))
+            {
+                return;
+            }
+
+            List<WaveModDef> candidates = _content.WaveMods.Where(mod => mod != null).ToList();
+            if (candidates.Count == 0)
+            {
+                return;
+            }
+
+            _activeWaveMod = candidates[_random.Next(0, candidates.Count)];
+            _run.WaveModId = _activeWaveMod.Id;
+            _run.WaveModName = _activeWaveMod.Name;
+            _run.WaveThreatBonus = Mathf.Clamp(_activeWaveMod.ThreatAdd, -0.65f, 1.8f);
+            _run.WaveSpeedBonus = Mathf.Clamp(_activeWaveMod.SpeedAdd, -0.65f, 1.8f);
+            _run.WaveRareBonus = Mathf.Clamp(
+                _activeWaveMod.RareAdd + (HasChallenge("CHAL_04") ? 0.18f : 0f),
+                -0.65f,
+                1.8f);
+            _run.WaveEliteBonus = Mathf.Clamp(_activeWaveMod.EliteAdd, -0.65f, 1.8f);
+            _run.WaveModRemaining = Mathf.Clamp(20f + (int)_activeWaveMod.Rarity * 4.5f, 18f, 42f);
+            _run.NextWaveModRollSecond = _run.ElapsedSeconds + UnityEngine.Random.Range(65f, 90f);
+
+            string name = string.IsNullOrWhiteSpace(_run.WaveModName) ? "未知修饰" : _run.WaveModName;
+            ShowMessage($"波次修饰生效：{name}", 1.1f, 2);
         }
 
         private void EndRun(bool win, string reason, int bonusChips)
@@ -5256,6 +7250,7 @@ namespace MoleSurvivors
             _meta.LifetimeGold += _run.Gold;
             _meta.LifetimeKills += _run.TotalKills;
             _run.BuildIdentity = ResolveBuildIdentity();
+            RecordRecentRunSummary(duration, workshopGain);
 
             foreach (string codex in _run.CodexUnlockedThisRun)
             {
@@ -5270,6 +7265,53 @@ namespace MoleSurvivors
 
             _endOpen = true;
             _endPanel.SetActive(true);
+
+            if (_endPanelImage != null)
+            {
+                Sprite resultBg = null;
+                if (_externalUiSkin != null)
+                {
+                    resultBg = win
+                        ? _externalUiSkin.ResultVictoryBackgroundSprite
+                        : _externalUiSkin.ResultDefeatBackgroundSprite;
+                }
+
+                if (resultBg != null)
+                {
+                    _endPanelImage.sprite = resultBg;
+                    _endPanelImage.type = Image.Type.Simple;
+                    _endPanelImage.color = new Color(1f, 1f, 1f, 0.94f);
+                }
+                else
+                {
+                    _endPanelImage.sprite = null;
+                    _endPanelImage.type = Image.Type.Simple;
+                    _endPanelImage.color = new Color(0f, 0f, 0f, 0.82f);
+                }
+            }
+
+            if (_endResultStamp != null)
+            {
+                Sprite stamp = null;
+                if (_externalUiSkin != null)
+                {
+                    stamp = win
+                        ? _externalUiSkin.ResultStampVictorySprite
+                        : _externalUiSkin.ResultStampDefeatSprite;
+                }
+
+                if (stamp != null)
+                {
+                    _endResultStamp.sprite = stamp;
+                    _endResultStamp.color = new Color(1f, 1f, 1f, 0.94f);
+                    _endResultStamp.gameObject.SetActive(true);
+                }
+                else
+                {
+                    _endResultStamp.gameObject.SetActive(false);
+                }
+            }
+
             string achievementText = newlyUnlocked.Count == 0
                 ? "无新成就"
                 : string.Join("、", newlyUnlocked.Select(a => a.DisplayName));
@@ -5279,11 +7321,16 @@ namespace MoleSurvivors
                 : 0f;
             string midBossStatus = _run.MidBossDefeated ? "已击败" : (_run.MidBossSpawned ? "未击败" : "未触发");
             string finalBossStatus = _run.BossDefeated ? "已击败" : (_run.BossSpawned ? "未击败" : "未触发");
+            string earlyTtkSummary = _run.EarlyCommonKillSamples > 0
+                ? $"{_run.EarlyCommonManualHitAverage:0.00} 锤 (样本 {_run.EarlyCommonKillSamples})"
+                : "样本不足";
+            float firstAutomation = _run.FirstAutomationSecond >= 0f ? _run.FirstAutomationSecond : _run.ElapsedSeconds;
 
             _endSummary.text =
                 (win ? "胜利" : "失败") + "\n" +
                 reason + "\n\n" +
                 $"时长: {duration}s\n" +
+                $"难度: {(_activeDifficulty != null ? _activeDifficulty.Name : _run.DifficultyId)}  挑战: {(_activeChallenge != null ? _activeChallenge.Name : (string.IsNullOrWhiteSpace(_run.ChallengeId) ? "无" : _run.ChallengeId))}\n" +
                 $"金币: {_run.Gold}\n" +
                 $"核心: {_run.CoreShards}\n" +
                 $"击杀: {_run.TotalKills}\n" +
@@ -5292,11 +7339,68 @@ namespace MoleSurvivors
                 $"事件参与: {_run.EventParticipationCount}  剩余券: {_run.EventTickets}\n" +
                 $"中期Boss: {midBossStatus}  终局Boss: {finalBossStatus}\n" +
                 $"自动化贡献: {automationRatio * 100f:0}% ({_run.AutomationGoldCollected}/{Mathf.Max(1, totalCollectedGold)})\n" +
+                $"首次自动化: {firstAutomation:0.0}s  自动形态: {_run.CurrentAutomationForms}\n" +
+                $"前期普通鼠锤数: {earlyTtkSummary}\n" +
                 $"单次收益峰值: {_run.PeakSingleIncome}\n" +
                 $"流派标签: {_run.BuildIdentity}\n" +
                 $"工坊芯片 +{workshopGain}\n" +
                 $"新成就: {achievementText}\n\n" +
                 "按下“工坊成长”可购买永久节点";
+
+            float firstUpgrade = _run.FirstUpgradeSecond >= 0f ? _run.FirstUpgradeSecond : _run.ElapsedSeconds;
+            float firstRelief = _run.FirstReliefSecond >= 0f ? _run.FirstReliefSecond : _run.ElapsedSeconds;
+            float firstBuild = _run.FirstBuildFormedSecond >= 0f ? _run.FirstBuildFormedSecond : _run.ElapsedSeconds;
+            Debug.Log(
+                $"[MoleSurvivors][PacingSnapshot] first_upgrade={firstUpgrade:0.0}s, " +
+                $"first_auto={firstAutomation:0.0}s, first_relief={firstRelief:0.0}s, first_build={firstBuild:0.0}s, " +
+                $"early_common_hits_avg={_run.EarlyCommonManualHitAverage:0.00}, early_common_samples={_run.EarlyCommonKillSamples}, " +
+                $"automation_ratio={automationRatio * 100f:0.#}%, upgrades={_run.UpgradeStacks.Values.Sum()}, " +
+                $"run_end={_run.ElapsedSeconds:0.0}s, won={_run.RunWon}");
+        }
+
+        private void RecordRecentRunSummary(int durationSeconds, int workshopGain)
+        {
+            if (_meta == null || _run == null)
+            {
+                return;
+            }
+
+            if (_meta.RecentRuns == null)
+            {
+                _meta.RecentRuns = new List<RunSummary>();
+            }
+
+            int totalCollectedGold = _run.ManualGoldCollected + _run.AutomationGoldCollected;
+            float automationRatio = totalCollectedGold > 0
+                ? (float)_run.AutomationGoldCollected / totalCollectedGold
+                : 0f;
+            RunSummary summary = new RunSummary
+            {
+                Won = _run.RunWon,
+                Gold = _run.Gold,
+                CoreShards = _run.CoreShards,
+                Kills = _run.TotalKills,
+                RareKills = _run.RareKillCount,
+                EventParticipations = _run.EventParticipationCount,
+                HighestCombo = _run.HighestCombo,
+                MidBossDefeated = _run.MidBossDefeated,
+                FinalBossDefeated = _run.BossDefeated,
+                AutomationContribution = automationRatio,
+                PeakIncome = _run.PeakSingleIncome,
+                DurationSeconds = Mathf.Max(0, durationSeconds),
+                WorkshopGain = workshopGain,
+                DifficultyId = _run.DifficultyId,
+                ChallengeId = _run.ChallengeId,
+                WaveModId = _run.WaveModId,
+                BuildIdentity = _run.BuildIdentity,
+                ReadabilityAlertCount = _run.ReadabilityAlertCount,
+            };
+
+            _meta.RecentRuns.Insert(0, summary);
+            if (_meta.RecentRuns.Count > MaxRecentRunHistory)
+            {
+                _meta.RecentRuns.RemoveRange(MaxRecentRunHistory, _meta.RecentRuns.Count - MaxRecentRunHistory);
+            }
         }
 
         private void SetMetaPanelVisible(bool visible)
@@ -5557,6 +7661,47 @@ namespace MoleSurvivors
             return button;
         }
 
+        private string ResolveStageLabel(float runDuration)
+        {
+            if (_run == null)
+            {
+                return "准备中";
+            }
+
+            if (HasActiveBoss())
+            {
+                return _activeBossEncounter != null && _activeBossEncounter.Def != null && !_activeBossEncounter.Def.IsFinalBoss
+                    ? "中期Boss战"
+                    : "终局Boss战";
+            }
+
+            float elapsed = _run.ElapsedSeconds;
+            if (!HasRealAutomation())
+            {
+                return "手动期";
+            }
+
+            float facilitySecond = runDuration * 0.4f;
+            float buildSecond = runDuration * 0.5f;
+            float overdriveSecond = runDuration * 0.7f;
+            if (elapsed < facilitySecond)
+            {
+                return "半自动期";
+            }
+
+            if (elapsed < buildSecond)
+            {
+                return "设施展开期";
+            }
+
+            if (elapsed < overdriveSecond)
+            {
+                return "中期验收期";
+            }
+
+            return "工厂暴走期";
+        }
+
         private void UpdateHud()
         {
             if (_run == null)
@@ -5567,21 +7712,14 @@ namespace MoleSurvivors
             int minutes = Mathf.FloorToInt(_run.ElapsedSeconds / 60f);
             int seconds = Mathf.FloorToInt(_run.ElapsedSeconds % 60f);
             float runDuration = GetRunDurationSeconds();
-            float stageManual = runDuration * 0.15f;
-            float stageAuto = runDuration * 0.4f;
-            float stageFacility = runDuration * 0.5f;
-            float stageMidBoss = runDuration * 0.7f;
-            string stage = _run.ElapsedSeconds switch
-            {
-                _ when _run.ElapsedSeconds < stageManual => "手动期",
-                _ when _run.ElapsedSeconds < stageAuto => "半自动期",
-                _ when _run.ElapsedSeconds < stageFacility => "设施展开期",
-                _ when _run.ElapsedSeconds < stageMidBoss => "中期验收期",
-                _ when _run.ElapsedSeconds < runDuration => "工厂暴走期",
-                _ => "Boss 终局",
-            };
+            string stage = ResolveStageLabel(runDuration);
+            string diffLabel = _activeDifficulty != null ? _activeDifficulty.Name : (_run.DifficultyId ?? "标准");
+            string challengeLabel = _activeChallenge != null ? _activeChallenge.Name : "无挑战";
+            string waveLabel = string.IsNullOrWhiteSpace(_run.WaveModName)
+                ? "波次: 常规"
+                : $"波次: {_run.WaveModName} {_run.WaveModRemaining:0}s";
 
-            _topHud.text = $"{minutes:00}:{seconds:00}  |  阶段: {stage}";
+            _topHud.text = $"{minutes:00}:{seconds:00}  |  阶段: {stage}\n难度: {diffLabel}  挑战: {challengeLabel}  {waveLabel}";
             UpdateHudMeters();
 
             float overloadProgress = _run.FacilityOverloadThresholdCurrent > 0
@@ -5593,10 +7731,14 @@ namespace MoleSurvivors
             string facilityMix = BuildFacilityMixLabel();
             string facilityCd = BuildFacilityCooldownLabel();
             string buildFocus = BuildTopTagFocusLabel();
+            string automationSources = BuildAutomationSourceLabel();
+            string automationForms = BuildAutomationFormsLabel();
+            string openingRouteLabel = BuildOpeningRouteLabel();
             string recentUpgrades = BuildRecentUpgradeHistoryLabel();
             string lastGain = string.IsNullOrWhiteSpace(_run.LastUpgradeDeltaSummary)
                 ? "最近增益: 无"
                 : $"最近增益: {_run.LastUpgradeDeltaSummary}";
+            string earlyTtk = BuildEarlyCommonTtkLabel();
 
             _rightHud.text =
                 $"金币: {_run.Gold}\n" +
@@ -5607,9 +7749,13 @@ namespace MoleSurvivors
                 $"连击: {_run.Combo}\n" +
                 $"击杀: {_run.TotalKills}\n" +
                 $"稀有击杀: {_run.RareKillCount}  事件券: {_run.EventTickets}\n" +
+                $"洞口: {_run.ActiveHoleCount}/{Mathf.Max(1, _run.MaxHoleCount)}\n" +
                 $"设施: {_run.ActiveFacilityCount}  进度: {overloadState}\n" +
                 $"{facilityMix}\n" +
                 $"{facilityCd}\n" +
+                $"{openingRouteLabel}\n" +
+                $"{automationForms}\n" +
+                $"{automationSources}\n" +
                 $"{buildFocus}";
 
             string autoStatus = _run.Stats.AutoHammerInterval > 0f
@@ -5628,112 +7774,10 @@ namespace MoleSurvivors
                 $"伤害 {_run.Stats.Damage:0.0}  攻速 {_run.Stats.AttackInterval:0.00}s  范围 {_run.Stats.AttackRadius:0.00}  暴击 {_run.Stats.CritChance * 100f:0}%\n" +
                 $"{autoStatus}  |  {droneStatus}  |  磁吸 {_run.Stats.MagnetRadius:0.00}  |  进化 {evoStatus}\n" +
                 $"状态: {rush} / {curse} / {bounty} / {rogue}  |  {bossTrack}  |  构筑: {ResolveBuildIdentity()}\n" +
+                $"{earlyTtk}\n" +
                 $"{lastGain}\n" +
                 $"已选升级(最近6): {recentUpgrades}\n" +
-                $"美术: {_activeArtSummary}  |  UI: {_activeUiSummary}";
-        }
-
-        private void UpdateHudMeters()
-        {
-            if (_run == null)
-            {
-                return;
-            }
-
-            if (_bossBarRoot != null)
-            {
-                bool showBoss = HasActiveBoss();
-                _bossBarRoot.gameObject.SetActive(showBoss);
-                if (showBoss && _boss != null)
-                {
-                    float maxHp = Mathf.Max(1f, _boss.MaxHp);
-                    float hpRatio = Mathf.Clamp01(_boss.RemainingHp / maxHp);
-                    if (_bossBarFill != null)
-                    {
-                        _bossBarFill.fillAmount = hpRatio;
-                    }
-
-                    if (_bossBarShieldFill != null)
-                    {
-                        _bossBarShieldFill.fillAmount = hpRatio;
-                        _bossBarShieldFill.enabled = _boss.ShieldActive;
-                    }
-
-                    if (_bossBarWarnGlow != null)
-                    {
-                        bool warn = hpRatio <= 0.35f;
-                        float pulse = 0.55f + Mathf.Sin(Time.unscaledTime * 9f) * 0.45f;
-                        _bossBarWarnGlow.color = new Color(1f, 1f, 1f, warn ? pulse : 0f);
-                    }
-
-                    if (_bossBarLabel != null)
-                    {
-                        string shield = _boss.ShieldActive ? " [护盾]" : string.Empty;
-                        _bossBarLabel.text =
-                            $"{_boss.Def.DisplayName}  {Mathf.CeilToInt(Mathf.Max(0f, _boss.RemainingHp))}/{Mathf.CeilToInt(maxHp)}{shield}";
-                    }
-                }
-            }
-
-            float durabilityRatio = _run.MaxDurability > 0
-                ? Mathf.Clamp01((float)_run.Durability / _run.MaxDurability)
-                : 0f;
-            if (_durabilityBarFill != null)
-            {
-                _durabilityBarFill.fillAmount = durabilityRatio;
-            }
-
-            if (_durabilityBarDangerOverlay != null)
-            {
-                bool danger = durabilityRatio <= 0.35f;
-                float pulse = 0.4f + Mathf.Sin(Time.unscaledTime * 8.5f) * 0.35f;
-                _durabilityBarDangerOverlay.color = new Color(1f, 1f, 1f, danger ? Mathf.Clamp01(pulse) : 0f);
-            }
-
-            if (_durabilityBarLabel != null)
-            {
-                _durabilityBarLabel.text = $"耐久 {_run.Durability}/{_run.MaxDurability}";
-            }
-
-            float expRatio = _run.NextExperience > 0f
-                ? Mathf.Clamp01(_run.Experience / _run.NextExperience)
-                : 0f;
-            if (_expBarFill != null)
-            {
-                _expBarFill.fillAmount = expRatio;
-            }
-
-            if (_expBarLabel != null)
-            {
-                _expBarLabel.text = $"经验 {Mathf.FloorToInt(_run.Experience)}/{Mathf.FloorToInt(_run.NextExperience)}";
-            }
-
-            _expBarFlashTimer = Mathf.Max(0f, _expBarFlashTimer - Time.unscaledDeltaTime);
-            if (_expBarLevelFlash != null)
-            {
-                float flashAlpha = _expBarFlashTimer > 0f
-                    ? Mathf.Clamp01(_expBarFlashTimer / 0.42f)
-                    : 0f;
-                _expBarLevelFlash.color = new Color(1f, 1f, 1f, flashAlpha);
-            }
-
-            float comboRatio = Mathf.Clamp01(_run.Combo / 30f);
-            if (_comboBarFill != null)
-            {
-                _comboBarFill.fillAmount = comboRatio;
-            }
-
-            bool comboMax = _run.Combo >= 30;
-            if (_comboBarMaxState != null)
-            {
-                float pulse = 0.45f + Mathf.Sin(Time.unscaledTime * 11f) * 0.4f;
-                _comboBarMaxState.color = new Color(1f, 1f, 1f, comboMax ? Mathf.Clamp01(pulse) : 0f);
-            }
-
-            if (_comboBarLabel != null)
-            {
-                _comboBarLabel.text = comboMax ? $"连击 {_run.Combo} (MAX)" : $"连击 {_run.Combo}";
-            }
+                $"美术: {_activeArtSummary}  |  UI: {_activeUiSummary}  |  {_feedbackAssetSummary}";
         }
 
         private string BuildFacilityMixLabel()
@@ -5742,7 +7786,9 @@ namespace MoleSurvivors
             int sensor = _holes.Count(h => h.Facility != null && h.Facility.Type == FacilityType.SensorHammer);
             int magnet = _holes.Count(h => h.Facility != null && h.Facility.Type == FacilityType.GoldMagnet);
             int bounty = _holes.Count(h => h.Facility != null && h.Facility.Type == FacilityType.BountyMarker);
-            return $"锤塔{tower} 雷锤{sensor} 吸金{magnet} 赏金{bounty}";
+            int tesla = _holes.Count(h => h.Facility != null && h.Facility.Type == FacilityType.TeslaCoupler);
+            int execute = _holes.Count(h => h.Facility != null && h.Facility.Type == FacilityType.ExecutionPlate);
+            return $"锤塔{tower} 雷锤{sensor} 吸金{magnet} 赏金{bounty} 电网{tesla} 处决{execute}";
         }
 
         private string BuildFacilityCooldownLabel()
@@ -5786,6 +7832,36 @@ namespace MoleSurvivors
             return $"构筑标签: {text}";
         }
 
+        private string BuildAutomationFormsLabel()
+        {
+            if (_run == null)
+            {
+                return "自动形态: 0";
+            }
+
+            string first = _run.FirstAutomationSecond >= 0f
+                ? $"{_run.FirstAutomationSecond:0.0}s"
+                : "--";
+            return $"自动形态: {_run.CurrentAutomationForms}  首次: {first}";
+        }
+
+        private string BuildOpeningRouteLabel()
+        {
+            if (_run == null || string.IsNullOrWhiteSpace(_run.OpeningRoute))
+            {
+                return "开局路线: 默认";
+            }
+
+            string routeLabel = _run.OpeningRoute switch
+            {
+                OpeningRouteAutoTower => "自动锤阵",
+                OpeningRouteChainGrid => "电链设施联动",
+                OpeningRouteBountyFactory => "赏金工厂",
+                _ => _run.OpeningRoute,
+            };
+            return $"开局路线: {routeLabel}";
+        }
+
         private string BuildRecentUpgradeHistoryLabel()
         {
             if (_run.RecentUpgradePicks == null || _run.RecentUpgradePicks.Count == 0)
@@ -5796,6 +7872,23 @@ namespace MoleSurvivors
             return string.Join("  ||  ", _run.RecentUpgradePicks);
         }
 
+        private string BuildEarlyCommonTtkLabel()
+        {
+            if (_run == null)
+            {
+                return "前期普通鼠锤数: 统计中";
+            }
+
+            float targetMin = GetEarlyCommonTtkMinHits();
+            float targetMax = GetEarlyCommonTtkMaxHits();
+            if (_run.EarlyCommonKillSamples <= 0)
+            {
+                return $"前期普通鼠锤数: 统计中 (目标 {targetMin:0.#}-{targetMax:0.#} 锤)";
+            }
+
+            return $"前期普通鼠锤数: {_run.EarlyCommonManualHitAverage:0.00} (样本 {_run.EarlyCommonKillSamples}, 目标 {targetMin:0.#}-{targetMax:0.#})";
+        }
+
         private static string ShortFacilityName(FacilityType type)
         {
             return type switch
@@ -5804,6 +7897,8 @@ namespace MoleSurvivors
                 FacilityType.SensorHammer => "雷锤",
                 FacilityType.GoldMagnet => "吸金",
                 FacilityType.BountyMarker => "赏金",
+                FacilityType.TeslaCoupler => "电网",
+                FacilityType.ExecutionPlate => "处决",
                 _ => "设施",
             };
         }
@@ -5813,6 +7908,8 @@ namespace MoleSurvivors
             int bountyLevel = _run.FacilityLevels.TryGetValue(FacilityType.BountyMarker, out int bounty) ? bounty : 0;
             int towerLevel = _run.FacilityLevels.TryGetValue(FacilityType.AutoHammerTower, out int tower) ? tower : 0;
             int sensorLevel = _run.FacilityLevels.TryGetValue(FacilityType.SensorHammer, out int sensor) ? sensor : 0;
+            int teslaLevel = _run.FacilityLevels.TryGetValue(FacilityType.TeslaCoupler, out int tesla) ? tesla : 0;
+            int executeLevel = _run.FacilityLevels.TryGetValue(FacilityType.ExecutionPlate, out int execute) ? execute : 0;
             if ((bountyLevel >= 2 || _run.BountyContractCount >= 2) && _run.BuildTags.Contains("Economy"))
             {
                 return "赏金工厂";
@@ -5823,6 +7920,12 @@ namespace MoleSurvivors
                 return "电链设施联动";
             }
 
+            if ((teslaLevel >= 2 && _run.BuildTags.Contains("Chain")) ||
+                (executeLevel >= 2 && _run.BuildTags.Contains("Execute")))
+            {
+                return "高压处决流";
+            }
+
             if (towerLevel >= 2 || _run.ActiveFacilityCount >= 3)
             {
                 return "自动锤阵";
@@ -5831,6 +7934,17 @@ namespace MoleSurvivors
             if (_run.Stats.DroneCount >= 3 && _run.Stats.AutoHammerInterval > 0f)
             {
                 return "无人机收割线";
+            }
+
+            if (_run.ElapsedSeconds <= 240f && !_run.BuildMilestoneReached)
+            {
+                return _run.OpeningRoute switch
+                {
+                    OpeningRouteAutoTower => "自动锤阵(预热)",
+                    OpeningRouteChainGrid => "电链设施联动(预热)",
+                    OpeningRouteBountyFactory => "赏金工厂(预热)",
+                    _ => _run.BuildTags.Contains("Damage") ? "战斗混合流" : "未成型",
+                };
             }
 
             return _run.BuildTags.Contains("Damage") ? "战斗混合流" : "未成型";

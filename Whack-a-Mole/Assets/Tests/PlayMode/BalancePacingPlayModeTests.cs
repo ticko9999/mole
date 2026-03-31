@@ -25,9 +25,14 @@ namespace MoleSurvivors.Tests.PlayMode
             public int Index;
             public int Seed;
             public float FirstUpgradeSecond = -1f;
+            public float FirstAutomationSecond = -1f;
             public float ReliefSecond = -1f;
             public float FunSecond = -1f;
             public float FullAutomationSecond = -1f;
+            public int AutomationFormsAt90 = -1;
+            public string BuildIdentityAt120 = string.Empty;
+            public float EarlyCommonManualHitsAverage = -1f;
+            public int EarlyCommonSamples;
             public float EndSecond;
             public bool RunEnded;
             public int FinalLevel;
@@ -40,14 +45,22 @@ namespace MoleSurvivors.Tests.PlayMode
         {
             public int RunCount;
             public float AvgFirstUpgradeSecond;
+            public float AvgFirstAutomationSecond;
             public float AvgReliefSecond;
             public float AvgFunSecond;
             public float AvgFullAutomationSecond;
+            public float P95FirstAutomationSecond;
             public float P75ReliefSecond;
             public float P75FunSecond;
+            public float FirstAutomationMissRate;
             public float ReliefMissRate;
             public float FunMissRate;
             public float FullAutomationMissRate;
+            public float FormsAt90MissRate;
+            public float AvgAutomationFormsAt90;
+            public float BuildIdentityAt120MissRate;
+            public float AvgEarlyCommonManualHits;
+            public float EarlyCommonSampleMissRate;
         }
 
         [UnitySetUp]
@@ -109,19 +122,39 @@ namespace MoleSurvivors.Tests.PlayMode
             Debug.Log(
                 $"[MoleSurvivors][BalancePacing] runs={summary.RunCount}, " +
                 $"avg_first_upgrade={summary.AvgFirstUpgradeSecond:0.0}s, " +
+                $"avg_first_auto={summary.AvgFirstAutomationSecond:0.0}s, p95_first_auto={summary.P95FirstAutomationSecond:0.0}s, " +
                 $"avg_relief={summary.AvgReliefSecond:0.0}s, p75_relief={summary.P75ReliefSecond:0.0}s, " +
                 $"avg_fun={summary.AvgFunSecond:0.0}s, p75_fun={summary.P75FunSecond:0.0}s, " +
                 $"avg_full={summary.AvgFullAutomationSecond:0.0}s, " +
+                $"avg_forms_at_90={summary.AvgAutomationFormsAt90:0.00}, " +
+                $"avg_early_common_hits={summary.AvgEarlyCommonManualHits:0.00}, " +
+                $"miss_first_auto={summary.FirstAutomationMissRate * 100f:0.#}%, " +
                 $"miss_relief={summary.ReliefMissRate * 100f:0.#}%, " +
                 $"miss_fun={summary.FunMissRate * 100f:0.#}%, " +
                 $"miss_full={summary.FullAutomationMissRate * 100f:0.#}%, " +
+                $"miss_forms_at_90={summary.FormsAt90MissRate * 100f:0.#}%, " +
+                $"miss_build_120={summary.BuildIdentityAt120MissRate * 100f:0.#}%, " +
+                $"miss_early_sample={summary.EarlyCommonSampleMissRate * 100f:0.#}%, " +
                 $"report={reportPath}");
 
             Assert.GreaterOrEqual(summary.RunCount, 6, "Simulation sample size is too small.");
-            Assert.LessOrEqual(summary.AvgFirstUpgradeSecond, 95f, "首个升级平均出现过慢（>95s）。");
-            Assert.LessOrEqual(summary.P75ReliefSecond, 130f, "自动化减负 P75 过慢（>130s）。");
-            Assert.LessOrEqual(summary.ReliefMissRate, 0.15f, "自动化减负缺失比例过高（>15%）。");
+            Assert.GreaterOrEqual(summary.AvgFirstUpgradeSecond, 42f, "首个升级平均出现过早（<42s）。");
+            Assert.LessOrEqual(summary.AvgFirstUpgradeSecond, 65f, "首个升级平均出现过慢（>65s）。");
+            Assert.GreaterOrEqual(summary.AvgFirstAutomationSecond, 37f, "首次自动化平均出现过早（<37s）。");
+            Assert.LessOrEqual(summary.AvgFirstAutomationSecond, 43f, "首次自动化平均出现过慢（>43s）。");
+            Assert.LessOrEqual(summary.P95FirstAutomationSecond, 45f, "首次自动化 P95 过慢（>45s）。");
+            Assert.LessOrEqual(summary.FirstAutomationMissRate, 0.02f, "首次自动化缺失比例过高（>2%）。");
+            Assert.GreaterOrEqual(summary.AvgReliefSecond, 34f, "自动化减负平均出现过早（<34s）。");
+            Assert.LessOrEqual(summary.P75ReliefSecond, 52f, "自动化减负 P75 过慢（>52s）。");
+            Assert.LessOrEqual(summary.ReliefMissRate, 0.02f, "自动化减负缺失比例过高（>2%）。");
+            Assert.GreaterOrEqual(summary.AvgAutomationFormsAt90, 2f, "90s 自动形态平均不足 2。");
+            Assert.LessOrEqual(summary.FormsAt90MissRate, 0.1f, "90s 自动形态采样缺失过高。");
+            Assert.LessOrEqual(summary.BuildIdentityAt120MissRate, 0.15f, "120s 流派成型缺失过高。");
             Assert.LessOrEqual(summary.P75FunSecond, 260f, "开始爽点 P75 过慢（>260s）。");
+            Assert.LessOrEqual(summary.FullAutomationMissRate, 0.02f, "完全自动化缺失比例未压到 2% 以内。");
+            Assert.GreaterOrEqual(summary.AvgEarlyCommonManualHits, 1.9f, "前45秒普通鼠平均锤数偏低，成长感不足。");
+            Assert.LessOrEqual(summary.AvgEarlyCommonManualHits, 3.1f, "前45秒普通鼠平均锤数偏高，开局压操作。");
+            Assert.LessOrEqual(summary.EarlyCommonSampleMissRate, 0.15f, "前45秒普通鼠样本缺失率过高，TTK统计不稳定。");
         }
 
         private static void CaptureMetric(DemoGameController controller, RunMetric metric)
@@ -141,6 +174,11 @@ namespace MoleSurvivors.Tests.PlayMode
                 metric.FirstUpgradeSecond = t;
             }
 
+            if (metric.FirstAutomationSecond < 0f && run.FirstAutomationSecond >= 0f)
+            {
+                metric.FirstAutomationSecond = run.FirstAutomationSecond;
+            }
+
             if (metric.ReliefSecond < 0f && HasRelief(run, controller.ActiveFacilityCount))
             {
                 metric.ReliefSecond = t;
@@ -155,6 +193,19 @@ namespace MoleSurvivors.Tests.PlayMode
             {
                 metric.FullAutomationSecond = t;
             }
+
+            if (metric.AutomationFormsAt90 < 0 && t >= 90f)
+            {
+                metric.AutomationFormsAt90 = Mathf.Max(0, run.CurrentAutomationForms);
+            }
+
+            if (string.IsNullOrWhiteSpace(metric.BuildIdentityAt120) && t >= 120f)
+            {
+                metric.BuildIdentityAt120 = run.BuildIdentity ?? string.Empty;
+            }
+
+            metric.EarlyCommonManualHitsAverage = controller.EarlyCommonAverageManualHits;
+            metric.EarlyCommonSamples = controller.EarlyCommonSampleCount;
         }
 
         private static bool HasRelief(RunState run, int activeFacilityCount)
@@ -239,16 +290,36 @@ namespace MoleSurvivors.Tests.PlayMode
             };
 
             summary.AvgFirstUpgradeSecond = AverageWithPenalty(runs, metric => metric.FirstUpgradeSecond);
+            summary.AvgFirstAutomationSecond = AverageWithPenalty(runs, metric => metric.FirstAutomationSecond);
             summary.AvgReliefSecond = AverageWithPenalty(runs, metric => metric.ReliefSecond);
             summary.AvgFunSecond = AverageWithPenalty(runs, metric => metric.FunSecond);
             summary.AvgFullAutomationSecond = AverageWithPenalty(runs, metric => metric.FullAutomationSecond);
 
+            summary.P95FirstAutomationSecond = PercentileWithPenalty(runs, metric => metric.FirstAutomationSecond, 0.95f);
             summary.P75ReliefSecond = PercentileWithPenalty(runs, metric => metric.ReliefSecond, 0.75f);
             summary.P75FunSecond = PercentileWithPenalty(runs, metric => metric.FunSecond, 0.75f);
 
+            summary.FirstAutomationMissRate = MissRate(runs, metric => metric.FirstAutomationSecond);
             summary.ReliefMissRate = MissRate(runs, metric => metric.ReliefSecond);
             summary.FunMissRate = MissRate(runs, metric => metric.FunSecond);
             summary.FullAutomationMissRate = MissRate(runs, metric => metric.FullAutomationSecond);
+            summary.FormsAt90MissRate = runs.Count > 0
+                ? runs.Count(metric => metric.AutomationFormsAt90 < 0) / (float)runs.Count
+                : 1f;
+            summary.AvgAutomationFormsAt90 = runs.Count > 0
+                ? runs.Where(metric => metric.AutomationFormsAt90 >= 0).DefaultIfEmpty().Average(metric => metric == null ? 0f : metric.AutomationFormsAt90)
+                : 0f;
+            summary.BuildIdentityAt120MissRate = runs.Count > 0
+                ? runs.Count(metric =>
+                    string.IsNullOrWhiteSpace(metric.BuildIdentityAt120) ||
+                    metric.BuildIdentityAt120.Contains("未成型")) / (float)runs.Count
+                : 1f;
+            summary.AvgEarlyCommonManualHits = AverageWithPenalty(
+                runs,
+                metric => metric.EarlyCommonSamples > 0 ? metric.EarlyCommonManualHitsAverage : -1f);
+            summary.EarlyCommonSampleMissRate = runs.Count > 0
+                ? runs.Count(metric => metric.EarlyCommonSamples <= 0) / (float)runs.Count
+                : 1f;
 
             return summary;
         }
@@ -304,25 +375,38 @@ namespace MoleSurvivors.Tests.PlayMode
             sb.AppendLine("metric,value");
             sb.AppendLine($"run_count,{summary.RunCount}");
             sb.AppendLine($"avg_first_upgrade_sec,{summary.AvgFirstUpgradeSecond:0.000}");
+            sb.AppendLine($"avg_first_automation_sec,{summary.AvgFirstAutomationSecond:0.000}");
             sb.AppendLine($"avg_relief_sec,{summary.AvgReliefSecond:0.000}");
             sb.AppendLine($"avg_fun_sec,{summary.AvgFunSecond:0.000}");
             sb.AppendLine($"avg_full_automation_sec,{summary.AvgFullAutomationSecond:0.000}");
+            sb.AppendLine($"p95_first_automation_sec,{summary.P95FirstAutomationSecond:0.000}");
             sb.AppendLine($"p75_relief_sec,{summary.P75ReliefSecond:0.000}");
             sb.AppendLine($"p75_fun_sec,{summary.P75FunSecond:0.000}");
+            sb.AppendLine($"first_automation_miss_rate,{summary.FirstAutomationMissRate:0.000}");
             sb.AppendLine($"relief_miss_rate,{summary.ReliefMissRate:0.000}");
             sb.AppendLine($"fun_miss_rate,{summary.FunMissRate:0.000}");
             sb.AppendLine($"full_automation_miss_rate,{summary.FullAutomationMissRate:0.000}");
+            sb.AppendLine($"forms_at_90_miss_rate,{summary.FormsAt90MissRate:0.000}");
+            sb.AppendLine($"avg_automation_forms_at_90,{summary.AvgAutomationFormsAt90:0.000}");
+            sb.AppendLine($"build_identity_120_miss_rate,{summary.BuildIdentityAt120MissRate:0.000}");
+            sb.AppendLine($"avg_early_common_manual_hits,{summary.AvgEarlyCommonManualHits:0.000}");
+            sb.AppendLine($"early_common_sample_miss_rate,{summary.EarlyCommonSampleMissRate:0.000}");
             sb.AppendLine();
-            sb.AppendLine("run_index,seed,first_upgrade_sec,relief_sec,fun_sec,full_automation_sec,end_sec,run_ended,final_level,kills,upgrade_picks,active_facilities");
+            sb.AppendLine("run_index,seed,first_upgrade_sec,first_automation_sec,relief_sec,fun_sec,full_automation_sec,automation_forms_at_90,build_identity_at_120,early_common_manual_hits,early_common_samples,end_sec,run_ended,final_level,kills,upgrade_picks,active_facilities");
             for (int i = 0; i < runs.Count; i++)
             {
                 RunMetric run = runs[i];
                 sb.Append(run.Index).Append(',')
                     .Append(run.Seed).Append(',')
                     .Append(FormatMetric(run.FirstUpgradeSecond)).Append(',')
+                    .Append(FormatMetric(run.FirstAutomationSecond)).Append(',')
                     .Append(FormatMetric(run.ReliefSecond)).Append(',')
                     .Append(FormatMetric(run.FunSecond)).Append(',')
                     .Append(FormatMetric(run.FullAutomationSecond)).Append(',')
+                    .Append(run.AutomationFormsAt90 >= 0 ? run.AutomationFormsAt90.ToString(CultureInfo.InvariantCulture) : "NA").Append(',')
+                    .Append(string.IsNullOrWhiteSpace(run.BuildIdentityAt120) ? "NA" : run.BuildIdentityAt120.Replace(',', '/')).Append(',')
+                    .Append(FormatMetric(run.EarlyCommonManualHitsAverage)).Append(',')
+                    .Append(run.EarlyCommonSamples).Append(',')
                     .Append(run.EndSecond.ToString("0.000", CultureInfo.InvariantCulture)).Append(',')
                     .Append(run.RunEnded ? "1" : "0").Append(',')
                     .Append(run.FinalLevel).Append(',')
